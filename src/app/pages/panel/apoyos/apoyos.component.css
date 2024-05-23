@@ -1,0 +1,11 @@
+.option-item {
+    display: flex;
+    align-items: center;
+  }
+  
+  .option-item .icon {
+    margin-right: 8px;
+    width: 20px; 
+    height: 20px; 
+  }
+  

@@ -37,8 +37,10 @@
                     <table class="table table-vcenter card-table">
                         <thead>
                             <tr>
-                                <th class="text-center">#</th>
-                                <th style="text-transform: none; font-size: inherit">Nombre</th>
+                                <th  style="text-transform: none; font-size: inherit"
+                                class="text-center">#</th>
+                                <th  style="text-transform: none; font-size: inherit"
+                                class="text-center">Nombre</th>
                                 <th class="w-1" style="text-transform: none; font-size: inherit">
                                     Acciones
                                 </th>
@@ -53,7 +55,9 @@
                                 <td class="text-center">
                                     {{ configPaginator.itemsPerPage * (configPaginator.currentPage - 1) + pointIndex + 1 }}
                                 </td>
+                                <td class="text-center">
                                 <i [ngClass]="area.icono" class="icono-con-espacio"></i>{{ area.nombre }}
+                            </td>
                                 <td>
                                     <div class="d-flex justify-content-between">
                                         <button class="btn btn-warning btn-icon btn-sm" data-bs-toggle="modal" data-bs-target="#modal-programa-social" (click)="setDataModalUpdate(area)">

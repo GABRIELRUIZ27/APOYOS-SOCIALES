@@ -3,15 +3,11 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PaginationInstance } from 'ngx-pagination';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { AreasService } from 'src/app/core/services/area.service';
-import { CandidatosService } from 'src/app/core/services/candidatos.service';
 import { MensajeService } from 'src/app/core/services/mensaje.service';
-import { OperadoresService } from 'src/app/core/services/operadores.service';
 import { RolsService } from 'src/app/core/services/rols.service';
 import { UsuariosService } from 'src/app/core/services/usuarios.service';
 import { LoadingStates } from 'src/app/global/global';
 import { Area } from 'src/app/models/area';
-import { Candidato } from 'src/app/models/candidato';
-import { Operador } from 'src/app/models/operador';
 import { Rol } from 'src/app/models/rol';
 import { Usuario } from 'src/app/models/usuario';
 import * as XLSX from 'xlsx';
@@ -31,8 +27,6 @@ export class UsuariosComponent {
   usuariosFilter: Usuario[] = [];
   isLoading = LoadingStates.neutro;
   rols: Rol[] = [];
-  candidatos: Candidato[] = [];
-  operadores: Operador[] = [];
   isModalAdd = true;
   areas: Area[] = []; 
   constructor(
@@ -41,10 +35,8 @@ export class UsuariosComponent {
     private usuarioService: UsuariosService,
     private mensajeService: MensajeService,
     private formBuilder: FormBuilder,
-    private candidatosService: CandidatosService,
     private rolsService: RolsService,
     private areasService: AreasService,
-    private operadoresService: OperadoresService
   ) {
     this.usuarioService.refreshListUsuarios.subscribe(() => this.getUsuarios());
     this.getUsuarios();

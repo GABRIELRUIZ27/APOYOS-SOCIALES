@@ -3,49 +3,44 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { HandleErrorService } from './handle-error.service';
 import { Subject } from 'rxjs';
+import { Apoyos } from 'src/app/models/apoyos';
 import { catchError, tap } from 'rxjs/operators';
-import { Propaganda } from 'src/app/models/propaganda-electoral';
-
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-export class PropagandaService {
-  route = `${environment.apiUrl}/propagandas`;
-  private _refreshListpropagandas$ = new Subject<Propaganda | null>();
+export class ApoyosService {
+  route = `${environment.apiUrl}/apoyos`;
+  private _refreshListApoyos$ = new Subject<Apoyos | null>();
 
   constructor(
     private http: HttpClient,
     private handleErrorService: HandleErrorService
-  ) { }
+  ) {}
 
-  get refreshListpropagandas() {
-    return this._refreshListpropagandas$;
-  }
-
-  getById(id: number) {
-    return this.http.get<Propaganda>(`${this.route}/obtener-por-id/${id}`);
+  get refreshListApoyos() {
+    return this._refreshListApoyos$;
   }
 
   getAll() {
-    return this.http.get<Propaganda[]>(`${this.route}/obtener-todos`);
+    return this.http.get<Apoyos[]>(`${this.route}/obtener-todos`);
   }
 
-  post(dto: Propaganda) {
-    return this.http.post<Propaganda>(`${this.route}/crear`, dto)
+  post(dto: Apoyos) {
+    return this.http.post<Apoyos>(`${this.route}/crear`, dto)
       .pipe(
         tap(() => {
-          this._refreshListpropagandas$.next(null);
+          this._refreshListApoyos$.next(null);
         }),
         catchError(this.handleErrorService.handleError)
       );
   }
 
-  put(id: number, dto: Propaganda) {
-    return this.http.put<Propaganda>(`${this.route}/actualizar/${id}`, dto)
+  put(id: number, dto: Apoyos) {
+    return this.http.put<Apoyos>(`${this.route}/actualizar/${id}`, dto)
       .pipe(
         tap(() => {
-          this._refreshListpropagandas$.next(null);
+          this._refreshListApoyos$.next(null);
         }),
         catchError(this.handleErrorService.handleError)
       );
@@ -55,7 +50,7 @@ export class PropagandaService {
     return this.http.delete(`${this.route}/eliminar/${id}`)
       .pipe(
         tap(() => {
-          this._refreshListpropagandas$.next(null);
+          this._refreshListApoyos$.next(null);
         }),
         catchError(this.handleErrorService.handleError)
       );

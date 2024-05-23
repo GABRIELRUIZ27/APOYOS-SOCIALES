@@ -46,6 +46,11 @@ const routes: Routes = [
         loadChildren: () =>
           import('./areas/areas.module').then((i) => i.AreasModule),
       },
+      {
+        path: 'apoyos',
+        loadChildren: () =>
+          import('./apoyos/apoyos.module').then((i) => i.ApoyosModule),
+      },
     ],
   },
 ];

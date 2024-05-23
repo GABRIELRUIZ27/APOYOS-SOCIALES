@@ -62,12 +62,7 @@
             </li>
             <li class="nav-item dropdown" *appHasClaim="'canAccessOperacion'" [ngClass]="{
           active:
-          (rlVisitas && rlVisitas.isActive)  ||
-            (rlMapaPromovidos && rlMapaPromovidos.isActive) ||
-            (rlPromovidos && rlPromovidos.isActive)||
-            (rlPropagandaElectoral && rlPropagandaElectoral.isActive) ||
-            (rlMapaPropagandaElectoral && rlMapaPropagandaElectoral.isActive) ||
-            (rlNubePalabras && rlNubePalabras.isActive)
+          (rlApoyos && rlApoyos.isActive)  
         }">
                 <a class="nav-link dropdown-toggle" [routerLink]="" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="true">
                     <span class="nav-link-icon d-md-none d-lg-inline-block">
@@ -78,43 +73,12 @@
                 <ul class="dropdown-menu show">
                     <div class="dropdown-menu-columns">
                         <div class="dropdown-menu-column">
-                            <a *appHasClaim="'canAccessSimpatizantes'" class="dropdown-item" [routerLink]="['promovidos']" routerLinkActive="active" #rlPromovidos="routerLinkActive" (click)="cerrarMenu()">
+                            <a *appHasClaim="'canAccessApoyos'" class="dropdown-item" [routerLink]="['apoyos']" routerLinkActive="active" #rlApoyos="routerLinkActive" (click)="cerrarMenu()">
                                 <span class="nav-link-icon d-md-none d-lg-inline-block">
-                  <i class="ti ti-user-exclamation"></i>
+                  <i class="ti ti-heart-handshake"></i>
                 </span>
-                                <span class="nav-link-title">Promovidos</span>
+                                <span class="nav-link-title">Apoyos</span>
                             </a>
-                            <a *appHasClaim="'canAccessVisitas'" class="dropdown-item" [routerLink]="['visitas']" routerLinkActive="active" #rlVisitas="routerLinkActive" (click)="cerrarMenu()">
-                                <span class="nav-link-icon d-md-none d-lg-inline-block">
-                  <i class="ti ti-user-square"></i>
-                </span>
-                                <span class="nav-link-title">Visitas</span>
-                            </a>
-                            <a *appHasClaim="'canAccessMapaSimpatizantes'" class="dropdown-item" [routerLink]="['mapa-promovidos']" routerLinkActive="active" #rlMapaPromovidos="routerLinkActive" (click)="cerrarMenu()">
-                                <span class="nav-link-icon d-md-none d-lg-inline-block">
-                  <i class="ti ti-map-search"></i>
-                </span>
-                                <span class="nav-link-title">Mapa de Promovidos</span>
-                            </a>
-                            <a class="dropdown-item" *appHasClaim="'CanAccessPropaganda'" [routerLink]="['Propaganda-Electoral']" routerLinkActive="active" #rlPropagandaElectoral="routerLinkActive" (click)="cerrarMenu()">
-                                <span class="nav-link-icon d-md-none d-lg-inline-block">
-                  <i class="ti ti-wall"></i>
-                </span>
-                                <span class="nav-link-title">Propaganda Electoral</span>
-                            </a>
-                            <a class="dropdown-item" *appHasClaim="'CanAccessMapaPropaganda'" [routerLink]="['mapa-propaganda']" routerLinkActive="active" #rlMapaPropagandaElectoral="routerLinkActive" (click)="cerrarMenu()">
-                                <span class="nav-link-icon d-md-none d-lg-inline-block">
-                  <i class="ti ti-map-search"></i>
-                </span>
-                                <span class="nav-link-title">Mapa de Propaganda Electoral</span>
-                            </a>
-                            <a *appHasClaim="'canAccessNubePalabras'" class="dropdown-item" [routerLink]="['nube-palabras']" routerLinkActive="active" #rlNubePalabras="routerLinkActive" (click)="cerrarMenu()">
-                                <span class="nav-link-icon d-md-none d-lg-inline-block">
-                  <i class="ti ti-cloud-snow"></i>
-                </span>
-                                <span class="nav-link-title">Nube de palabras</span>
-                            </a>
-
                         </div>
                     </div>
                 </ul>

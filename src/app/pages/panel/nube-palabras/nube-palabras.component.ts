@@ -1,14 +1,11 @@
 import { AfterViewInit, Component } from '@angular/core';
 import * as Highcharts from 'highcharts';
 import Histogram from 'highcharts/modules/histogram-bellcurve';
-import { CandidatosService } from 'src/app/core/services/candidatos.service';
-import { Candidato } from 'src/app/models/candidato';
 import { GeneralWordCloud } from 'src/app/models/word-cloud';
 
 import NoDataToDisplay from 'highcharts/modules/no-data-to-display';
 import { DashboardService } from 'src/app/core/services/dashboard.service';
 import { Seccion } from 'src/app/models/seccion';
-import { SeccionService } from 'src/app/core/services/seccion.service';
 import { SecurityService } from 'src/app/core/services/security.service';
 import { AppUserAuth } from 'src/app/models/login';
 import { FormBuilder, FormGroup } from '@angular/forms';
@@ -32,7 +29,6 @@ Wordcloud(Highcharts);
 export class NubePalabrasComponent implements AfterViewInit {
   generalWordCloud!: GeneralWordCloud;
   options: Highcharts.Options = {};
-  candidato: Candidato[] = [];
   seccion: Seccion[] = [];
   currentUser!: AppUserAuth | null;
   mapaForm!: FormGroup;
@@ -41,8 +37,6 @@ export class NubePalabrasComponent implements AfterViewInit {
 
   constructor(
     private dashboardService: DashboardService,
-    private candidatoService: CandidatosService,
-    private seccionService: SeccionService,
     private securityService: SecurityService,
     private formBuilder: FormBuilder
   ) {
@@ -52,8 +46,6 @@ export class NubePalabrasComponent implements AfterViewInit {
     }
 
     this.getWordCloud();
-    this.getMunicipios();
-    this.getMunicipios2();
     this.creteForm();
     this.readonlySelectCandidato =
       this.currentUser?.rolId !== RolesBD.administrador;
@@ -74,17 +66,6 @@ export class NubePalabrasComponent implements AfterViewInit {
     this.dashboardService.updateWordCloud(
       this.generalWordCloud.generalWordCloud
     );
-  }
-
-  getMunicipios() {
-    this.candidatoService
-      .getAll()
-      .subscribe({ next: (dataFromAPI) => (this.candidato = dataFromAPI) });
-  }
-  getMunicipios2() {
-    this.seccionService
-      .getAll()
-      .subscribe({ next: (dataFromAPI) => (this.seccion = dataFromAPI) });
   }
 
   getWordCloud() {
@@ -180,17 +161,6 @@ export class NubePalabrasComponent implements AfterViewInit {
       };
       Highcharts.chart('container', this.options);
     });
-  }
-
-  onSelectCandidato(id: number) {
-    if (id) {
-      const wordCloudByCandidato =
-        this.generalWordCloud.wordCloudPorCandidatos.find((i) => i.id === id);
-      if (wordCloudByCandidato) {
-        this.dashboardService.updateWordCloud(wordCloudByCandidato.wordCloud);
-        this.setSettingsWordCloud();
-      }
-    }
   }
 
   onSelectSeccion(id: number) {
