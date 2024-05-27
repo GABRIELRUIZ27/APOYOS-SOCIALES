@@ -51,6 +51,11 @@ const routes: Routes = [
         loadChildren: () =>
           import('./apoyos/apoyos.module').then((i) => i.ApoyosModule),
       },
+      {
+        path: 'mapa-apoyos',
+        loadChildren: () =>
+          import('./mapa-apoyos/mapa-apoyos.module').then((i) => i.MapaApoyosModule),
+      },
     ],
   },
 ];

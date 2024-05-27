@@ -37,13 +37,10 @@
                     <table class="table table-vcenter card-table">
                         <thead>
                             <tr>
-                                <th  style="text-transform: none; font-size: inherit"
-                                class="text-center">#</th>
-                                <th  style="text-transform: none; font-size: inherit"
-                                class="text-center">Nombre</th>
-                                <th class="w-1" style="text-transform: none; font-size: inherit">
-                                    Acciones
-                                </th>
+                                <th style="text-transform: none; font-size: inherit" class="text-center">#</th>
+                                <th class="text-center" style="text-transform: none; font-size: inherit">Color</th>
+                                <th style="text-transform: none; font-size: inherit" class="text-center">Nombre</th>
+                                <th class="w-1" style="text-transform: none; font-size: inherit">Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -55,6 +52,13 @@
                                 <td class="text-center">
                                     {{ configPaginator.itemsPerPage * (configPaginator.currentPage - 1) + pointIndex + 1 }}
                                 </td>
+                                 <td class="text-center">
+                  <span
+                    class="badge"
+                    style="height: 20px; width: 20px"
+                    [style.backgroundColor]="area.color"
+                  ></span>
+                </td>
                                 <td class="text-center">
                                 <i [ngClass]="area.icono" class="icono-con-espacio"></i>{{ area.nombre }}
                             </td>
@@ -129,7 +133,7 @@
                               </div>
                             </div>
                           </div>
-                        <div class="col-lg-9">
+                          <div class="col-lg-9">
                             <div class="mb-3">
                                 <label class="form-label">Nombre*:</label>
                                 <input type="text" class="form-control" formControlName="nombre" />
@@ -158,7 +162,28 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>   
+                        </div>  
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-9">
+                            <label style="margin-top: 15px" class="form-label">Color*:</label>
+                            <input
+                              type="color"
+                              class="form-control form-control-color"
+                              title="Selecciona color"
+                              formControlName="color"
+                              value="#206bc4"
+                              (input)="updateColorCode($event)"
+                            />
+                            <div
+                              *ngIf="areaForm.get('color')?.touched"
+                              class="error-message"
+                            >
+                              <div *ngIf="areaForm.get('color')?.hasError('required')">
+                                El color es obligatorio
+                              </div>
+                            </div>
+                        </div>                    
                     </div>
                 </div>
                 <p class="form-label" style="margin-left: 20px; color: red; font-weight: bold">

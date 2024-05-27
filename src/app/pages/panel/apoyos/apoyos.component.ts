@@ -52,6 +52,7 @@ export class ApoyosComponent {
     private apoyosService: ApoyosService,
     private areaService: AreasService,
   ) {
+    this.getApoyos();
     this.apoyosService.refreshListApoyos.subscribe(() =>
       this.getApoyos()
     );

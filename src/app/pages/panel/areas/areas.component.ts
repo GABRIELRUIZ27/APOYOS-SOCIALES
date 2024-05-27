@@ -7,9 +7,11 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { AreasService } from 'src/app/core/services/area.service';
 import { MensajeService } from 'src/app/core/services/mensaje.service';
 import * as XLSX from 'xlsx';
+import { ColorPickerService, Rgba } from 'ngx-color-picker';
 
 @Component({
   selector: 'app-areas',
+  template: ` <color-picker [(color)]="color"></color-picker>`,
   templateUrl: './areas.component.html',
   styleUrls: ['./areas.component.css'],
 })
@@ -28,6 +30,7 @@ export class AreasComponent {
   verdadero = 'Activo';
   falso = 'Inactivo';
   estatusTag = this.verdadero;
+  selectedColorCode: string = '#206bc4';
 
   iconosTabler = [
     { name: 'Home', class: 'ti ti-home' },
@@ -66,6 +69,7 @@ export class AreasComponent {
         ],
       ],
       estatus: [true],
+      color: ['#000000', Validators.required],
     });
   }
 
@@ -240,5 +244,12 @@ export class AreasComponent {
   actualizarFiltro(event: any): void {
     this.buscar = event.target.value;
     this.areaFiltrada = this.filtrarAreas();
+  }
+
+  updateColorCode(event: Event): void {
+    const target = event.target as HTMLInputElement;
+    if (target) {
+      this.selectedColorCode = target.value;
+    }
   }
 }
