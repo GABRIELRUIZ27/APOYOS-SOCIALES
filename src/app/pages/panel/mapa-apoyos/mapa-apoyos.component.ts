@@ -1,14 +1,8 @@
 import { AfterViewInit, Component, Inject } from '@angular/core';
 import { PaginationInstance } from 'ngx-pagination';
 import { ApoyosService } from 'src/app/core/services/apoyo.service';
-import { LoadingStates, RolesBD } from 'src/app/global/global';
 import { Apoyos } from 'src/app/models/apoyos';
-import * as XLSX from 'xlsx';
-import { SecurityService } from 'src/app/core/services/security.service';
-import { AppUserAuth } from 'src/app/models/login';
-import { FormBuilder, FormGroup } from '@angular/forms';
 declare const google: any;
-
 @Component({
   selector: 'app-mapa-apoyos',
   templateUrl: './mapa-apoyos.component.html',
@@ -18,43 +12,18 @@ export class MapaApoyosComponent implements AfterViewInit {
   map: any = {};
   infowindow = new google.maps.InfoWindow();
   markers: google.maps.Marker[] = [];
-  apoyos: Apoyos[] = [];
-  apoyosFiltradas: Apoyos[] = [];
-  sinIncidencias: boolean = true;
-  isLoadingModalIncidencias = LoadingStates.neutro;
-  pagModalPromovidos: number = 1;
-  initialValueModalSearchSecciones: string = '';
-  initialValueModalSearchPromovidos: string = '';
-  readonlySelectCandidato = true;
-  currentUser!: AppUserAuth | null;
-  mapaForm!: FormGroup;
-  candidatoId = 0;
+  apoyos: Apoyos[] = [];  apoyosFiltradas: Apoyos[] = [];
+
 
   constructor(
     @Inject('CONFIG_PAGINATOR') public configPaginator: PaginationInstance,
     private apoyosService: ApoyosService,
-    private securityService: SecurityService,
-    private formBuilder: FormBuilder
   ) {
     this.getApoyos();
-    this.currentUser = securityService.getDataUser();
-    if (this.currentUser?.rolId === RolesBD.candidato) {
-      this.candidatoId = this.currentUser?.candidatoId;
-    }
-    this.readonlySelectCandidato =
-      this.currentUser?.rolId !== RolesBD.administrador;
-    if (this.currentUser?.rolId === RolesBD.candidato) {
-      this.mapaForm.controls['candidatoId'].setValue(this.candidatoId);
-    }
   }
+
   onPageChange(number: number) {
     this.configPaginator.currentPage = number;
-  }
-  creteForm2() {
-    this.mapaForm = this.formBuilder.group({
-      candidatoId: [],
-      promovidos: [],
-    });
   }
 
   ngAfterViewInit() {
@@ -122,27 +91,6 @@ export class MapaApoyosComponent implements AfterViewInit {
         this.setAllMarkers();
       },
     });
-  }
-  getType(id: number) {
-    this.pagModalPromovidos = 1;
-    const modal = document.getElementById('modal-simpatizantes');
-    if (modal) {
-      modal.classList.add('show');
-      modal.style.display = 'block';
-    }
-  }
-
-  clearInputModalSearch() {
-    this.initialValueModalSearchSecciones = '';
-    this.initialValueModalSearchPromovidos = '';
-  }
-  cerrarModal2() {
-    this.clearInputModalSearch();
-    const modal = document.getElementById('modal-simpatizantes');
-    if (modal) {
-      modal.classList.remove('show');
-      modal.style.display = 'none';
-    }
   }
 
   setAllMarkers() {
@@ -234,46 +182,7 @@ export class MapaApoyosComponent implements AfterViewInit {
     });
     this.markers = [];
   }
-  exportarDatosAExcel() {
-    if (this.apoyos.length === 0) {
-      console.warn('La lista de apoyos está vacía. No se puede exportar.');
-      return;
-    }
 
-    const datosParaExportar = this.apoyos.map((incidencias) => {
-      return {
-        Nombre: incidencias.nombre,
-        Comunidad: incidencias.comunidad.nombre,
-        Area: incidencias.area.nombre,
-        Dirección: incidencias.ubicacion,
-      };
-    });
-
-    const worksheet: XLSX.WorkSheet =
-      XLSX.utils.json_to_sheet(datosParaExportar);
-    const workbook: XLSX.WorkBook = {
-      Sheets: { data: worksheet },
-      SheetNames: ['data'],
-    };
-    const excelBuffer: any = XLSX.write(workbook, {
-      bookType: 'xlsx',
-      type: 'array',
-    });
-
-    this.guardarArchivoExcel(excelBuffer, 'incidencias.xlsx');
-  }
-
-  guardarArchivoExcel(buffer: any, nombreArchivo: string) {
-    const data: Blob = new Blob([buffer], {
-      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-    });
-    const url: string = window.URL.createObjectURL(data);
-    const a: HTMLAnchorElement = document.createElement('a');
-    a.href = url;
-    a.download = nombreArchivo;
-    a.click();
-    window.URL.revokeObjectURL(url);
-  }
   handleChangeSearch(event: any) {
     const inputValue = event.target.value;
     this.apoyosFiltradas = this.apoyos.filter(
