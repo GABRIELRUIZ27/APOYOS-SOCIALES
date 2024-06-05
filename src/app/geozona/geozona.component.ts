@@ -50,7 +50,7 @@ export class GeozonaComponent implements AfterViewInit {
         for (let j = 0; j < simpleDatas.length; j++) {
           const simpleData = simpleDatas[j];
           if (simpleData.getAttribute('name') === 'NOMGEO') {
-            const municipioNombre = simpleData.textContent?.toLowerCase();
+            const municipioNombre = simpleData.textContent;
             if (municipioNombre) {
               this.municipios.push(municipioNombre);
             }
@@ -111,12 +111,12 @@ export class GeozonaComponent implements AfterViewInit {
       strokeOpacity: 0.8,
       strokeWeight: 2,
       fillColor: '#00FF00', // Verde
-      fillOpacity: 0.35
+      fillOpacity: 0.30
     });
     this.municipioPolygon.setMap(this.map);
     console.log('Mapa centrado en:', coordinates[0]);
     this.map.panTo(coordinates[0]);
-    this.map.setZoom(10);
+    this.map.setZoom(11);
     console.log('Zoom del mapa establecido en 10');
   }
 
