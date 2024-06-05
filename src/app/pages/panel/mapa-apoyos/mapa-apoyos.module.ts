@@ -9,11 +9,14 @@ import { NgxGpAutocompleteModule } from '@angular-magic/ngx-gp-autocomplete';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
+import { GeozonaComponent } from 'src/app/geozona/geozona.component';
+
 
 
 @NgModule({
   declarations: [
-    MapaApoyosComponent
+    MapaApoyosComponent,
+    GeozonaComponent, // Agrega GeozonaComponent como declaración
   ],
   imports: [
     CommonModule,
