@@ -2,6 +2,9 @@ import { AfterViewInit, Component, Inject } from '@angular/core';
 import { PaginationInstance } from 'ngx-pagination';
 import { ApoyosService } from 'src/app/core/services/apoyo.service';
 import { Apoyos } from 'src/app/models/apoyos';
+import { Area } from 'src/app/models/area';
+import { AreasService } from 'src/app/core/services/area.service';
+
 declare const google: any;
 @Component({
   selector: 'app-mapa-apoyos',
@@ -13,17 +16,22 @@ export class MapaApoyosComponent implements AfterViewInit {
   infowindow = new google.maps.InfoWindow();
   markers: google.maps.Marker[] = [];
   apoyos: Apoyos[] = [];  apoyosFiltradas: Apoyos[] = [];
-
+  Areas: Area [] = [];
 
   constructor(
-    @Inject('CONFIG_PAGINATOR') public configPaginator: PaginationInstance,
+    @Inject('CONFIG_PAGINATOR') 
+    public configPaginator: PaginationInstance,
     private apoyosService: ApoyosService,
+    private areaService: AreasService,
   ) {
     this.getApoyos();
+    this.getAreas();
   }
 
-  onPageChange(number: number) {
-    this.configPaginator.currentPage = number;
+  getAreas() {
+    this.areaService
+      .getAll()
+      .subscribe({ next: (dataFromAPI) => (this.Areas = dataFromAPI) });
   }
 
   ngAfterViewInit() {

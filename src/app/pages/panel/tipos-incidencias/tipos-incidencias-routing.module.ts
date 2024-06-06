@@ -1,13 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { PropagandaElectoralComponent } from './propaganda-electoral.component';
+import { TiposIncidenciasComponent } from './tipos-incidencias.component';
 import { AuthGuard } from 'src/app/core/services/auth.guard';
 
 const routes: Routes = [
   {
     path: '',
-    component: PropagandaElectoralComponent,
-    canActivate: [AuthGuard], data: { claimType: 'CanAccessPropaganda'}
+    component: TiposIncidenciasComponent,
+    canActivate: [AuthGuard], data: { claimType: 'CanAccessTiposIncidencias'}
   }
 ];
 
@@ -15,4 +15,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class PropagandaElectoralRoutingModule { }
+export class TiposIncidenciasRoutingModule { }

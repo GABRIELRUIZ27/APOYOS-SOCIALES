@@ -4,14 +4,14 @@ import { environment } from 'src/environments/environment';
 import { HandleErrorService } from './handle-error.service';
 import { Subject } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
-import { TipoIncidencia } from 'src/app/models/tipoIncidencias';
+import { TiposIncidencias } from 'src/app/models/tipos-incidecias';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TipoIncidenciaService {
-  route = `${environment.apiUrl}/Tipoincidencias`;
-  private _refreshListIncidencia$ = new Subject<TipoIncidencia | null>();
+  route = `${environment.apiUrl}/tipos-incidencias`;
+  private _refreshListIncidencia$ = new Subject<TiposIncidencias | null>();
 
   constructor(
     private http: HttpClient,
@@ -22,16 +22,12 @@ export class TipoIncidenciaService {
     return this._refreshListIncidencia$;
   }
 
-  getById(id: number) {
-    return this.http.get<TipoIncidencia>(`${this.route}/obtener-por-id/${id}`);
-  }
-
   getAll() {
-    return this.http.get<TipoIncidencia[]>(`${this.route}/obtener-todos`);
+    return this.http.get<TiposIncidencias[]>(`${this.route}/obtener-todos`);
   }
 
-  post(dto: TipoIncidencia) {
-    return this.http.post<TipoIncidencia>(`${this.route}/crear`, dto)
+  post(dto: TiposIncidencias) {
+    return this.http.post<TiposIncidencias>(`${this.route}/crear`, dto)
       .pipe(
         tap(() => {
           this._refreshListIncidencia$.next(null);
@@ -40,8 +36,8 @@ export class TipoIncidenciaService {
       );
   }
 
-  put(id: number, dto: TipoIncidencia) {
-    return this.http.put<TipoIncidencia>(`${this.route}/actualizar/${id}`, dto)
+  put(id: number, dto: TiposIncidencias) {
+    return this.http.put<TiposIncidencias>(`${this.route}/actualizar/${id}`, dto)
       .pipe(
         tap(() => {
           this._refreshListIncidencia$.next(null);

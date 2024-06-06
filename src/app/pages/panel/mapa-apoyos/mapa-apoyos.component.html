@@ -45,7 +45,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let indicador of apoyos; let pointIndex = index">
+              <tr *ngFor="let indicador of Areas; let pointIndex = index">
                 <td class="text-center">
                   {{ pointIndex + 1 }}
                 </td>
@@ -53,13 +53,13 @@
                   <span
                     class="badge me-2"
                     style="height: 14px; width: 14px"
-                    [style.backgroundColor]="indicador.area.color"
+                    [style.backgroundColor]="indicador.color"
                   >
                   </span>
-                  {{ indicador.area.nombre }}
+                  {{ indicador.nombre }}
                 </td>
                 <td class="text-muted text-center">
-1 
+                  {{ indicador.totalApoyosPorArea }}
                </td>
               </tr>
             </tbody>

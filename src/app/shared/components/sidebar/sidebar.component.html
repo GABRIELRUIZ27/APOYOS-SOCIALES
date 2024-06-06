@@ -60,7 +60,7 @@
                     </div>
                 </ul>
             </li>
-            <li class="nav-item dropdown" *appHasClaim="'canAccessOperacion'" [ngClass]="{
+            <li class="nav-item dropdown" *appHasClaim="'CanAccessOperacion'" [ngClass]="{
           active:
           (rlApoyos && rlApoyos.isActive)  
         }">
@@ -83,7 +83,7 @@
                     </div>
                 </ul>
             </li>
-            <li class="nav-item dropdown" *appHasClaim="'canAccessMapas'" [ngClass]="{
+            <li class="nav-item dropdown" *appHasClaim="'CanAccessAreas'" [ngClass]="{
                 active:
                 (rlMapaApoyos && rlMapaApoyos.isActive)  
               }">
@@ -96,7 +96,7 @@
                       <ul class="dropdown-menu show">
                           <div class="dropdown-menu-columns">
                               <div class="dropdown-menu-column">
-                                  <a *appHasClaim="'canAccessMapasApoyos'" class="dropdown-item" [routerLink]="['mapa-apoyos']" routerLinkActive="active" #rlApoyos="routerLinkActive" (click)="cerrarMenu()">
+                                  <a *appHasClaim="'CanAccessMapasApoyos'" class="dropdown-item" [routerLink]="['mapa-apoyos']" routerLinkActive="active" #rlApoyos="routerLinkActive" (click)="cerrarMenu()">
                                       <span class="nav-link-icon d-md-none d-lg-inline-block">
                         <i class="ti ti-current-location"></i>
                       </span>
@@ -106,6 +106,29 @@
                           </div>
                       </ul>
                   </li>
+                  <li class="nav-item dropdown" *appHasClaim="'CanAccessSeguridad'" [ngClass]="{
+                    active:
+                    (rlTiposIncidencias && rlTiposIncidencias.isActive)  
+                  }">
+                          <a class="nav-link dropdown-toggle" [routerLink]="" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="true">
+                              <span class="nav-link-icon d-md-none d-lg-inline-block">
+                      <i class="ti ti-user-shield"></i>
+                    </span>
+                              <span class="nav-link-title">Seguridad</span>
+                          </a>
+                          <ul class="dropdown-menu show">
+                              <div class="dropdown-menu-columns">
+                                  <div class="dropdown-menu-column">
+                                      <a *appHasClaim="'CanAccessTiposIncidencias'" class="dropdown-item" [routerLink]="['tipos-incidencias']" routerLinkActive="active" #rlTiposIncidencias="routerLinkActive" (click)="cerrarMenu()">
+                                          <span class="nav-link-icon d-md-none d-lg-inline-block">
+                            <i class="ti ti-urgent"></i>
+                          </span>
+                                          <span class="nav-link-title">Tipos de incidencias</span>
+                                      </a>
+                                  </div>
+                              </div>
+                          </ul>
+                      </li>
         </ul>
     </div>
 </div>
