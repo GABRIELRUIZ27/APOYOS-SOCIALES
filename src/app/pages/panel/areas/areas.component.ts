@@ -160,6 +160,7 @@ export class AreasComponent {
       id: dto.id,
       nombre: dto.nombre,
       icono: dto.icono,
+      color: dto.color,
     });
     this.formData = this.areaForm.value;
     console.log(dto);

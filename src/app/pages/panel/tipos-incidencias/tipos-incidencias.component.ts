@@ -127,6 +127,7 @@ export class TiposIncidenciasComponent {
       id: dto.id,
       nombre: dto.nombre,
       icono: dto.icono,
+      color: dto.color,
     });
     this.formData = this.tipoForm.value;
     console.log(dto);
