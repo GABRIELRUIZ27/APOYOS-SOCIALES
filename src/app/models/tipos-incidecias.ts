@@ -1,7 +1,6 @@
-export interface Area {
+export interface TiposIncidencias {
     id: number;
     color: string;
     nombre: string;
     icono: string;
-    totalApoyosPorArea: number;
 }

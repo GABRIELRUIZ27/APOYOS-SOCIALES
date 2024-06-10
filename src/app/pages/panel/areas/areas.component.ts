@@ -33,12 +33,44 @@ export class AreasComponent {
   selectedColorCode: string = '#206bc4';
 
   iconosTabler = [
-    { name: 'Home', class: 'ti ti-home' },
-    { name: 'User', class: 'ti ti-user' },
-    { name: 'Settings', class: 'ti ti-settings' },
-    { name: 'Building Community', class: 'ti ti-building-community' },
+    { name: 'Presidencia Municipal', class: 'ti ti-home' },
+    { name: 'Presidencia Municipal', class: 'ti ti-user' },
+    { name: 'Secretaría del Ayuntamiento', class: 'ti ti-settings' },
+    { name: 'Secretaría del Ayuntamiento', class: 'ti ti-folder' },
+    { name: 'Tesorería Municipal', class: 'ti ti-briefcase' },
+    { name: 'Tesorería Municipal', class: 'ti ti-credit-card' },
+    { name: 'Dirección de Obras Públicas', class: 'ti ti-crane' },
+    { name: 'Dirección de Obras Públicas', class: 'ti ti-hammer' }, // Reemplazado
+    { name: 'Dirección de Seguridad Pública y Tránsito', class: 'ti ti-shield' },
+    { name: 'Dirección de Seguridad Pública y Tránsito', class: 'ti ti-car' },
+    { name: 'Dirección de Desarrollo Urbano', class: 'ti ti-location-pin' },
+    { name: 'Dirección de Desarrollo Urbano', class: 'ti ti-map' },
+    { name: 'Dirección de Desarrollo Social', class: 'ti ti-heart' },
+    { name: 'Dirección de Desarrollo Social', class: 'ti ti-messages' }, // Reemplazado
+    { name: 'Dirección de Salud Municipal', class: 'ti ti-heart-broken' },
+    { name: 'Dirección de Salud Municipal', class: 'ti ti-first-aid-kit' }, // Reemplazado
+    { name: 'Dirección de Educación y Cultura', class: 'ti ti-book' },
+    { name: 'Dirección de Educación y Cultura', class: 'ti ti-school' }, // Reemplazado
+    { name: 'Dirección de Servicios Públicos', class: 'ti ti-trash' },
+    { name: 'Dirección de Servicios Públicos', class: 'ti ti-paint' }, // Reemplazado
+    { name: 'Dirección de Ecología y Medio Ambiente', class: 'ti ti-leaf' },
+    { name: 'Dirección de Ecología y Medio Ambiente', class: 'ti ti-sun' },
+    { name: 'Dirección de Desarrollo Económico', class: 'ti ti-coins' },
+    { name: 'Dirección de Desarrollo Económico', class: 'ti ti-shopping-cart' },
+    { name: 'Registro Civil', class: 'ti ti-id-badge' },
+    { name: 'Registro Civil', class: 'ti ti-check' },
+    { name: 'Agua Potable', class: 'ti ti-droplet' },
+    { name: 'Agua Potable', class: 'ti ti-ripple' },
+    { name: 'Dirección de Turismo', class: 'ti ti-camera' },
+    { name: 'Dirección de Turismo', class: 'ti ti-compass' },
+    { name: 'Contraloría Municipal', class: 'ti ti-eye' },
+    { name: 'Contraloría Municipal', class: 'ti ti-lock' },
+    { name: 'Dirección de Tecnología de la Información', class: 'ti ti-devices-pc' },
+    { name: 'Dirección de Tecnología de la Información', class: 'ti ti-wifi' },
+    { name: 'Gestión de Riesgo y Protección Civil', class: 'ti ti-volcano' },
+    { name: 'Gestión de Riesgo y Protección Civil', class: 'ti ti-shield-check' } // Reemplazado
   ];
-
+  
   constructor(
     @Inject('CONFIG_PAGINATOR') public configPaginator: PaginationInstance,
     private spinnerService: NgxSpinnerService,

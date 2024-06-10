@@ -16,6 +16,7 @@ import { RouterLinkActive } from '@angular/router';
 export class SidebarComponent implements AfterViewInit {
   menuColapsado: boolean = true;
   @ViewChild('rlDashboard') rlDashboard!: RouterLinkActive;
+  @ViewChild('rlTiposIncidencias') rlTiposIncidencias!: RouterLinkActive;
   @ViewChild('rlUsuarios') rlUsuarios: RouterLinkActive | undefined;
   @ViewChild('rlProgramasSociales') rlProgramasSociales:
     | RouterLinkActive

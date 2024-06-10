@@ -30,6 +30,13 @@ const routes: Routes = [
           ),
       },
       {
+        path: 'tipos-incidencias',
+        loadChildren: () =>
+          import('./tipos-incidencias/tipos-incidencias.module').then(
+            (i) => i.TiposIncidenciasModule
+          ),
+      },
+      {
         path: 'nube-palabras',
         loadChildren: () =>
           import('./nube-palabras/nube-palabras.module').then(
