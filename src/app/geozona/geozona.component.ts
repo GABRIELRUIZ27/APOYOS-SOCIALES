@@ -117,7 +117,7 @@ export class GeozonaComponent implements AfterViewInit {
     console.log('Mapa centrado en:', coordinates[0]);
     this.map.panTo(coordinates[0]);
     this.map.setZoom(11);
-    console.log('Zoom del mapa establecido en 10');
+    console.log('Zoom del mapa establecido en 11');
   }
 
   limpiarMapa(): void {
