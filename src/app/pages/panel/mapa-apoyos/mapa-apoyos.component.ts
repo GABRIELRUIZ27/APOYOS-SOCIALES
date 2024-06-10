@@ -4,6 +4,7 @@ import { ApoyosService } from 'src/app/core/services/apoyo.service';
 import { Apoyos } from 'src/app/models/apoyos';
 import { Area } from 'src/app/models/area';
 import { AreasService } from 'src/app/core/services/area.service';
+import { HttpClient } from '@angular/common/http'; 
 
 declare const google: any;
 @Component({
@@ -15,16 +16,22 @@ export class MapaApoyosComponent implements AfterViewInit {
   map: any = {};
   infowindow = new google.maps.InfoWindow();
   markers: google.maps.Marker[] = [];
-  apoyos: Apoyos[] = [];  apoyosFiltradas: Apoyos[] = [];
-  Areas: Area [] = [];
+  apoyos: Apoyos[] = [];
+  apoyosFiltradas: Apoyos[] = [];
+  Areas: Area[] = [];
+  municipioPolygon: google.maps.Polygon | undefined;
+  nombreMunicipio: string = 'Apetatitlán de Antonio Carbajal'; 
+  municipios: string[] = [];
 
   constructor(
-    @Inject('CONFIG_PAGINATOR') 
+    @Inject('CONFIG_PAGINATOR')
     public configPaginator: PaginationInstance,
     private apoyosService: ApoyosService,
     private areaService: AreasService,
+    private http: HttpClient // Inyectar HttpClient
   ) {
     this.getApoyos();
+    this.cargarNombresMunicipios();
     this.getAreas();
   }
 
@@ -89,8 +96,117 @@ export class MapaApoyosComponent implements AfterViewInit {
       ],
     };
     this.map = new google.maps.Map(mapElement, mapOptions);
+
+    // Cargar y resaltar el municipio por defecto
+    this.cargarCoordenadasMunicipioSeleccionado();
   }
 
+  cargarNombresMunicipios(): void {
+    this.http.get('assets/maps-kml/2023_1_29_MUN.kml', { responseType: 'text' }).subscribe(data => {
+      this.parseNombresMunicipios(data);
+      this.nombreMunicipio = 'Apetatitlán de Antonio Carvajal'; // Establecer el municipio por defecto
+      this.cargarCoordenadasMunicipioSeleccionado(); // Resaltar el municipio por defecto después de cargar los nombres
+    });
+  }
+  
+  parseNombresMunicipios(kmlData: string): void {
+    const parser = new DOMParser();
+    const xmlDoc = parser.parseFromString(kmlData, 'text/xml');
+    const placemarks = xmlDoc.getElementsByTagName('Placemark');
+    for (let i = 0; i < placemarks.length; i++) {
+      const placemark = placemarks[i];
+      const extendedData = placemark.getElementsByTagName('ExtendedData')[0];
+      if (extendedData) {
+        const simpleDatas = extendedData.getElementsByTagName('SimpleData');
+        for (let j = 0; j < simpleDatas.length; j++) {
+          const simpleData = simpleDatas[j];
+          if (simpleData.getAttribute('name') === 'NOMGEO') {
+            const municipioNombre = simpleData.textContent;
+            if (municipioNombre) {
+              this.municipios.push(municipioNombre);
+            }
+            break;
+          }
+        }
+      }
+    }
+  }
+  cargarCoordenadasMunicipioSeleccionado(): void {
+    const selectedMunicipio = this.nombreMunicipio.toLowerCase();
+    this.http.get('assets/maps-kml/2023_1_29_MUN.kml', { responseType: 'text' }).subscribe(data => {
+      this.parseCoordenadasMunicipio(data, selectedMunicipio);
+    });
+  }
+
+  parseCoordenadasMunicipio(kmlData: string, selectedMunicipio: string): void {
+    const parser = new DOMParser();
+    const xmlDoc = parser.parseFromString(kmlData, 'text/xml');
+    const placemarks = xmlDoc.getElementsByTagName('Placemark');
+    for (let i = 0; i < placemarks.length; i++) {
+      const placemark = placemarks[i];
+      const simpleDatas = placemark.getElementsByTagName('SimpleData');
+      let municipioNombre: string | undefined;
+      let municipioCoordinates: google.maps.LatLngLiteral[] = [];
+      for (let j = 0; j < simpleDatas.length; j++) {
+        const simpleData = simpleDatas[j];
+        if (simpleData.getAttribute('name') === 'NOMGEO') {
+          municipioNombre = simpleData.textContent?.toLowerCase();
+          if (municipioNombre === selectedMunicipio) {
+            const coordinatesText = placemark.getElementsByTagName('coordinates')[0].textContent;
+            if (coordinatesText) {
+              municipioCoordinates = coordinatesText.split(' ').map(coord => {
+                const [lng, lat] = coord.split(',');
+                return { lat: parseFloat(lat), lng: parseFloat(lng) };
+              });
+            }
+            break;
+          }
+        }
+      }
+      if (municipioCoordinates.length > 0) {
+        this.resaltarMunicipio(municipioCoordinates);
+        break;
+      }
+    }
+  }
+
+  resaltarMunicipio(coordinates: google.maps.LatLngLiteral[]): void {
+    this.limpiarMapa();
+    
+    console.log('Coordenadas del municipio:', coordinates);
+    this.municipioPolygon = new google.maps.Polygon({
+      paths: coordinates,
+      strokeColor: '#D71D1E', // Rojo
+      strokeOpacity: 0.8,
+      strokeWeight: 2,
+      fillColor: '#80ff0000', // Transparente
+      fillOpacity: 0.30
+    });
+  
+    if (this.municipioPolygon) {
+      this.municipioPolygon.setMap(this.map);
+      
+      // Calcular el centro del polígono
+      const bounds = new google.maps.LatLngBounds();
+      coordinates.forEach(coord => bounds.extend(coord));
+      const center = bounds.getCenter();
+      
+      console.log('Mapa centrado en:', center);
+      this.map.panTo(center);
+      this.map.setZoom(13);
+      console.log('Zoom del mapa establecido en 13');
+    } else {
+      console.error('municipioPolygon no está definido.');
+    }
+  }  
+  
+  limpiarMapa(): void {
+    if (this.municipioPolygon) {
+      this.municipioPolygon.setMap(null);
+    }
+  }
+
+  // Métodos existentes
   getApoyos() {
     this.apoyosService.getAll().subscribe({
       next: (dataFromAPI) => {
