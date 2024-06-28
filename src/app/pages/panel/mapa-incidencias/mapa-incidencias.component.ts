@@ -1,9 +1,9 @@
 import { AfterViewInit, Component, Inject } from '@angular/core';
 import { PaginationInstance } from 'ngx-pagination';
-import { ApoyosService } from 'src/app/core/services/apoyo.service';
-import { Apoyos } from 'src/app/models/apoyos';
-import { Area } from 'src/app/models/area';
-import { AreasService } from 'src/app/core/services/area.service';
+import { IncidenciaService } from 'src/app/core/services/incidencia.service';
+import { Incidencias } from 'src/app/models/incidencia';
+import { TiposIncidencias } from 'src/app/models/tipos-incidecias';
+import { TipoIncidenciaService } from 'src/app/core/services/tipoIncidencias.service';
 import { HttpClient } from '@angular/common/http'; 
 
 declare const google: any;
@@ -16,9 +16,9 @@ export class MapaIncidenciasComponent implements AfterViewInit {
   map: any = {};
   infowindow = new google.maps.InfoWindow();
   markers: google.maps.Marker[] = [];
-  apoyos: Apoyos[] = [];
-  apoyosFiltradas: Apoyos[] = [];
-  Areas: Area[] = [];
+  incidencias: Incidencias[] = [];
+  incidenciaFiltradas: Incidencias[] = [];
+  TiposIncidencias: TiposIncidencias[] = [];
   municipioPolygon: google.maps.Polygon | undefined;
   nombreMunicipio: string = 'Apetatitlán de Antonio Carbajal'; 
   municipios: string[] = [];
@@ -26,19 +26,19 @@ export class MapaIncidenciasComponent implements AfterViewInit {
   constructor(
     @Inject('CONFIG_PAGINATOR')
     public configPaginator: PaginationInstance,
-    private apoyosService: ApoyosService,
-    private areaService: AreasService,
+    private incidenciasService: IncidenciaService,
+    private tipoIncidenciasService: TipoIncidenciaService,
     private http: HttpClient // Inyectar HttpClient
   ) {
-    this.getApoyos();
+    this.getIncidencias();
     this.cargarNombresMunicipios();
-    this.getAreas();
+    this.getTiposIncidencias();
   }
 
-  getAreas() {
-    this.areaService
+  getTiposIncidencias() {
+    this.tipoIncidenciasService
       .getAll()
-      .subscribe({ next: (dataFromAPI) => (this.Areas = dataFromAPI) });
+      .subscribe({ next: (dataFromAPI) => (this.TiposIncidencias = dataFromAPI) });
   }
 
   ngAfterViewInit() {
@@ -207,11 +207,11 @@ export class MapaIncidenciasComponent implements AfterViewInit {
   }
 
   // Métodos existentes
-  getApoyos() {
-    this.apoyosService.getAll().subscribe({
+  getIncidencias() {
+    this.incidenciasService.getAll().subscribe({
       next: (dataFromAPI) => {
-        this.apoyos = dataFromAPI;
-        this.apoyosFiltradas = this.apoyos;
+        this.incidencias = dataFromAPI;
+        this.incidenciaFiltradas = this.incidencias;
         this.setAllMarkers();
       },
     });
@@ -219,45 +219,39 @@ export class MapaIncidenciasComponent implements AfterViewInit {
 
   setAllMarkers() {
     this.clearMarkers();
-    this.apoyos.forEach((apoyos) => {
+    this.incidencias.forEach((incidencias) => {
       this.setInfoWindow(
-        this.getMarker(apoyos),
-        this.getContentString(apoyos)
+        this.getMarker(incidencias),
+        this.getContentString(incidencias)
       );
     });
   }
 
-  getContentString(apoyos: Apoyos) {
+  getContentString(incidencias: Incidencias) {
     return `
 <div style="width: 350px; height: auto;" class="text-center">
-  <img src="${apoyos.foto}" alt="Imagen de incidencia" style="width: 100%; height: auto;">
+  <img src="${incidencias.foto}" alt="Imagen de incidencia" style="width: 100%; height: auto;">
             <div class="px-4 py-4">
           <p style="font-weight:  bolder;" class=" ">
-          Nombre del beneficiario:
+          Ubicación:
           <p class="text-muted ">
-            ${apoyos.nombre}
+            ${incidencias.ubicacion}
           </p>
-            Area:
+            Tipo de incidencia:
             <p class="text-muted ">
-              ${apoyos.area.nombre}
+              ${incidencias.tipoIncidencia.nombre}
             </p>
           </p>            
           <p style="font-weight:  bolder;" class=" ">
             Comunidad:
             <p class="text-muted ">
-              ${apoyos.comunidad.nombre}
+              ${incidencias.comunidad.nombre}
             </p>
           </p>
           <p style="font-weight:  bolder;" class=" ">
             Comentarios:
             <p class="text-muted ">
-              ${apoyos.comentarios}
-            </p>
-          </p>
-          <p style="font-weight:  bolder;" class="">
-            Dirección:
-            <p class=" text-muted">
-              ${apoyos.ubicacion}
+              ${incidencias.comentarios}
             </p>
           </p>
         </div>
@@ -265,21 +259,21 @@ export class MapaIncidenciasComponent implements AfterViewInit {
     `;
   }
 
-  getMarker(apoyos: Apoyos) {
+  getMarker(incidencias: Incidencias) {
     const marker = new google.maps.Marker({
       position: new google.maps.LatLng(
-        apoyos.latitud,
-        apoyos.longitud
+        incidencias.latitud,
+        incidencias.longitud
       ),
       map: this.map,
       icon: {
         path: google.maps.SymbolPath.CIRCLE,
-        fillColor: apoyos.area.color,
+        fillColor: incidencias.tipoIncidencia.color,
         fillOpacity: 1,
         scale: 6,
         strokeWeight: 0,
       },
-      title: `${apoyos.area.nombre}`,
+      title: `${incidencias.tipoIncidencia.nombre}`,
     });
     this.markers.push(marker);
     return marker;
@@ -309,11 +303,10 @@ export class MapaIncidenciasComponent implements AfterViewInit {
 
   handleChangeSearch(event: any) {
     const inputValue = event.target.value;
-    this.apoyosFiltradas = this.apoyos.filter(
+    this.incidenciaFiltradas = this.incidencias.filter(
       (incidencia) =>
-        incidencia.nombre
-          .toLocaleLowerCase()
-          .includes(inputValue.toLowerCase()) ||
+        incidencia.tipoIncidencia.nombre.toLowerCase().includes(inputValue)||
+        incidencia.comunidad.nombre.toLowerCase().includes(inputValue)||
         incidencia.ubicacion.toLowerCase().includes(inputValue)
     );
     this.configPaginator.currentPage = 1;

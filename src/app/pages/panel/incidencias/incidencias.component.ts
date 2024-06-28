@@ -5,6 +5,8 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { MensajeService } from 'src/app/core/services/mensaje.service';
 import { ComunidadService } from 'src/app/core/services/comunidad.service';
 import { IncidenciaService } from 'src/app/core/services/incidencia.service';
+import { TipoIncidenciaService } from 'src/app/core/services/tipoIncidencias.service';
+import { TiposIncidencias } from 'src/app/models/tipos-incidecias';
 
 import { LoadingStates } from 'src/app/global/global';
 import { Comunidad } from 'src/app/models/comunidad';
@@ -32,6 +34,7 @@ export class IncidenciasComponent {
   IncidenciasFilter: Incidencias[] = [];
   Incidencias: Incidencias[] = [];
   Comunidad: Comunidad[] = [];
+  TiposIncidencias: TiposIncidencias[] = [];
   imagenAmpliada: string | null = null;
   isLoading = LoadingStates.neutro;
   id!: number;
@@ -46,6 +49,7 @@ export class IncidenciasComponent {
     private mensajeService: MensajeService,
     private formBuilder: FormBuilder,
     private comunidadService: ComunidadService,
+    private tipoIncidenciaService: TipoIncidenciaService,
     private incidenciasService: IncidenciaService,
   ) {
     this.getIncidencias();
@@ -54,6 +58,7 @@ export class IncidenciasComponent {
     );
     this.creteForm();
     this.getComunidades();
+    this.getTipoIncidencias();
   }
   getIncidencias() {
     this.isLoading = LoadingStates.trueLoading;
@@ -76,13 +81,12 @@ export class IncidenciasComponent {
     this.incidenciasForm = this.formBuilder.group({
       id: [null],
       comunidad: ['', Validators.required],
-      nombre: ['', [Validators.required, Validators.maxLength(25)]],
       comentarios: [''],
       imagenBase64: [''],
       latitud: [],
       longitud: [],
       ubicacion: ['', Validators.required],
-      area: ['', Validators.required],
+      tipoIncidencia: ['', Validators.required],
     });
   }
 
@@ -90,6 +94,12 @@ export class IncidenciasComponent {
     this.comunidadService
       .getAll()
       .subscribe({ next: (dataFromAPI) => (this.Comunidad = dataFromAPI) });
+  }
+
+  getTipoIncidencias() {
+    this.tipoIncidenciaService
+      .getAll()
+      .subscribe({ next: (dataFromAPI) => (this.TiposIncidencias = dataFromAPI) });
   }
 
   submit() {
@@ -105,7 +115,10 @@ export class IncidenciasComponent {
 
     const comunidad = this.incidenciasForm.get('comunidad')?.value;
     this.incidencias.comunidad = { id: comunidad } as Comunidad;
-   
+
+    const tipoIncidencia = this.incidenciasForm.get('tipoIncidencia')?.value;
+    this.incidencias.tipoIncidencia = { id: tipoIncidencia } as TiposIncidencias;
+
     const imagenBase64 = this.incidenciasForm.get('imagenBase64')?.value;
 
     this.imgPreview = '';
@@ -154,6 +167,9 @@ export class IncidenciasComponent {
     const comunidad = this.incidenciasForm.get('comunidad')?.value;
     this.incidencias.comunidad = { id: comunidad } as Comunidad;
 
+    const tipoIncidencia = this.incidenciasForm.get('tipoIncidencia')?.value;
+    this.incidencias.tipoIncidencia = { id: tipoIncidencia } as TiposIncidencias;
+
     this.spinnerService.show();
 
     console.log('data:', this.incidencias);
@@ -196,6 +212,7 @@ export class IncidenciasComponent {
     this.incidenciasForm.patchValue({
       id: dto.id,
       comunidad: dto.comunidad.id,
+      tipoIncidencia: dto.tipoIncidencia.id,
       comentarios: dto.comentarios,
       latitud: dto.latitud,
       longitud: dto.longitud,

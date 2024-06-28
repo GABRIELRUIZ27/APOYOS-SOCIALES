@@ -1,4 +1,4 @@
-<app-page-header headerTitle="Mapa de apoyos"></app-page-header>
+<app-page-header headerTitle="Mapa de incidencias atendidas"></app-page-header>
 <div class="row row-deck row-cards">
   <div class="card">
     <div class="col-12">
@@ -39,7 +39,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let indicador of Areas; let pointIndex = index">
+              <tr *ngFor="let indicador of TiposIncidencias; let pointIndex = index">
                 <td class="text-center">
                   {{ pointIndex + 1 }}
                 </td>
@@ -53,7 +53,7 @@
                   {{ indicador.nombre }}
                 </td>
                 <td class="text-muted text-center">
-                  {{ indicador.totalApoyosPorArea }}
+                  {{ indicador.totalIncidenciasPorTipo }}
                </td>
               </tr>
             </tbody>

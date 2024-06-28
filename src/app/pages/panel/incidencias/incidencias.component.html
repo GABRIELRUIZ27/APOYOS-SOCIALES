@@ -194,6 +194,48 @@
             <div class="row">
               <div class="col-lg-12">
                 <div class="mb-3">
+                  <label class="form-label">Tipo de Incidencia*:</label>
+                  <ng-select
+                    formControlName="tipoIncidencia"
+                    #selectarea
+                    [searchable]="false"
+                    [items]="TiposIncidencias"
+                    bindLabel="nombre"
+                    bindValue="id"
+                    placeholder="Elegir"
+                    [clearable]="false"
+                  >
+                    <ng-template ng-header-tmp>
+                      <input
+                        class="form-control"
+                        type="text"
+                        (input)="selectarea.filter($any($event.target).value)"
+                      />
+                    </ng-template>
+                    <ng-template ng-option-tmp let-item="item" let-index="index">
+                      <div class="option-item">
+                        <i *ngIf="item.icono" class="{{ item.icono }} icon"></i>
+                        {{ item.nombre }}
+                      </div>
+                    </ng-template>
+                    <ng-template ng-label-tmp let-item="item">
+                      <div class="selected-item">
+                        <i *ngIf="item.icono" class="{{ item.icono }} icon"></i>
+                        {{ item.nombre }}
+                      </div>
+                    </ng-template>
+                  </ng-select>
+                  <div *ngIf="incidenciasForm.get('tipoIncidencia')?.touched" class="error-message">
+                    <div *ngIf="incidenciasForm.get('tipoIncidencia')?.hasError('required')">
+                      El tipo de incidencia es requerida
+                    </div>
+                  </div>
+                </div>
+              </div>                    
+            </div>
+            <div class="row">
+              <div class="col-lg-12">
+                <div class="mb-3">
                   <label class="form-label">Comunidad*:</label>
                   <ng-select
                     formControlName="comunidad"

@@ -3,4 +3,5 @@ export interface TiposIncidencias {
     color: string;
     nombre: string;
     icono: string;
+    totalIncidenciasPorTipo: number;
 }
