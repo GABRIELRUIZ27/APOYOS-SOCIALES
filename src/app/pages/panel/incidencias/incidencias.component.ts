@@ -4,14 +4,12 @@ import { PaginationInstance } from 'ngx-pagination';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MensajeService } from 'src/app/core/services/mensaje.service';
 import { ComunidadService } from 'src/app/core/services/comunidad.service';
-import { ApoyosService } from 'src/app/core/services/apoyo.service';
-import { AreasService } from 'src/app/core/services/area.service';
+import { IncidenciaService } from 'src/app/core/services/incidencia.service';
 
 import { LoadingStates } from 'src/app/global/global';
 import { Comunidad } from 'src/app/models/comunidad';
-import { Apoyos } from 'src/app/models/apoyos';
+import { Incidencias } from 'src/app/models/incidencia';
 import * as XLSX from 'xlsx';
-import { Area } from 'src/app/models/area';
 
 @Component({
   selector: 'app-incidencias',
@@ -23,7 +21,7 @@ export class IncidenciasComponent {
   @ViewChild('closebutton') closebutton!: ElementRef;
   @ViewChild('ubicacionInput', { static: false }) ubicacionInput!: ElementRef;
   @ViewChild('searchItem') searchItem!: ElementRef;
-  apoyosForm!: FormGroup;
+  incidenciasForm!: FormGroup;
   isModalAdd = true;
   latitude: number = 19.316818295403003;
   longitude: number = -98.23837658175323;
@@ -31,15 +29,14 @@ export class IncidenciasComponent {
   private map: any;
   private marker: any;
   maps!: google.maps.Map;
-  ApoyosFilter: Apoyos[] = [];
-  Apoyos: Apoyos[] = [];
+  IncidenciasFilter: Incidencias[] = [];
+  Incidencias: Incidencias[] = [];
   Comunidad: Comunidad[] = [];
-  Areas: Area [] = [];
   imagenAmpliada: string | null = null;
   isLoading = LoadingStates.neutro;
   id!: number;
   public isUpdatingfoto: boolean = false;
-  apoyos!: Apoyos;
+  incidencias!: Incidencias;
   public isUpdatingImg: boolean = false;
   public imgPreview: string = '';
 
@@ -49,23 +46,21 @@ export class IncidenciasComponent {
     private mensajeService: MensajeService,
     private formBuilder: FormBuilder,
     private comunidadService: ComunidadService,
-    private apoyosService: ApoyosService,
-    private areaService: AreasService,
+    private incidenciasService: IncidenciaService,
   ) {
-    this.getApoyos();
-    this.apoyosService.refreshListApoyos.subscribe(() =>
-      this.getApoyos()
+    this.getIncidencias();
+    this.incidenciasService.refreshListIncidencias.subscribe(() =>
+      this.getIncidencias()
     );
     this.creteForm();
     this.getComunidades();
-    this.getAreas();
   }
-  getApoyos() {
+  getIncidencias() {
     this.isLoading = LoadingStates.trueLoading;
-    this.apoyosService.getAll().subscribe({
+    this.incidenciasService.getAll().subscribe({
       next: (dataFromAPI) => {
-        this.Apoyos = dataFromAPI;
-        this.ApoyosFilter = this.Apoyos;
+        this.Incidencias = dataFromAPI;
+        this.IncidenciasFilter = this.Incidencias;
         this.isLoading = LoadingStates.falseLoading;
       },
       error: (err) => {
@@ -78,7 +73,7 @@ export class IncidenciasComponent {
   }
 
   creteForm() {
-    this.apoyosForm = this.formBuilder.group({
+    this.incidenciasForm = this.formBuilder.group({
       id: [null],
       comunidad: ['', Validators.required],
       nombre: ['', [Validators.required, Validators.maxLength(25)]],
@@ -97,12 +92,6 @@ export class IncidenciasComponent {
       .subscribe({ next: (dataFromAPI) => (this.Comunidad = dataFromAPI) });
   }
 
-  getAreas() {
-    this.areaService
-      .getAll()
-      .subscribe({ next: (dataFromAPI) => (this.Areas = dataFromAPI) });
-  }
-
   submit() {
     if (this.isModalAdd === false) {
       this.editar();
@@ -110,26 +99,25 @@ export class IncidenciasComponent {
       this.agregar();
     }
   }
-  editar() {
-    this.apoyos = this.apoyosForm.value as Apoyos;
 
-    const comunidad = this.apoyosForm.get('comunidad')?.value;
-    this.apoyos.comunidad = { id: comunidad } as Comunidad;
-    const area = this.apoyosForm.get('area')?.value;
-    this.apoyos.area = { id: area } as Area;
+  editar() {
+    this.incidencias = this.incidenciasForm.value as Incidencias;
+
+    const comunidad = this.incidenciasForm.get('comunidad')?.value;
+    this.incidencias.comunidad = { id: comunidad } as Comunidad;
    
-    const imagenBase64 = this.apoyosForm.get('imagenBase64')?.value;
+    const imagenBase64 = this.incidenciasForm.get('imagenBase64')?.value;
 
     this.imgPreview = '';
 
     if (!imagenBase64) {
-      const formData = { ...this.apoyos };
+      const formData = { ...this.incidencias };
       this.spinnerService.show();
-      this.apoyosService.put(this.id, formData).subscribe({
+      this.incidenciasService.put(this.id, formData).subscribe({
         next: () => {
           this.spinnerService.hide();
           this.mensajeService.mensajeExito(
-            'Apoyo actualizado correctamente'
+            'Incidencia actualizada correctamente'
           );
           this.resetForm();
           this.configPaginator.currentPage = 1;
@@ -141,15 +129,15 @@ export class IncidenciasComponent {
       });
     } else if (imagenBase64) {
       const formData = {
-        ...this.apoyos,
+        ...this.incidencias,
         imagenBase64,
       };
       this.spinnerService.show();
-      this.apoyosService.put(this.id, formData).subscribe({
+      this.incidenciasService.put(this.id, formData).subscribe({
         next: () => {
           this.spinnerService.hide();
           this.mensajeService.mensajeExito(
-            'Apoyo actualizado correctamente'
+            'Incidencia actualizada correctamente'
           );
           this.resetForm();
           this.configPaginator.currentPage = 1;
@@ -162,25 +150,23 @@ export class IncidenciasComponent {
     }
   }
   agregar() {
-    this.apoyos = this.apoyosForm.value as Apoyos;
-    const comunidad = this.apoyosForm.get('comunidad')?.value;
-    this.apoyos.comunidad = { id: comunidad } as Comunidad;
-    const area = this.apoyosForm.get('area')?.value;
-    this.apoyos.area = { id: area } as Area;
+    this.incidencias = this.incidenciasForm.value as Incidencias;
+    const comunidad = this.incidenciasForm.get('comunidad')?.value;
+    this.incidencias.comunidad = { id: comunidad } as Comunidad;
 
     this.spinnerService.show();
 
-    console.log('data:', this.apoyos);
-    const imagenBase64 = this.apoyosForm.get('imagenBase64')?.value;
+    console.log('data:', this.incidencias);
+    const imagenBase64 = this.incidenciasForm.get('imagenBase64')?.value;
 
     if (imagenBase64) {
-      let formData = { ...this.apoyos, imagenBase64 };
+      let formData = { ...this.incidencias, imagenBase64 };
       this.spinnerService.show();
-      this.apoyosService.post(formData).subscribe({
+      this.incidenciasService.post(formData).subscribe({
         next: () => {
           this.spinnerService.hide();
           this.mensajeService.mensajeExito(
-            'Apoyo guardado correctamente'
+            'Incidencia guardada correctamente'
           );
           this.resetForm();
           this.configPaginator.currentPage = 1;
@@ -198,27 +184,25 @@ export class IncidenciasComponent {
     }
   }
   
-  setDataModalUpdate(dto: Apoyos) {
+  setDataModalUpdate(dto: Incidencias) {
     this.isModalAdd = false;
     this.id = dto.id;
 
-    const apoyo = this.ApoyosFilter.find((p) => p.id === dto.id);
+    const apoyo = this.IncidenciasFilter.find((p) => p.id === dto.id);
 
     this.imgPreview = apoyo!.foto;
     this.isUpdatingImg = true;
 
-    this.apoyosForm.patchValue({
+    this.incidenciasForm.patchValue({
       id: dto.id,
-      area: dto.area.id,
       comunidad: dto.comunidad.id,
-      mombre: dto.nombre,
       comentarios: dto.comentarios,
       latitud: dto.latitud,
       longitud: dto.longitud,
       ubicacion: dto.ubicacion,
       imagenBase64: '',
     });
-    console.log('setDataUpdateForm ', this.apoyosForm.value);
+    console.log('setDataUpdateForm ', this.incidenciasForm.value);
     console.log('setDataUpdateDTO', dto);
   }
 
@@ -226,7 +210,7 @@ export class IncidenciasComponent {
     this.mensajeService.mensajeAdvertencia(
       `¿Estás seguro de eliminar el apoyo de: ${nameItem}?`,
       () => {
-        this.apoyosService.delete(id).subscribe({
+        this.incidenciasService.delete(id).subscribe({
           next: () => {
             this.mensajeService.mensajeExito(
               'Apoyo borrado correctamente'
@@ -258,7 +242,7 @@ export class IncidenciasComponent {
         const base64String = reader.result as string;
         const base64WithoutPrefix = base64String.split(';base64,').pop() || '';
 
-        this.apoyosForm.patchValue({
+        this.incidenciasForm.patchValue({
           imagenBase64: base64WithoutPrefix, // Contiene solo la representación en base64
         });
       };
@@ -268,18 +252,18 @@ export class IncidenciasComponent {
   }
   resetForm() {
     this.closebutton.nativeElement.click();
-    this.apoyosForm.reset();
+    this.incidenciasForm.reset();
   }
   resetMap() {
     this.ubicacionInput.nativeElement.value = '';
     this.setCurrentLocation();
-    this.getApoyos();
+    this.getIncidencias();
     this.ngAfterViewInit();
   }
 
   handleChangeAdd() {
-    if (this.apoyosForm) {
-      this.apoyosForm.reset();
+    if (this.incidenciasForm) {
+      this.incidenciasForm.reset();
       this.isModalAdd = true;
       this.isUpdatingfoto = false;
       this.isUpdatingImg = false;
@@ -326,7 +310,7 @@ export class IncidenciasComponent {
 
           if (formattedAddress.toLowerCase().includes('tlax')) {
             if (place.formatted_address) {
-              this.apoyosForm.patchValue({
+              this.incidenciasForm.patchValue({
                 ubicacion: place.formatted_address,
                 domicilio: place.formatted_address,
               });
@@ -357,7 +341,7 @@ export class IncidenciasComponent {
       }
 
       if (place.formatted_address) {
-        this.apoyosForm.patchValue({
+        this.incidenciasForm.patchValue({
           domicilio: place.formatted_address,
         });
       }
@@ -379,7 +363,7 @@ export class IncidenciasComponent {
         animation: google.maps.Animation.DROP,
         title: place.name,
       });
-      this.apoyosForm.patchValue({
+      this.incidenciasForm.patchValue({
         longitud: selectedLng,
         latitud: selectedLat,
       });
@@ -388,8 +372,8 @@ export class IncidenciasComponent {
     }
   }
   selectAddress2(place: google.maps.places.PlaceResult) {
-    const selectedLat = this.apoyosForm.value.latitud;
-    const selectedLng = this.apoyosForm.value.longitud;
+    const selectedLat = this.incidenciasForm.value.latitud;
+    const selectedLng = this.incidenciasForm.value.longitud;
 
     this.canvas.setAttribute('data-lat', selectedLat.toString());
     this.canvas.setAttribute('data-lng', selectedLng.toString());
@@ -403,7 +387,7 @@ export class IncidenciasComponent {
       position: newLatLng,
       map: this.maps,
       animation: google.maps.Animation.DROP,
-      title: this.apoyosForm.value.nombres,
+      title: this.incidenciasForm.value.nombres,
     });
   }
   ngAfterViewInit() {
@@ -492,7 +476,7 @@ export class IncidenciasComponent {
     if (event.latLng) {
       this.latitude = event.latLng.lat();
       this.longitude = event.latLng.lng();
-      this.apoyosForm.patchValue({
+      this.incidenciasForm.patchValue({
         latitud: this.latitude,
         longitud: this.longitude,
       });
@@ -510,31 +494,27 @@ export class IncidenciasComponent {
 
     console.log('Search Value:', valueSearch);
 
-    this.ApoyosFilter = this.Apoyos.filter(
+    this.IncidenciasFilter = this.Incidencias.filter(
       (p) =>
-        p.nombre.toLowerCase().includes(valueSearch) ||
         p.comunidad.nombre.toLowerCase().includes(valueSearch) ||
-        p.area.nombre.toLowerCase().includes(valueSearch) ||
         p.ubicacion.toString().includes(valueSearch)
     );
 
-    console.log('Filtered:', this.ApoyosFilter);
+    console.log('Filtered:', this.IncidenciasFilter);
 
     this.configPaginator.currentPage = 1;
   }
   exportarDatosAExcel() {
-    if (this.Areas.length === 0) {
+    if (this.Incidencias.length === 0) {
       console.warn(
-        'La lista de apoyos está vacía, no se puede exportar.'
+        'La lista de incidencias está vacía, no se puede exportar.'
       );
       return;
     }
 
-    const datosParaExportar = this.Apoyos.map((p) => {
+    const datosParaExportar = this.Incidencias.map((p) => {
       return {
-        Nombre: p.nombre,
         Comunidad: p.comunidad.nombre,
-        Area: p.area.nombre,
         Comentarios: p.comentarios,
         ubicacion: p.ubicacion,
       };

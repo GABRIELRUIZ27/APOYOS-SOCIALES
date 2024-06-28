@@ -37,6 +37,13 @@ const routes: Routes = [
           ),
       },
       {
+        path: 'incidencias',
+        loadChildren: () =>
+          import('./incidencias/incidencias.module').then(
+            (i) => i.IncidenciasModule
+          ),
+      },
+      {
         path: 'nube-palabras',
         loadChildren: () =>
           import('./nube-palabras/nube-palabras.module').then(
@@ -62,6 +69,11 @@ const routes: Routes = [
         path: 'mapa-apoyos',
         loadChildren: () =>
           import('./mapa-apoyos/mapa-apoyos.module').then((i) => i.MapaApoyosModule),
+      },
+      {
+        path: 'mapa-incidencias',
+        loadChildren: () =>
+          import('./mapa-incidencias/mapa-incidencias.module').then((i) => i.MapaIncidenciasModule),
       },
     ],
   },

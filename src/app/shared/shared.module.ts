@@ -9,6 +9,8 @@ import { RouterModule } from '@angular/router';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { NoResultsComponent } from './components/no-results/no-results.component';
 import { HasClaimDirective } from './directives/has-claim.directive';
+import { FormsModule } from '@angular/forms'; // Import FormsModule
+import { GeozonaComponent } from 'src/app/geozona/geozona.component'; // Import GeozonaComponent
 
 @NgModule({
   declarations: [
@@ -19,7 +21,8 @@ import { HasClaimDirective } from './directives/has-claim.directive';
     PageHeaderComponent,
     NotFoundComponent,
     NoResultsComponent,
-    HasClaimDirective
+    HasClaimDirective,
+    GeozonaComponent // Declare GeozonaComponent
   ],
   exports: [
     SidebarComponent,
@@ -29,11 +32,13 @@ import { HasClaimDirective } from './directives/has-claim.directive';
     PageHeaderComponent,
     NotFoundComponent,
     NoResultsComponent,
-    HasClaimDirective
+    HasClaimDirective,
+    GeozonaComponent // Export GeozonaComponent
   ],
   imports: [
     CommonModule,
-    RouterModule
+    RouterModule,
+    FormsModule // Import FormsModule
   ]
 })
 export class SharedModule { }

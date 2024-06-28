@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MapaApoyosRoutingModule } from './mapa-apoyos-routing.module';
-import { MapaApoyosComponent } from './mapa-apoyos.component';
+import { MapaIncidenciasRoutingModule } from './mapa-incidencias-routing.module';
+import { MapaIncidenciasComponent } from './mapa-incidencias.component';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { NgSelectModule } from '@ng-select/ng-select';
@@ -11,11 +11,11 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
-    MapaApoyosComponent,
+    MapaIncidenciasComponent,
   ],
   imports: [
     CommonModule,
-    MapaApoyosRoutingModule,
+    MapaIncidenciasRoutingModule,
     NgxSpinnerModule,
     NgxPaginationModule,
     NgSelectModule,
@@ -25,4 +25,4 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     ReactiveFormsModule,
   ]
 })
-export class MapaApoyosModule { }
+export class MapaIncidenciasModule { }

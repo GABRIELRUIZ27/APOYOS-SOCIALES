@@ -94,7 +94,7 @@
             <tbody>
               <tr
                 *ngFor="
-                  let apoyos of ApoyosFilter
+                  let apoyos of IncidenciasFilter
                     | paginate : configPaginator;
                   let pointIndex = index
                 "
@@ -133,7 +133,7 @@
                     </button>
                     <button
                       class="btn btn-danger btn-icon btn-sm"
-                      (click)="deleteItem(apoyos.id, apoyos.nombre)"
+                      (click)="deleteItem(apoyos.id, apoyos.comentarios)"
                     >
                       <i class="ti ti-eraser"></i>
                     </button>
@@ -149,7 +149,7 @@
 
       <div class="card-footer d-flex align-items-center">
         <p class="m-0 text-muted">
-          Total de registros: <b>{{ ApoyosFilter.length }}</b>
+          Total de registros: <b>{{ IncidenciasFilter.length }}</b>
         </p>
 
         <div class="m-0 ms-auto">
@@ -188,11 +188,11 @@
         ></button>
       </div>
 
-      <form [formGroup]="apoyosForm" (ngSubmit)="submit()">
+      <form [formGroup]="incidenciasForm" (ngSubmit)="submit()">
         <div class="modal-body">
           <div class="row d-flex align-items-center align-items-end">
             <div class="row">
-              <div class="col-lg-6">
+              <div class="col-lg-12">
                 <div class="mb-3">
                   <label class="form-label">Comunidad*:</label>
                   <ng-select
@@ -223,59 +223,19 @@
                     </ng-template>
                   </ng-select>
                   <div
-                    *ngIf="apoyosForm.get('comunidad')?.touched"
+                    *ngIf="incidenciasForm.get('comunidad')?.touched"
                     class="error-message"
                   >
                     <div
                       *ngIf="
-                        apoyosForm.get('comunidad')?.hasError('required')
+                        incidenciasForm.get('comunidad')?.hasError('required')
                       "
                     >
                       La comunidad es requerida
                     </div>
                   </div>
                 </div>
-              </div>
-              <div class="col-lg-6">
-                <div class="mb-3">
-                  <label class="form-label">Area*:</label>
-                  <ng-select
-                    formControlName="area"
-                    #selectarea
-                    [searchable]="false"
-                    [items]="Areas"
-                    bindLabel="nombre"
-                    bindValue="id"
-                    placeholder="Elegir"
-                    [clearable]="false"
-                  >
-                    <ng-template ng-header-tmp>
-                      <input
-                        class="form-control"
-                        type="text"
-                        (input)="selectarea.filter($any($event.target).value)"
-                      />
-                    </ng-template>
-                    <ng-template ng-option-tmp let-item="item" let-index="index">
-                      <div class="option-item">
-                        <i *ngIf="item.icono" class="{{ item.icono }} icon"></i>
-                        {{ item.nombre }}
-                      </div>
-                    </ng-template>
-                    <ng-template ng-label-tmp let-item="item">
-                      <div class="selected-item">
-                        <i *ngIf="item.icono" class="{{ item.icono }} icon"></i>
-                        {{ item.nombre }}
-                      </div>
-                    </ng-template>
-                  </ng-select>
-                  <div *ngIf="apoyosForm.get('area')?.touched" class="error-message">
-                    <div *ngIf="apoyosForm.get('area')?.hasError('required')">
-                      El area es requerida
-                    </div>
-                  </div>
-                </div>
-              </div>                        
+              </div>                    
             </div>
           </div>
           <div class="col-lg-12">
@@ -315,10 +275,10 @@
             <div class="mb-3">
               <img
                 class="img"
-                *ngIf="apoyosForm.get('imagenBase64')?.value"
+                *ngIf="incidenciasForm.get('imagenBase64')?.value"
                 [src]="
                   'data:image/jpeg;base64,' +
-                  apoyosForm.get('imagenBase64')?.value
+                  incidenciasForm.get('imagenBase64')?.value
                 "
                 width="50%"
                 height="50%"
@@ -338,11 +298,11 @@
                 (onAddressChange)="selectAddress($event)"
               />
               <div
-                *ngIf="apoyosForm.get('ubicacion')?.touched"
+                *ngIf="incidenciasForm.get('ubicacion')?.touched"
                 class="error-message"
               >
                 <div
-                  *ngIf="apoyosForm.get('ubicacion')?.hasError('required')"
+                  *ngIf="incidenciasForm.get('ubicacion')?.hasError('required')"
                 >
                   La ubicacion es requerida
                 </div>
@@ -386,7 +346,7 @@
           <button
             type="submit"
             class="btn btn-success"
-            [disabled]="!apoyosForm.valid"
+            [disabled]="!incidenciasForm.valid"
           >
             {{ isModalAdd ? "Agregar" : "Actualizar" }}
           </button>

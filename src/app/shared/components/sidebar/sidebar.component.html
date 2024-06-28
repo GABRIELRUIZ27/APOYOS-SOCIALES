@@ -96,12 +96,18 @@
                       <ul class="dropdown-menu show">
                           <div class="dropdown-menu-columns">
                               <div class="dropdown-menu-column">
-                                  <a *appHasClaim="'CanAccessMapasApoyos'" class="dropdown-item" [routerLink]="['mapa-apoyos']" routerLinkActive="active" #rlApoyos="routerLinkActive" (click)="cerrarMenu()">
+                                  <a *appHasClaim="'CanAccessMapasApoyos'" class="dropdown-item" [routerLink]="['mapa-apoyos']" routerLinkActive="active" #rlMapaApoyos="routerLinkActive" (click)="cerrarMenu()">
                                       <span class="nav-link-icon d-md-none d-lg-inline-block">
                         <i class="ti ti-current-location"></i>
                       </span>
                                       <span class="nav-link-title">Mapa de apoyos</span>
                                   </a>
+                                  <a *appHasClaim="'CanAccessMapasIncidencias'" class="dropdown-item" [routerLink]="['mapa-incidencias']" routerLinkActive="active" #rlMapaIncidencias="routerLinkActive" (click)="cerrarMenu()">
+                                    <span class="nav-link-icon d-md-none d-lg-inline-block">
+                      <i class="ti ti-current-location"></i>
+                    </span>
+                                    <span class="nav-link-title">Mapa de incidencias</span>
+                                </a>
                               </div>
                           </div>
                       </ul>
@@ -125,6 +131,12 @@
                           </span>
                                           <span class="nav-link-title">Tipos de incidencias</span>
                                       </a>
+                                      <a *appHasClaim="'CanAccessIncidencias'" class="dropdown-item" [routerLink]="['incidencias']" routerLinkActive="active" #rlIncidencias="routerLinkActive" (click)="cerrarMenu()">
+                                        <span class="nav-link-icon d-md-none d-lg-inline-block">
+                          <i class="ti ti-urgent"></i>
+                        </span>
+                                        <span class="nav-link-title">Incidencias</span>
+                                    </a>
                                   </div>
                               </div>
                           </ul>
