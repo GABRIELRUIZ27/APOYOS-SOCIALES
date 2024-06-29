@@ -191,8 +191,8 @@
       <form [formGroup]="apoyosForm" (ngSubmit)="submit()">
         <div class="modal-body">
           <div class="row d-flex align-items-center align-items-end">
-            <div class="row">
-                <div class="col-lg-12">
+              <div class="row">
+                <div class="col-lg-9">
                   <div class="mb-3">
                     <label class="form-label">Nombre*:</label>
                     <input
@@ -217,93 +217,206 @@
                     </div>
                   </div>
                 </div>
-              </div>
-            <div class="row">
-              <div class="col-lg-6">
-                <div class="mb-3">
-                  <label class="form-label">Comunidad*:</label>
-                  <ng-select
-                    formControlName="comunidad"
-                    #selectMunicipio
-                    [searchable]="true"
-                    [items]="Comunidad"
-                    bindLabel="nombre"
-                    bindValue="id"
-                    placeholder="Elegir"
-                    [clearable]="true"
-                  >
-                    <ng-template ng-header-tmp>
-                      <input
-                        class="form-control color"
-                        type="text"
-                        (input)="
-                          selectMunicipio.filter($any($event.target).value)
-                        "
-                      />
-                    </ng-template>
-                    <ng-template
-                      ng-option-tmp
-                      let-item="item"
-                      let-index="index"
-                    >
-                      {{ item.nombre }}
-                    </ng-template>
-                  </ng-select>
-                  <div
-                    *ngIf="apoyosForm.get('comunidad')?.touched"
-                    class="error-message"
-                  >
+                <div class="col-lg-3">
+                  <div class="mb-3">
+                    <label class="form-label">Edad*:</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      formControlName="edad"
+                    />
                     <div
-                      *ngIf="
-                        apoyosForm.get('comunidad')?.hasError('required')
-                      "
+                      *ngIf="apoyosForm.get('edad')?.touched"
+                      class="error-message"
                     >
-                      La comunidad es requerida
+                      <div
+                        *ngIf="apoyosForm.get('edad')?.hasError('required')"
+                      >
+                        La edad es requerida
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="col-lg-6">
-                <div class="mb-3">
-                  <label class="form-label">Area*:</label>
-                  <ng-select
-                    formControlName="area"
-                    #selectarea
-                    [searchable]="false"
-                    [items]="Areas"
-                    bindLabel="nombre"
-                    bindValue="id"
-                    placeholder="Elegir"
-                    [clearable]="false"
-                  >
-                    <ng-template ng-header-tmp>
-                      <input
-                        class="form-control"
-                        type="text"
-                        (input)="selectarea.filter($any($event.target).value)"
-                      />
-                    </ng-template>
-                    <ng-template ng-option-tmp let-item="item" let-index="index">
-                      <div class="option-item">
-                        <i *ngIf="item.icono" class="{{ item.icono }} icon"></i>
-                        {{ item.nombre }}
+              <div class="row">
+                <div class="col-lg-12">
+                  <div class="mb-3">
+                    <label class="form-label">CURP:</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      formControlName="nombre"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-6">
+                  <div class="mb-3">
+                    <label class="form-label">Género*:</label>
+                    <ng-select
+                      formControlName="genero"
+                      #selectarea
+                      [searchable]="false"
+                      [items]="Genero"
+                      bindLabel="nombre"
+                      bindValue="id"
+                      placeholder="Elegir"
+                      [clearable]="false"
+                    >
+                      <ng-template ng-header-tmp>
+                        <input
+                          class="form-control"
+                          type="text"
+                          (input)="selectarea.filter($any($event.target).value)"
+                        />
+                      </ng-template>
+                      <ng-template ng-option-tmp let-item="item" let-index="index">
+                        <div class="option-item">
+                          {{ item.nombre }}
+                        </div>
+                      </ng-template>
+                      <ng-template ng-label-tmp let-item="item">
+                        <div class="selected-item">
+                          {{ item.nombre }}
+                        </div>
+                      </ng-template>
+                    </ng-select>
+                    <div *ngIf="apoyosForm.get('genero')?.touched" class="error-message">
+                      <div *ngIf="apoyosForm.get('genero')?.hasError('required')">
+                        El género es requerido
                       </div>
-                    </ng-template>
-                    <ng-template ng-label-tmp let-item="item">
-                      <div class="selected-item">
-                        <i *ngIf="item.icono" class="{{ item.icono }} icon"></i>
+                    </div>
+                  </div>
+                </div> 
+                <div class="col-lg-6">
+                  <div class="mb-3">
+                    <label class="form-label">Comunidad*:</label>
+                    <ng-select
+                      formControlName="comunidad"
+                      #selectMunicipio
+                      [searchable]="true"
+                      [items]="Comunidad"
+                      bindLabel="nombre"
+                      bindValue="id"
+                      placeholder="Elegir"
+                      [clearable]="true"
+                    >
+                      <ng-template ng-header-tmp>
+                        <input
+                          class="form-control color"
+                          type="text"
+                          (input)="
+                            selectMunicipio.filter($any($event.target).value)
+                          "
+                        />
+                      </ng-template>
+                      <ng-template
+                        ng-option-tmp
+                        let-item="item"
+                        let-index="index"
+                      >
                         {{ item.nombre }}
+                      </ng-template>
+                    </ng-select>
+                    <div
+                      *ngIf="apoyosForm.get('comunidad')?.touched"
+                      class="error-message"
+                    >
+                      <div
+                        *ngIf="
+                          apoyosForm.get('comunidad')?.hasError('required')
+                        "
+                      >
+                        La comunidad es requerida
                       </div>
-                    </ng-template>
-                  </ng-select>
-                  <div *ngIf="apoyosForm.get('area')?.touched" class="error-message">
-                    <div *ngIf="apoyosForm.get('area')?.hasError('required')">
-                      El area es requerida
                     </div>
                   </div>
                 </div>
-              </div>                        
-            </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-6">
+                  <div class="mb-3">
+                    <label class="form-label">Area*:</label>
+                    <ng-select
+                      formControlName="area"
+                      #selectarea
+                      [searchable]="false"
+                      [items]="Areas"
+                      bindLabel="nombre"
+                      bindValue="id"
+                      placeholder="Elegir"
+                      [clearable]="false"
+                      (change)="onAreaChange($event)"
+                    >
+                      <ng-template ng-header-tmp>
+                        <input
+                          class="form-control"
+                          type="text"
+                          (input)="selectarea.filter($any($event.target).value)"
+                        />
+                      </ng-template>
+                      <ng-template ng-option-tmp let-item="item" let-index="index">
+                        <div class="option-item">
+                          <i *ngIf="item.icono" class="{{ item.icono }} icon"></i>
+                          {{ item.nombre }}
+                        </div>
+                      </ng-template>
+                      <ng-template ng-label-tmp let-item="item">
+                        <div class="selected-item">
+                          <i *ngIf="item.icono" class="{{ item.icono }} icon"></i>
+                          {{ item.nombre }}
+                        </div>
+                      </ng-template>
+                    </ng-select>
+                    <div *ngIf="apoyosForm.get('area')?.touched" class="error-message">
+                      <div *ngIf="apoyosForm.get('area')?.hasError('required')">
+                        El area es requerida
+                      </div>
+                    </div>
+                  </div>
+                </div> 
+                <div class="col-lg-6">
+                  <div class="mb-3">
+                    <label class="form-label">Programa social*:</label>
+                    <ng-select
+                      formControlName="programasSociales"
+                      #selectprogramas
+                      [searchable]="false"
+                      [items]="filteredProgramasSociales"
+                      bindLabel="nombre"
+                      bindValue="id"
+                      placeholder="Elegir"
+                      [clearable]="false"
+                      [disabled]="!isProgramaSocialSelectEnabled"
+                    >
+                      <ng-template ng-header-tmp>
+                        <input
+                          class="form-control"
+                          type="text"
+                          (input)="selectprogramas.filter($any($event.target).value)"
+                        />
+                      </ng-template>
+                      <ng-template ng-option-tmp let-item="item" let-index="index">
+                        <div class="option-item">
+                          {{ item.nombre }}
+                        </div>
+                      </ng-template>
+                      <ng-template ng-label-tmp let-item="item">
+                        <div class="selected-item">
+                          {{ item.nombre }}
+                        </div>
+                      </ng-template>
+                    </ng-select>
+                    <div *ngIf="apoyosForm.get('programasSociales')?.touched" class="error-message">
+                      <div *ngIf="apoyosForm.get('programasSociales')?.hasError('required')">
+                        El programa social es requerido
+                      </div>
+                    </div>
+                  </div>
+                </div>                        
+              </div>
+              
           </div>
           <div class="col-lg-12">
             <div class="mb-3">

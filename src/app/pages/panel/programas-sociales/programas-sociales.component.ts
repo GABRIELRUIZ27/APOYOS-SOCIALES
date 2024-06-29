@@ -7,6 +7,8 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { ProgramasSocialesService } from 'src/app/core/services/programas-sociales.service';
 import { MensajeService } from 'src/app/core/services/mensaje.service';
 import * as XLSX from 'xlsx';
+import { Area } from 'src/app/models/area';
+import { AreasService } from 'src/app/core/services/area.service';
 
 @Component({
   selector: 'app-programas-sociales',
@@ -28,18 +30,22 @@ export class ProgramasSocialesComponent {
   verdadero = 'Activo';
   falso = 'Inactivo';
   estatusTag = this.verdadero;
+  Areas: Area [] = [];
+
   constructor(
     @Inject('CONFIG_PAGINATOR') public configPaginator: PaginationInstance,
     private spinnerService: NgxSpinnerService,
     private programasSocialesService: ProgramasSocialesService,
     private mensajeService: MensajeService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private areaService: AreasService,
   ) {
     this.programasSocialesService.refreshListProgramasSociales.subscribe(() =>
       this.getProgramasSociales()
     );
     this.getProgramasSociales();
     this.creteForm();
+    this.getAreas();
   }
 
   creteForm() {
@@ -57,6 +63,7 @@ export class ProgramasSocialesComponent {
         ],
       ],
       estatus: [true],
+      area: ['', Validators.required],
     });
   }
 
@@ -77,6 +84,13 @@ export class ProgramasSocialesComponent {
   onPageChange(number: number) {
     this.configPaginator.currentPage = number;
   }
+
+  getAreas() {
+    this.areaService
+      .getAll()
+      .subscribe({ next: (dataFromAPI) => (this.Areas = dataFromAPI) });
+  }
+
   handleChangeSearch(event: any) {
     const inputValue = event.target.value;
     const valueSearch = inputValue.toLowerCase();
@@ -91,6 +105,9 @@ export class ProgramasSocialesComponent {
   actualizar() {
     const programaSocialData = { ...this.programaSocialForm.value };
     this.programaSocial = programaSocialData as ProgramaSocial;
+    const area = this.programaSocialForm.get('area')?.value;
+    this.programaSocial.area = { id: area } as Area;
+
     this.spinnerService.show();
     this.programasSocialesService.put(this.id, this.programaSocial).subscribe({
       next: () => {
@@ -115,6 +132,7 @@ export class ProgramasSocialesComponent {
       id: dto.id,
       nombre: dto.nombre,
       estatus: dto.estatus,
+      area: dto.area.id
     });
     this.formData = this.programaSocialForm.value;
     console.log(dto);
@@ -150,16 +168,15 @@ export class ProgramasSocialesComponent {
   }
 
   agregar() {
-    const programaSocialData = { ...this.programaSocialForm.value };
-    delete programaSocialData.id;
-    this.programaSocial = programaSocialData as ProgramaSocial;
+    this.programaSocial = this.programaSocialForm.value as ProgramaSocial;
+    const area = this.programaSocialForm.get('area')?.value;
+
+    this.programaSocial.area = { id: area } as Area;
     this.spinnerService.show();
     this.programasSocialesService.post(this.programaSocial).subscribe({
       next: () => {
         this.spinnerService.hide();
-        this.mensajeService.mensajeExito(
-          'Programa social guardado correctamente'
-        );
+        this.mensajeService.mensajeExito('Programa guardado correctamente');
         this.resetForm();
         this.configPaginator.currentPage = 1;
       },
@@ -169,7 +186,7 @@ export class ProgramasSocialesComponent {
       },
     });
   }
-
+  
   handleChangeAdd() {
     if (this.programaSocialForm) {
       this.programaSocialForm.reset();

@@ -4,25 +4,25 @@ import { environment } from 'src/environments/environment';
 import { HandleErrorService } from './handle-error.service';
 import { Subject } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
-import { TipoEleccion } from 'src/app/models/tipo-eleccion';
+import { Genero } from 'src/app/models/genero';
 
 @Injectable({
   providedIn: 'root',
 })
-export class TipoEleccionService {
-  route = `${environment.apiUrl}/tipos-elecciones`;
-  private _refreshListTiposEleccion$ = new Subject<TipoEleccion | null>();
+export class GeneroService {
+  route = `${environment.apiUrl}/genero`;
+  private _refreshListGeneros$ = new Subject<Genero | null>();
 
   constructor(
     private http: HttpClient,
     private handleErrorService: HandleErrorService
   ) {}
 
-  get refreshListTiposEleccion() {
-    return this._refreshListTiposEleccion$;
+  get refreshListComunidades() {
+    return this._refreshListGeneros$;
   }
 
   getAll() {
-    return this.http.get<TipoEleccion[]>(`${this.route}/obtener-todos`);
+    return this.http.get<Genero[]>(`${this.route}/obtener-todos`);
   }
 }

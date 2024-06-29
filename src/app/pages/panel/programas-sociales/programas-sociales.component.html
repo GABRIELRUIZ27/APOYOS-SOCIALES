@@ -39,6 +39,7 @@
                             <tr>
                                 <th class="text-center">#</th>
                                 <th style="text-transform: none; font-size: inherit">Nombre</th>
+                                <th style="text-transform: none; font-size: inherit">Área</th>
                                 <th style="text-transform: none; font-size: inherit" class="text-center">
                                     Estatus
                                 </th>
@@ -57,6 +58,9 @@
                                     {{ configPaginator.itemsPerPage * (configPaginator.currentPage - 1) + pointIndex + 1 }}
                                 </td>
                                 <td>{{ programa.nombre }}</td>
+                                <td>
+                                    <i [ngClass]="programa.area.icono" class="icono-con-espacio"></i>{{ programa.area.nombre }}
+                                </td>
                                 <td class="text-center">
                                     <ng-container *ngIf="programa.estatus; else elseEstatus">
                                         <span class="badge bg-success me-1"> </span> Activo
@@ -110,7 +114,7 @@
             <form [formGroup]="programaSocialForm" (ngSubmit)="submit()">
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-lg-10">
+                        <div class="col-lg-12">
                             <div class="mb-3">
                                 <label class="form-label">Nombre*:</label>
                                 <input type="text" class="form-control" formControlName="nombre" />
@@ -139,7 +143,49 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-2">
+
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                      <label class="form-label">Area*:</label>
+                                      <ng-select
+                                        formControlName="area"
+                                        #selectarea
+                                        [searchable]="false"
+                                        [items]="Areas"
+                                        bindLabel="nombre"
+                                        bindValue="id"
+                                        placeholder="Elegir"
+                                        [clearable]="false"
+                                      >
+                                        <ng-template ng-header-tmp>
+                                          <input
+                                            class="form-control"
+                                            type="text"
+                                            (input)="selectarea.filter($any($event.target).value)"
+                                          />
+                                        </ng-template>
+                                        <ng-template ng-option-tmp let-item="item" let-index="index">
+                                          <div class="option-item">
+                                            <i *ngIf="item.icono" class="{{ item.icono }} icon"></i>
+                                            {{ item.nombre }}
+                                          </div>
+                                        </ng-template>
+                                        <ng-template ng-label-tmp let-item="item">
+                                          <div class="selected-item">
+                                            <i *ngIf="item.icono" class="{{ item.icono }} icon"></i>
+                                            {{ item.nombre }}
+                                          </div>
+                                        </ng-template>
+                                      </ng-select>
+                                      <div *ngIf="programaSocialForm.get('area')?.touched" class="error-message">
+                                        <div *ngIf="programaSocialForm.get('area')?.hasError('required')">
+                                          El area es requerida
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div> 
+                            <div class="col-lg-6">
                                 <div class="mb-3 custom-green-switch">
                                     <label for="estadoActivo" class="form-label">Estatus</label>
                                     <label class="form-check form-switch checkbox-verde">
@@ -158,6 +204,7 @@
                   </label>
                                 </div>
                             </div>
+                        </div>
                         </div>
                     </div>
                 </div>

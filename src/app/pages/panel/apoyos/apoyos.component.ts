@@ -6,12 +6,16 @@ import { MensajeService } from 'src/app/core/services/mensaje.service';
 import { ComunidadService } from 'src/app/core/services/comunidad.service';
 import { ApoyosService } from 'src/app/core/services/apoyo.service';
 import { AreasService } from 'src/app/core/services/area.service';
+import { GeneroService } from 'src/app/core/services/genero.service';
+import { ProgramasSocialesService } from 'src/app/core/services/programas-sociales.service';
+import { ProgramaSocial } from 'src/app/models/programa-social';
 
 import { LoadingStates } from 'src/app/global/global';
 import { Comunidad } from 'src/app/models/comunidad';
 import { Apoyos } from 'src/app/models/apoyos';
 import * as XLSX from 'xlsx';
 import { Area } from 'src/app/models/area';
+import { Genero } from 'src/app/models/genero';
 
 @Component({
   selector: 'app-apoyos',
@@ -34,7 +38,11 @@ export class ApoyosComponent {
   ApoyosFilter: Apoyos[] = [];
   Apoyos: Apoyos[] = [];
   Comunidad: Comunidad[] = [];
+  Genero: Genero[] = [];
   Areas: Area [] = [];
+  filteredProgramasSociales: ProgramaSocial[] = [];
+  isProgramaSocialSelectEnabled = false;
+  programasSociales: ProgramaSocial[] = [];
   imagenAmpliada: string | null = null;
   isLoading = LoadingStates.neutro;
   id!: number;
@@ -49,8 +57,10 @@ export class ApoyosComponent {
     private mensajeService: MensajeService,
     private formBuilder: FormBuilder,
     private comunidadService: ComunidadService,
+    private generoService: GeneroService,
     private apoyosService: ApoyosService,
     private areaService: AreasService,
+    private programasSocialesService: ProgramasSocialesService,
   ) {
     this.getApoyos();
     this.apoyosService.refreshListApoyos.subscribe(() =>
@@ -59,6 +69,8 @@ export class ApoyosComponent {
     this.creteForm();
     this.getComunidades();
     this.getAreas();
+    this.getGeneros();
+    this. getProgramas();
   }
   getApoyos() {
     this.isLoading = LoadingStates.trueLoading;
@@ -77,6 +89,25 @@ export class ApoyosComponent {
     });
   }
 
+  getProgramas() {
+    this.programasSocialesService
+      .getAll()
+      .subscribe({ next: (dataFromAPI) => (this.programasSociales = dataFromAPI) });
+  }
+
+  onAreaChange(event: any): void {
+    const areaId = event ? event.id : null;
+    if (areaId) {
+      this.isProgramaSocialSelectEnabled = true;
+      this.filteredProgramasSociales = this.programasSociales.filter(programa => programa.area.id === areaId);
+      this.apoyosForm.get('programasSociales')?.enable();
+    } else {
+      this.isProgramaSocialSelectEnabled = false;
+      this.apoyosForm.get('programasSociales')?.disable();
+      this.filteredProgramasSociales = [];
+    }
+  }
+
   creteForm() {
     this.apoyosForm = this.formBuilder.group({
       id: [null],
@@ -88,6 +119,11 @@ export class ApoyosComponent {
       longitud: [],
       ubicacion: ['', Validators.required],
       area: ['', Validators.required],
+      edad: ['', Validators.required],
+      genero: ['', Validators.required],
+      CURP: [''],
+      programasSociales: ['', Validators.required],
+
     });
   }
 
@@ -95,6 +131,12 @@ export class ApoyosComponent {
     this.comunidadService
       .getAll()
       .subscribe({ next: (dataFromAPI) => (this.Comunidad = dataFromAPI) });
+  }
+
+  getGeneros() {
+    this.generoService
+      .getAll()
+      .subscribe({ next: (dataFromAPI) => (this.Genero = dataFromAPI) });
   }
 
   getAreas() {
@@ -117,7 +159,11 @@ export class ApoyosComponent {
     this.apoyos.comunidad = { id: comunidad } as Comunidad;
     const area = this.apoyosForm.get('area')?.value;
     this.apoyos.area = { id: area } as Area;
-   
+    const genero = this.apoyosForm.get('genero')?.value;
+    this.apoyos.genero = { id: genero } as Genero;  
+    const programa = this.apoyosForm.get('programasSociales')?.value;
+    this.apoyos.programa = { id: programa } as ProgramaSocial;
+
     const imagenBase64 = this.apoyosForm.get('imagenBase64')?.value;
 
     this.imgPreview = '';
@@ -167,6 +213,10 @@ export class ApoyosComponent {
     this.apoyos.comunidad = { id: comunidad } as Comunidad;
     const area = this.apoyosForm.get('area')?.value;
     this.apoyos.area = { id: area } as Area;
+    const genero = this.apoyosForm.get('genero')?.value;
+    this.apoyos.genero = { id: genero } as Genero;
+    const programa = this.apoyosForm.get('programasSociales')?.value;
+    this.apoyos.programa = { id: programa } as ProgramaSocial;
 
     this.spinnerService.show();
 
@@ -211,7 +261,11 @@ export class ApoyosComponent {
       id: dto.id,
       area: dto.area.id,
       comunidad: dto.comunidad.id,
-      mombre: dto.nombre,
+      programa: dto.programa.id,
+      genero: dto.genero.id,
+      nombre: dto.nombre,
+      edad: dto.edad,
+      CURP: dto.CURP,
       comentarios: dto.comentarios,
       latitud: dto.latitud,
       longitud: dto.longitud,
