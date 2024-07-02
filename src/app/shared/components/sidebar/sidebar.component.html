@@ -44,6 +44,13 @@
                                 <span class="nav-link-title">Usuarios</span>
                             </a>
                             
+                            <a *appHasClaim="'CanAccessPersonal'" class="dropdown-item" [routerLink]="['personal']" routerLinkActive="active" #rlUsuarios="routerLinkActive" (click)="cerrarMenu()">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block">
+                  <i class="ti ti-friends"></i>
+                </span>
+                                <span class="nav-link-title">Personal</span>
+                            </a>
+
                             <a *appHasClaim="'CanAccessAreas'" class="dropdown-item" [routerLink]="['areas']" routerLinkActive="active" #rlAreas="routerLinkActive" (click)="cerrarMenu()">
                                 <span class="nav-link-icon d-md-none d-lg-inline-block">
                   <i class="ti ti-building-community"></i>

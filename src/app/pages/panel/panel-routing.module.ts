@@ -66,6 +66,11 @@ const routes: Routes = [
           import('./apoyos/apoyos.module').then((i) => i.ApoyosModule),
       },
       {
+        path: 'personal',
+        loadChildren: () =>
+          import('./personal/personal.module').then((i) => i.PersonalModule),
+      },
+      {
         path: 'mapa-apoyos',
         loadChildren: () =>
           import('./mapa-apoyos/mapa-apoyos.module').then((i) => i.MapaApoyosModule),
