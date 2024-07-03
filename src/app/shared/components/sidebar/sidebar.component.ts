@@ -26,6 +26,9 @@ export class SidebarComponent implements AfterViewInit {
     | undefined;
   @ViewChild('rlIncidencias') rlIncidencias: RouterLinkActive | undefined;
   @ViewChild('rlApoyos') rlApoyos: RouterLinkActive | undefined;
+  @ViewChild('rlFondos') rlFondos: RouterLinkActive | undefined;
+  @ViewChild('rlPersonal') rlPersonal: RouterLinkActive | undefined;
+  @ViewChild('rlAdquisiciones')rlAdquisiciones: RouterLinkActive | undefined;
   dataObject!: AppUserAuth | null;
   @ViewChild('rlMapaApoyos') rlMapaApoyos: RouterLinkActive | undefined;
   @ViewChild('rlMapaIncidencias') rlMapaIncidencias: RouterLinkActive | undefined;

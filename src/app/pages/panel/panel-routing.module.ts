@@ -71,6 +71,11 @@ const routes: Routes = [
           import('./personal/personal.module').then((i) => i.PersonalModule),
       },
       {
+        path: 'fondos',
+        loadChildren: () =>
+          import('./fondos/fondos.module').then((i) => i.FondosModule),
+      },
+      {
         path: 'mapa-apoyos',
         loadChildren: () =>
           import('./mapa-apoyos/mapa-apoyos.module').then((i) => i.MapaApoyosModule),

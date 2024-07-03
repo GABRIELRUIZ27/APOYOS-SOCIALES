@@ -43,13 +43,6 @@
                 </span>
                                 <span class="nav-link-title">Usuarios</span>
                             </a>
-                            
-                            <a *appHasClaim="'CanAccessPersonal'" class="dropdown-item" [routerLink]="['personal']" routerLinkActive="active" #rlUsuarios="routerLinkActive" (click)="cerrarMenu()">
-                                <span class="nav-link-icon d-md-none d-lg-inline-block">
-                  <i class="ti ti-friends"></i>
-                </span>
-                                <span class="nav-link-title">Personal</span>
-                            </a>
 
                             <a *appHasClaim="'CanAccessAreas'" class="dropdown-item" [routerLink]="['areas']" routerLinkActive="active" #rlAreas="routerLinkActive" (click)="cerrarMenu()">
                                 <span class="nav-link-icon d-md-none d-lg-inline-block">
@@ -67,6 +60,52 @@
                     </div>
                 </ul>
             </li>
+            <li class="nav-item dropdown" *appHasClaim="'canAccessContaduria'" [ngClass]="{
+                active:
+                  (rlDashboard && rlDashboard.isActive) ||
+                  (rlPersonal && rlPersonal.isActive) ||
+                  (rlAdquisiciones && rlAdquisiciones.isActive) ||
+                  (rlFondos && rlFondos.isActive)
+              }">
+                      <a class="nav-link dropdown-toggle" [routerLink]="" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="true">
+                          <span class="nav-link-icon d-md-none d-lg-inline-block">
+                  <i class="ti ti-building-bank"></i>
+                </span>
+                          <span class="nav-link-title"> Contabilidad Municipal </span>
+                      </a>
+                      <ul class="dropdown-menu show">
+                          <div class="dropdown-menu-columns">
+                              <div class="dropdown-menu-column">
+                                  <a *appHasClaim="'CanAccessDashboardFinanciero'" class="dropdown-item" [routerLink]="['dashboard']" routerLinkActive="active" #rlDashboard="routerLinkActive" (click)="cerrarMenu()">
+                                      <span class="nav-link-icon d-md-none d-lg-inline-block">
+                        <i class="ti ti-chart-dots"></i>
+                      </span>
+                                      <span class="nav-link-title">Tablero</span>
+                                  </a>
+                                  
+                                  <a *appHasClaim="'CanAccessPersonal'" class="dropdown-item" [routerLink]="['personal']" routerLinkActive="active" #rlPersonal="routerLinkActive" (click)="cerrarMenu()">
+                                      <span class="nav-link-icon d-md-none d-lg-inline-block">
+                        <i class="ti ti-friends"></i>
+                      </span>
+                                      <span class="nav-link-title">Personal</span>
+                                  </a>
+      
+                                  <a *appHasClaim="'CanAccessFondos'" class="dropdown-item" [routerLink]="['fondos']" routerLinkActive="active" #rlFondos="routerLinkActive" (click)="cerrarMenu()">
+                                      <span class="nav-link-icon d-md-none d-lg-inline-block">
+                        <i class="ti ti-pig-money"></i>
+                      </span>
+                                      <span class="nav-link-title">Fondos</span>
+                                  </a>
+                                  <a *appHasClaim="'CanAccessAdquisiciones'" class="dropdown-item" [routerLink]="['fondos']" routerLinkActive="active" #rlAdquisiciones="routerLinkActive" (click)="cerrarMenu()">
+                                      <span class="nav-link-icon d-md-none d-lg-inline-block">
+                        <i class="ti ti-businessplan"></i>
+                      </span>
+                                      <span class="nav-link-title">Adquisiciones</span>
+                                  </a>
+                              </div>
+                          </div>
+                      </ul>
+                  </li>
             <li class="nav-item dropdown" *appHasClaim="'CanAccessOperacion'" [ngClass]="{
           active:
           (rlApoyos && rlApoyos.isActive)  
@@ -90,9 +129,10 @@
                     </div>
                 </ul>
             </li>
-            <li class="nav-item dropdown" *appHasClaim="'CanAccessAreas'" [ngClass]="{
+            <li class="nav-item dropdown" *appHasClaim="'CanAccessMapas'" [ngClass]="{
                 active:
-                (rlMapaApoyos && rlMapaApoyos.isActive)  
+                (rlMapaApoyos && rlMapaApoyos.isActive) ||
+                (rlMapaIncidencias && rlMapaIncidencias.isActive)  
               }">
                       <a class="nav-link dropdown-toggle" [routerLink]="" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="true">
                           <span class="nav-link-icon d-md-none d-lg-inline-block">
@@ -121,6 +161,7 @@
                   </li>
                   <li class="nav-item dropdown" *appHasClaim="'CanAccessSeguridad'" [ngClass]="{
                     active:
+                    (rlIncidencias && rlIncidencias.isActive) ||
                     (rlTiposIncidencias && rlTiposIncidencias.isActive)  
                   }">
                           <a class="nav-link dropdown-toggle" [routerLink]="" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="true">
