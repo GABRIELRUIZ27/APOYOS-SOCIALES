@@ -71,6 +71,11 @@ const routes: Routes = [
           import('./personal/personal.module').then((i) => i.PersonalModule),
       },
       {
+        path: 'adquisiciones',
+        loadChildren: () =>
+          import('./adquisicion/adquisicion.module').then((i) => i.AdquisicionModule),
+      },
+      {
         path: 'fondos',
         loadChildren: () =>
           import('./fondos/fondos.module').then((i) => i.FondosModule),

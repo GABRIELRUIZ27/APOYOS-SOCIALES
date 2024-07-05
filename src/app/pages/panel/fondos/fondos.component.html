@@ -60,54 +60,54 @@
         </div>
 
         <div *ngSwitchCase="3" class="container">
-            <div class="row">
-              <ng-container *ngFor="let fondos of fondosFilter; let i = index">
-                <div *ngIf="i % 4 === 0" class="col-12">
-                  <h2 class="year-title">{{ getYear(i) }}</h2>
-                  <hr class="year-divider">
-                </div>
-                <div class="col-lg-3 mb-3">
-                  <div class="card h-100 text-center">
-                    <div class="card-body d-flex flex-column justify-content-between">
-                      <h5 class="card-title">
-                        {{ fondos.tipoDistribucion.nombre }}
-                      </h5>
-                      <p class="card-text">
-                        <strong>Cantidad:</strong> {{ fondos.cantidad | currency:'MXN':'symbol':'1.0-0' }} MXN
-                      </p>
-                      <p class="card-text">
-                        <strong>Periodo:</strong> {{ fondos.periodo }}
-                      </p>
-                      <div class="d-flex justify-content-center mt-auto">
-                        <button
-                          class="btn btn-warning btn-icon btn-sm me-2"
-                          data-bs-toggle="modal"
-                          data-bs-target="#modal-usuario"
-                          (click)="setDataModalUpdate(fondos)"
-                        >
-                          <i class="ti ti-edit"></i>
-                        </button>
-                        <button
-                          class="btn btn-danger btn-icon btn-sm"
-                          (click)="deleteItem(fondos.id, fondos.cantidad)"
-                        >
-                          <i class="ti ti-eraser"></i>
-                        </button>
-                      </div>
+          <div class="row">
+            <ng-container *ngFor="let fondos of fondosFilter; let i = index">
+              <div *ngIf="i % 4 === 0" class="col-12">
+                <h2 class="year-title">{{ getYear(i) }}</h2>
+                <hr class="year-divider">
+              </div>
+              <div class="col-lg-3 mb-3">
+                <div class="card h-100 text-center">
+                  <div class="card-body d-flex flex-column justify-content-between">
+                    <h5 class="card-title">
+                      {{ fondos.tipoDistribucion.nombre }}
+                    </h5>
+                    <p class="card-text">
+                      <strong>Cantidad:</strong> {{ fondos.cantidad | currency:'MXN':'symbol':'1.2-2' }} MXN
+                    </p>
+                    <p class="card-text">
+                      <strong>Periodo:</strong> {{ fondos.periodo }}
+                    </p>
+                    <div class="d-flex justify-content-center mt-auto">
+                      <button
+                        class="btn btn-warning btn-icon btn-sm me-2"
+                        data-bs-toggle="modal"
+                        data-bs-target="#modal-usuario"
+                        (click)="setDataModalUpdate(fondos)"
+                      >
+                        <i class="ti ti-edit"></i>
+                      </button>
+                      <button
+                        class="btn btn-danger btn-icon btn-sm"
+                        (click)="deleteItem(fondos.id, fondos.cantidad)"
+                      >
+                        <i class="ti ti-eraser"></i>
+                      </button>
                     </div>
                   </div>
                 </div>
-                <div *ngIf="(i + 1) % 4 === 0 || i === fondosFilter.length - 1" class="col-12">
-                  <h2 class="text-center"><strong>Total:</strong> {{ getTotalForGroup(i - (i % 4)) | currency:'MXN':'symbol':'1.0-0' }} MXN</h2>
-                  <h3 *ngIf="getPercentageDifference(i - (i % 4)) !== null" [ngClass]="{'text-success': getPercentageDifference(i - (i % 4)) > 0, 'text-danger': getPercentageDifference(i - (i % 4)) < 0}" class="text-center">
-                    {{ getPercentageDifference(i - (i % 4)) | number:'1.0-2' }}% respecto al mes anterior
-                  </h3>
-                  <br>
-                </div>
-              </ng-container>
-            </div>
+              </div>
+              <div *ngIf="(i + 1) % 4 === 0 || i === fondosFilter.length - 1" class="col-12">
+                <h3 class="text-center"><strong>Total:</strong> {{ getTotalForGroup(i - (i % 4)) | currency:'MXN':'symbol':'1.2-2' }} MXN</h3>
+                <h3 [ngClass]="{'text-success': getPercentageDifference(i - (i % 4)) > 0, 'text-danger': getPercentageDifference(i - (i % 4)) < 0}" class="text-center">
+                  {{ getPercentageDifference(i - (i % 4)) | number:'1.2-2' }}% respecto al mes anterior
+                </h3>
+                <br>
+              </div>
+            </ng-container>
           </div>
-          
+        </div>
+        
         <app-no-results *ngSwitchCase="4"></app-no-results>
       </ng-container>
       <!-- Fin *ngSwitchCase-->
@@ -132,7 +132,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">
-          {{ isModalAdd ? "Agregar" : "Actualizar" }} personal
+          {{ isModalAdd ? "Agregar" : "Actualizar" }} fondos
         </h5>
         <button
           #closebutton
