@@ -42,7 +42,7 @@ export class MapaApoyosComponent implements AfterViewInit {
   }
 
   ngAfterViewInit() {
-    const mapElement = document.getElementById('map-canvas') || null;
+    const mapElement = document.getElementById('map-canvas1') || null;
     const lat = mapElement?.getAttribute('data-lat') || null;
     const lng = mapElement?.getAttribute('data-lng') || null;
     const myLatlng = new google.maps.LatLng(lat, lng);
