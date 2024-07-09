@@ -1,72 +1,78 @@
-<div class="row row-deck row-cards justify-content-center">
-  <div class="col-6 col-md-4 col-lg-2">
-    <div class="card mb-0 mx-auto">
-      <div class="card-body">
-        <div class="d-flex align-items-center">
-          <div class="subheader">Total Usuarios</div>
+<div class="container">
+  <!-- Total de Empleados -->
+  <div class="row mt-4">
+    <div class="col-lg-12 mb-4">
+      <div class="card">
+        <div class="card-body d-flex flex-column justify-content-center align-items-center">
+          <div class="d-flex align-items-center">
+            <div class="me-3">
+              <i class="fas fa-users fa-3x"></i>
+            </div>
+            <div>
+              <h2>Total de Empleados</h2>
+              <h3 id="total-empleados" class="count">{{ totalEmpleados }}</h3>
+            </div>
+          </div>
         </div>
-        <div class="h1">{{ totalGeneral.totalUsuarios }}</div>
       </div>
     </div>
   </div>
-  <div class="col-6 col-md-4 col-lg-2">
-    <div class="card mb-0 mx-auto">
-      <div class="card-body">
-        <div class="d-flex align-items-center">
-          <div class="subheader">Total Operadores</div>
+
+  <!-- Row para Áreas, Salarios y Gráfica de Género -->
+  <div class="row">
+    <!-- Gráfica de Género -->
+    <div class="col-lg-6 mb-4">
+      <div class="card h-100">
+        <div class="card-body">
+          <div id="containerPersonalGenero" style="width: 100%; height: 400px;"></div>
         </div>
-        <div class="h1">{{ totalGeneral.totalOperadores }}</div>
+      </div>
+    </div>
+
+    <!-- Áreas y Salarios -->
+    <div class="col-lg-6 mb-4">
+      <div class="row h-100">
+        <div class="col-lg-12 mb-4 flex-fill">
+          <div class="card h-100 card-half-height">
+            <div class="card-body d-flex flex-column justify-content-center align-items-center">
+              <div class="me-3">
+                <i class="fas fa-building fa-3x"></i>
+              </div>
+              <div class="text-center">
+                <h2>Total de Áreas</h2>
+                <h3>{{ totalAreas }}</h3>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-12 flex-fill">
+          <div class="card h-100 card-half-height">
+            <div class="card-body d-flex flex-column justify-content-center align-items-center">
+              <div class="me-3">
+                <i class="fas fa-money-bill-wave fa-3x"></i>
+              </div>
+              <div class="text-center">
+                <h2>Total de Salarios</h2>
+        <h3>
+          {{ totalSalarios | number:'1.2-2' }} MXN
+        </h3>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-  <div class="col-6 col-md-4 col-lg-2">
-    <div class="card mb-0 mx-auto">
-      <div class="card-body">
-        <div class="d-flex align-items-center">
-          <div class="subheader">Total Promovidos</div>
+
+  <!-- Gráfica de Personal por Área -->
+  <div class="row mt-4">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-body">
+          <div id="containerPersonalArea" style="width: 100%; height: 400px;"></div>
         </div>
-        <div class="h1">{{ totalGeneral.totalSimpatizantes }}</div>
       </div>
-    </div>
-  </div>
-  <div class="col-6 col-md-4 col-lg-2">
-    <div class="card mb-0 mx-auto">
-      <div class="card-body">
-        <div class="d-flex align-items-center">
-          <div class="subheader">Total Candidatos</div>
-        </div>
-        <div class="h1">{{ totalGeneral.totalCandidatos }}</div>
-      </div>
-    </div>
-  </div>
-  <div class="col-6 col-md-4 col-lg-2">
-    <div class="card mb-0 mx-auto">
-      <div class="card-body">
-        <div class="d-flex align-items-center">
-          <div class="subheader">Total Visitas</div>
-        </div>
-        <div class="h1">{{ totalGeneral.totalVisitas }}</div>
-      </div>
-    </div>
-  </div>
-  <div class="col-lg-6">
-    <div class="card">
-      <div id="container-simpatizantes-por-genero" style="height: 400px"></div>
-    </div>
-  </div>
-  <div class="col-lg-6">
-    <div class="card">
-      <div id="container-simpatizantes-por-programa-social" style="height: 400px"></div>
-    </div>
-  </div>
-  <div class="col-lg-12">
-    <div class="card">
-      <div id="container-simpatizantes-por-edad" style="height: 600px"></div>
-    </div>
-  </div>
-  <div class="col-lg-12">
-    <div class="card">
-      <div id="container-nube-palabras" style="height: 400px"></div>
     </div>
   </div>
 </div>

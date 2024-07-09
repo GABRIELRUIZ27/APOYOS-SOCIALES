@@ -1,15 +1,6 @@
-export interface Estadistica {
-    nombre: string;
-    porcentaje: number;
-    totalSinpatizantes: number;
-    rangoEdad: string;
-    genero: number;
-}
-
-export interface TotalGeneral {
-    totalUsuarios: number;
-    totalSimpatizantes: number;
-    totalCandidatos: number;
-    totalVisitas: number;
-    totalOperadores: number;
-}
+export interface TotalPersonal {
+    totalEmpleados: number;
+    empleadosPorGenero: { [key: string]: number };
+    empleadosPorArea: { [key: string]: number };
+  }
+  

@@ -44,13 +44,6 @@ const routes: Routes = [
           ),
       },
       {
-        path: 'nube-palabras',
-        loadChildren: () =>
-          import('./nube-palabras/nube-palabras.module').then(
-            (i) => i.NubePalabrasModule
-          ),
-      },
-      {
         path: 'dashboard',
         loadChildren: () =>
           import('./dashboard/dashboard.module').then((i) => i.DashboardModule),

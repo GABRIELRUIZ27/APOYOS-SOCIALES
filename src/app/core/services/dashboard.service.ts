@@ -1,43 +1,33 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { Estadistica, TotalGeneral } from 'src/app/models/estadistica';
-import { GeneralWordCloud, WordCloud } from 'src/app/models/word-cloud';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DashboardService {
-  route = `${environment.apiUrl}/dashboard`;
+  private apiUrl = environment.apiUrl;
 
-  private dataWordCloudSubject = new BehaviorSubject<WordCloud[]>([]);
-  dataWordCloud$ = this.dataWordCloudSubject.asObservable();
+  constructor(private http: HttpClient) {}
 
-  constructor(private http: HttpClient) { }
-
-  updateWordCloud(newData: WordCloud[]) {
-    this.dataWordCloudSubject.next(newData);
+  getEmpleadosPorGenero(): Observable<{ empleadosPorGenero: { [key: string]: number } }> {
+    return this.http.get<{ empleadosPorGenero: { [key: string]: number } }>(`${this.apiUrl}/dashboard/empleados-por-genero`);
   }
 
-
-
-  getTotalSimpatizantesPorProgramaSocial() {
-    return this.http.get<Estadistica[]>(`${this.route}/total-Simpatizantes-por-programa-social`);
+  getEmpleadosPorArea(): Observable<{ empleadosPorArea: { [key: string]: number } }> {
+    return this.http.get<{ empleadosPorArea: { [key: string]: number } }>(`${this.apiUrl}/dashboard/empleados-por-area`);
   }
 
-  getTotalSimpatizantesPorEdad() {
-    return this.http.get<Estadistica[]>(`${this.route}/total-Simpatizantes-por-edad`);
+  getTotalEmpleados(): Observable<{ totalEmpleados: number }> {
+    return this.http.get<{ totalEmpleados: number }>(`${this.apiUrl}/dashboard/total-empleados`);
   }
 
-  getTotalGeneral() {
-    return this.http.get<TotalGeneral>(`${this.route}/total-general`);
-  }
-  getSimpatizantesPorGenero() {
-    return this.http.get<Estadistica[]>(`${this.route}/total-Simpatizantes-por-genero`);
+  getTotalSalarios(): Observable<{ totalSalarios: number }> {
+    return this.http.get<{ totalSalarios: number }>(`${this.apiUrl}/dashboard/total-salarios`);
   }
 
-  getWordCloud() {
-    return this.http.get<GeneralWordCloud>(`${this.route}/obtener-nube-palabras`);
-  }
+  getTotalAreas(): Observable<{ totalAreas: number }> {
+    return this.http.get<{ totalAreas: number }>(`${this.apiUrl}/dashboard/total-areas`);
+  }  
 }
