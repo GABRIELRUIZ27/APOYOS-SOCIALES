@@ -3,6 +3,10 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
+export interface AdquisicionesPorDia {
+  fecha: string;
+  cantidad: number;
+}
 @Injectable({
   providedIn: 'root'
 })
@@ -30,4 +34,8 @@ export class DashboardService {
   getTotalAreas(): Observable<{ totalAreas: number }> {
     return this.http.get<{ totalAreas: number }>(`${this.apiUrl}/dashboard/total-areas`);
   }  
+
+  getAdquisicionesPorDia(): Observable<AdquisicionesPorDia[]> {
+    return this.http.get<AdquisicionesPorDia[]>(`${this.apiUrl}/dashboard/adquisiciones-por-dia`);
+  }
 }

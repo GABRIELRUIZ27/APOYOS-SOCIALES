@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import * as Highcharts from 'highcharts';
-import { DashboardService } from 'src/app/core/services/dashboard.service';
+import { DashboardService, AdquisicionesPorDia } from 'src/app/core/services/dashboard.service';
 
 interface EmpleadosPorGenero {
   [key: string]: number;
@@ -30,6 +30,18 @@ export class DashboardComponent implements OnInit {
     this.getTotalEmpleados();
     this.getTotalSalarios();
     this.getTotalAreas();
+    this.getAdquisicionesPorDia();
+  }
+
+  getAdquisicionesPorDia() {
+    this.dashboardService.getAdquisicionesPorDia().subscribe(
+      (data: AdquisicionesPorDia[]) => {
+        this.renderChartAdquisicionesPorDia(data);
+      },
+      error => {
+        console.error('Error al obtener las adquisiciones por día:', error);
+      }
+    );
   }
 
   getTotalEmpleados() {
@@ -89,37 +101,89 @@ export class DashboardComponent implements OnInit {
     );
   }
 
-  renderChartPersonalGenero() {
+  renderChartAdquisicionesPorDia(data: AdquisicionesPorDia[]) {
+    const fechas = data.map(d => d.fecha);
+    const cantidades = data.map(d => d.cantidad);
+
     const chartOptions: Highcharts.Options = {
       chart: {
-        type: 'column'
+        type: 'line'
       },
       title: {
-        text: 'Empleados por Género'
+        text: 'Adquisiciones por Día'
       },
       xAxis: {
-        categories: Object.keys(this.empleadosPorGenero),
+        categories: fechas,
         title: {
-          text: 'Género'
+          text: 'Fecha'
         }
       },
       yAxis: {
         title: {
-          text: 'Número de Empleados'
+          text: 'Cantidad de Adquisiciones'
         }
       },
       series: [{
-        type: 'column',
-        name: 'Número de Empleados',
-        data: Object.values(this.empleadosPorGenero),
-        colorByPoint: true,
-        colors: ['#1E90FF', '#FF69B4', '#32CD32'] 
+        type: 'line',
+        name: 'Cantidad de Adquisiciones',
+        data: cantidades
       }]
     };
 
-    Highcharts.chart('containerPersonalGenero', chartOptions);
+    Highcharts.chart('containerAdquisicionesPorDia', chartOptions);
   }
 
+  renderChartPersonalGenero() {
+    const chartOptions: Highcharts.Options = {
+      chart: {
+        type: 'pie'
+      },
+      title: {
+        text: 'Empleados por Género'
+      },
+      tooltip: {
+        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+      },
+      plotOptions: {
+        pie: {
+          allowPointSelect: true,
+          cursor: 'pointer',
+          dataLabels: {
+            enabled: true,
+            format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+          }
+        }
+      },
+      series: [{
+        type: 'pie',
+        name: 'Empleados',
+        data: Object.keys(this.empleadosPorGenero).map(genero => {
+          let color = '';
+          switch (genero.toLowerCase()) {
+            case 'masculino':
+              color = '#3498db'; // Azul claro
+              break;
+            case 'femenino':
+              color = '#e74c3c'; // Rosa
+              break;
+            case 'no binario':
+              color = '#9b59b6'; // Morado
+              break;
+            default:
+              color = '#95a5a6'; // Gris para cualquier otro género
+          }
+          return {
+            name: genero,
+            y: this.empleadosPorGenero[genero],
+            color: color
+          };
+        })
+      } as Highcharts.SeriesPieOptions]
+    };
+  
+    Highcharts.chart('containerPersonalGenero', chartOptions);
+  }
+  
   renderChartPersonalArea() {
     const chartOptions: Highcharts.Options = {
       chart: {
