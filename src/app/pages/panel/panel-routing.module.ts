@@ -44,9 +44,14 @@ const routes: Routes = [
           ),
       },
       {
-        path: 'dashboard',
+        path: 'dashboard-financiero',
         loadChildren: () =>
           import('./dashboard/dashboard.module').then((i) => i.DashboardModule),
+      },
+      {
+        path: 'solicitudes',
+        loadChildren: () =>
+          import('./solicitudes/solicitudes.module').then((i) => i.SolicitudesModule),
       },
       {
         path: 'areas',

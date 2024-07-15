@@ -23,12 +23,24 @@ export class DashboardService {
     return this.http.get<{ empleadosPorArea: { [key: string]: number } }>(`${this.apiUrl}/dashboard/empleados-por-area`);
   }
 
+  getAdquisicionesPorArea(): Observable<{ adquisicionesPorArea: { [key: string]: number } }> {
+    return this.http.get<{ adquisicionesPorArea: { [key: string]: number } }>(`${this.apiUrl}/dashboard/adquisiciones-por-area`);
+  }
+
   getTotalEmpleados(): Observable<{ totalEmpleados: number }> {
     return this.http.get<{ totalEmpleados: number }>(`${this.apiUrl}/dashboard/total-empleados`);
   }
 
   getTotalSalarios(): Observable<{ totalSalarios: number }> {
     return this.http.get<{ totalSalarios: number }>(`${this.apiUrl}/dashboard/total-salarios`);
+  }
+
+  getTotalAdquisiciones(): Observable<{ totalAdquisiciones: number }> {
+    return this.http.get<{ totalAdquisiciones: number }>(`${this.apiUrl}/dashboard/total-adquisiciones`);
+  }
+
+  getValorAdquisiciones(): Observable<{ valorAdquisiciones: number }> {
+    return this.http.get<{ valorAdquisiciones: number }>(`${this.apiUrl}/dashboard/valor-adquisiciones`);
   }
 
   getTotalAreas(): Observable<{ totalAreas: number }> {

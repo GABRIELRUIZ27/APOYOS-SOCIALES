@@ -16,6 +16,7 @@ import { RouterLinkActive } from '@angular/router';
 export class SidebarComponent implements AfterViewInit {
   menuColapsado: boolean = true;
   @ViewChild('rlDashboard') rlDashboard!: RouterLinkActive;
+  @ViewChild('rlDashboardFinanciero') rlDashboardFinanciero!: RouterLinkActive;
   @ViewChild('rlTiposIncidencias') rlTiposIncidencias!: RouterLinkActive;
   @ViewChild('rlUsuarios') rlUsuarios: RouterLinkActive | undefined;
   @ViewChild('rlProgramasSociales') rlProgramasSociales:
@@ -26,6 +27,7 @@ export class SidebarComponent implements AfterViewInit {
     | undefined;
   @ViewChild('rlIncidencias') rlIncidencias: RouterLinkActive | undefined;
   @ViewChild('rlApoyos') rlApoyos: RouterLinkActive | undefined;
+  @ViewChild('rlSolicitudesApoyos') rlSolicitudesApoyos: RouterLinkActive | undefined;
   @ViewChild('rlFondos') rlFondos: RouterLinkActive | undefined;
   @ViewChild('rlPersonal') rlPersonal: RouterLinkActive | undefined;
   @ViewChild('rlAdquisiciones')rlAdquisiciones: RouterLinkActive | undefined;

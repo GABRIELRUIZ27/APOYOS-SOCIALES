@@ -10,6 +10,10 @@ interface EmpleadosPorArea {
   [key: string]: number;
 }
 
+interface AdquisicionPorArea {
+  [key: string]: number;
+}
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -18,10 +22,12 @@ interface EmpleadosPorArea {
 export class DashboardComponent implements OnInit {
   empleadosPorGenero: EmpleadosPorGenero = {};
   empleadosPorArea: EmpleadosPorArea = {};
+  adquisicionesPorArea: EmpleadosPorArea = {};
   totalEmpleados: number = 0;
   totalSalarios: number = 0;
   totalAreas: number = 0;
-
+  totalAdquisiciones = 0;
+  valorAdquisiciones: number =0;
   constructor(private dashboardService: DashboardService) {}
 
   ngOnInit() {
@@ -31,6 +37,9 @@ export class DashboardComponent implements OnInit {
     this.getTotalSalarios();
     this.getTotalAreas();
     this.getAdquisicionesPorDia();
+    this.getAdquisicionesPorArea();
+    this.getValorAdquisiciones();
+    this.getTotalAdquicisiones();
   }
 
   getAdquisicionesPorDia() {
@@ -55,6 +64,7 @@ export class DashboardComponent implements OnInit {
     );
   }
 
+
   getTotalSalarios() {
     this.dashboardService.getTotalSalarios().subscribe(
       (data: { totalSalarios: number }) => {
@@ -73,6 +83,17 @@ export class DashboardComponent implements OnInit {
       },
       error => {
         console.error('Error al obtener el total de áreas:', error);
+      }
+    );
+  }
+
+  getValorAdquisiciones() {
+    this.dashboardService.getValorAdquisiciones().subscribe(
+      (data: { valorAdquisiciones: number }) => {
+        this.valorAdquisiciones = data.valorAdquisiciones;
+      },
+      error => {
+        console.error('Error al obtener el valor de adquisiciones:', error);
       }
     );
   }
@@ -101,6 +122,60 @@ export class DashboardComponent implements OnInit {
     );
   }
 
+  getAdquisicionesPorArea() {
+    this.dashboardService.getAdquisicionesPorArea().subscribe(
+      (data: { adquisicionesPorArea:  AdquisicionPorArea }) => {
+        this.adquisicionesPorArea = data.adquisicionesPorArea;
+        this.renderChartAdquisicionesArea();
+      },
+      error => {
+        console.error('Error al obtener adquisiciones por área:', error);
+      }
+    );
+  }
+
+  getTotalAdquicisiones() {
+    this.dashboardService.getTotalAdquisiciones().subscribe(
+      (data: { totalAdquisiciones: number }) => {
+        this.totalAdquisiciones = data.totalAdquisiciones;
+      },
+      error => {
+        console.error('Error al obtener el total de adquisiciones:', error);
+      }
+    );
+  }
+
+  renderChartAdquisicionesArea() {
+    const chartOptions: Highcharts.Options = {
+      chart: {
+        type: 'column'
+      },
+      title: {
+        text: 'Adquisiciones por área'
+      },
+      xAxis: {
+        categories: Object.keys(this.adquisicionesPorArea),
+        title: {
+          text: 'Área'
+        }
+      },
+      yAxis: {
+        title: {
+          text: 'Número de adquisiciones'
+        }
+      },
+      series: [{
+        type: 'column',
+        name: 'Número de adquisiciones',
+        data: Object.values(this.adquisicionesPorArea),
+        colorByPoint: true,
+        colors: Highcharts.getOptions().colors 
+      }]
+    };
+
+    Highcharts.chart('containerAdquisicionArea', chartOptions);
+  }
+
   renderChartAdquisicionesPorDia(data: AdquisicionesPorDia[]) {
     const fechas = data.map(d => d.fecha);
     const cantidades = data.map(d => d.cantidad);
@@ -110,7 +185,7 @@ export class DashboardComponent implements OnInit {
         type: 'line'
       },
       title: {
-        text: 'Adquisiciones por Día'
+        text: 'Adquisiciones por día'
       },
       xAxis: {
         categories: fechas,
@@ -120,12 +195,12 @@ export class DashboardComponent implements OnInit {
       },
       yAxis: {
         title: {
-          text: 'Cantidad de Adquisiciones'
+          text: 'Cantidad de adquisiciones'
         }
       },
       series: [{
         type: 'line',
-        name: 'Cantidad de Adquisiciones',
+        name: 'Cantidad de adquisiciones',
         data: cantidades
       }]
     };
@@ -139,7 +214,7 @@ export class DashboardComponent implements OnInit {
         type: 'pie'
       },
       title: {
-        text: 'Empleados por Género'
+        text: 'Empleados por género'
       },
       tooltip: {
         pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -190,7 +265,7 @@ export class DashboardComponent implements OnInit {
         type: 'column'
       },
       title: {
-        text: 'Empleados por Área'
+        text: 'Empleados por área'
       },
       xAxis: {
         categories: Object.keys(this.empleadosPorArea),
@@ -200,12 +275,12 @@ export class DashboardComponent implements OnInit {
       },
       yAxis: {
         title: {
-          text: 'Número de Empleados'
+          text: 'Número de empleados'
         }
       },
       series: [{
         type: 'column',
-        name: 'Número de Empleados',
+        name: 'Número de empleados',
         data: Object.values(this.empleadosPorArea),
         colorByPoint: true,
         colors: Highcharts.getOptions().colors 

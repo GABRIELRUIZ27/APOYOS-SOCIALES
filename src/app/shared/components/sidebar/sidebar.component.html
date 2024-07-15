@@ -17,8 +17,6 @@
             </li>
             <li class="nav-item dropdown" *appHasClaim="'canAccessAdministracion'" [ngClass]="{
           active:
-            (rlDashboard && rlDashboard.isActive) ||
-            (rlUsuarios && rlUsuarios.isActive) ||
             (rlProgramasSociales && rlProgramasSociales.isActive) ||
             (rlAreas && rlAreas.isActive)
         }">
@@ -31,12 +29,6 @@
                 <ul class="dropdown-menu show">
                     <div class="dropdown-menu-columns">
                         <div class="dropdown-menu-column">
-                            <a *appHasClaim="'CanAccessDashboard'" class="dropdown-item" [routerLink]="['dashboard']" routerLinkActive="active" #rlDashboard="routerLinkActive" (click)="cerrarMenu()">
-                                <span class="nav-link-icon d-md-none d-lg-inline-block">
-                  <i class="ti ti-chart-infographic"></i>
-                </span>
-                                <span class="nav-link-title">Tablero</span>
-                            </a>
                             <a *appHasClaim="'CanAccessUsuarios'" class="dropdown-item" [routerLink]="['usuarios']" routerLinkActive="active" #rlUsuarios="routerLinkActive" (click)="cerrarMenu()">
                                 <span class="nav-link-icon d-md-none d-lg-inline-block">
                   <i class="ti ti-users"></i>
@@ -49,12 +41,6 @@
                   <i class="ti ti-building-community"></i>
                 </span>
                                 <span class="nav-link-title">Areas</span>
-                            </a>
-                            <a *appHasClaim="'CanAccessProgramasSociales'" class="dropdown-item" [routerLink]="['programas-sociales']" routerLinkActive="active" #rlProgramasSociales="routerLinkActive" (click)="cerrarMenu()">
-                                <span class="nav-link-icon d-md-none d-lg-inline-block">
-                  <i class="ti ti-social"></i>
-                </span>
-                                <span class="nav-link-title">Programas Sociales</span>
                             </a>
                         </div>
                     </div>
@@ -76,11 +62,11 @@
                       <ul class="dropdown-menu show">
                           <div class="dropdown-menu-columns">
                               <div class="dropdown-menu-column">
-                                  <a *appHasClaim="'CanAccessDashboardFinanciero'" class="dropdown-item" [routerLink]="['dashboard']" routerLinkActive="active" #rlDashboard="routerLinkActive" (click)="cerrarMenu()">
+                                  <a *appHasClaim="'CanAccessDashboardFinanciero'" class="dropdown-item" [routerLink]="['dashboard-financiero']" routerLinkActive="active" #rlDashboardFinanciero="routerLinkActive" (click)="cerrarMenu()">
                                       <span class="nav-link-icon d-md-none d-lg-inline-block">
                         <i class="ti ti-chart-dots"></i>
                       </span>
-                                      <span class="nav-link-title">Tablero</span>
+                                      <span class="nav-link-title">Tablero financiero</span>
                                   </a>
                                   
                                   <a *appHasClaim="'CanAccessPersonal'" class="dropdown-item" [routerLink]="['personal']" routerLinkActive="active" #rlPersonal="routerLinkActive" (click)="cerrarMenu()">
@@ -108,23 +94,37 @@
                   </li>
             <li class="nav-item dropdown" *appHasClaim="'CanAccessOperacion'" [ngClass]="{
           active:
+          (rlUsuarios && rlUsuarios.isActive) ||
+          (rlSolicitudesApoyos && rlSolicitudesApoyos.isActive)  ||
           (rlApoyos && rlApoyos.isActive)  
         }">
                 <a class="nav-link dropdown-toggle" [routerLink]="" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="true">
                     <span class="nav-link-icon d-md-none d-lg-inline-block">
-            <i class="ti ti-settings-pin"></i>
+            <i class="ti ti-mood-heart"></i>
           </span>
-                    <span class="nav-link-title">Operacion</span>
+                    <span class="nav-link-title">Asistencia Social</span>
                 </a>
                 <ul class="dropdown-menu show">
                     <div class="dropdown-menu-columns">
                         <div class="dropdown-menu-column">
+                            <a *appHasClaim="'CanAccessProgramasSociales'" class="dropdown-item" [routerLink]="['programas-sociales']" routerLinkActive="active" #rlProgramasSociales="routerLinkActive" (click)="cerrarMenu()">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block">
+                  <i class="ti ti-social"></i>
+                </span>
+                                <span class="nav-link-title">Programas Sociales</span>
+                            </a>
                             <a *appHasClaim="'canAccessApoyos'" class="dropdown-item" [routerLink]="['apoyos']" routerLinkActive="active" #rlApoyos="routerLinkActive" (click)="cerrarMenu()">
                                 <span class="nav-link-icon d-md-none d-lg-inline-block">
                   <i class="ti ti-heart-handshake"></i>
                 </span>
                                 <span class="nav-link-title">Apoyos</span>
                             </a>
+                            <a *appHasClaim="'canAccessApoyos'" class="dropdown-item" [routerLink]="['solicitudes']" routerLinkActive="active" #rlSolicitudesApoyos="routerLinkActive" (click)="cerrarMenu()">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block">
+                  <i class="ti ti-folder-plus"></i>
+                </span>
+                                <span class="nav-link-title">Solicitudes de Apoyos</span>
+                            </a>                           
                         </div>
                     </div>
                 </ul>
