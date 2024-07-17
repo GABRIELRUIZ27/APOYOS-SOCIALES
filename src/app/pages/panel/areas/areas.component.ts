@@ -71,6 +71,8 @@ export class AreasComponent {
     { name: 'Gestión de Riesgo y Protección Civil', class: 'ti ti-shield-check' } // Reemplazado
   ];
   
+  filteredIconos: {name:string, class:string }[]= [];
+
   constructor(
     @Inject('CONFIG_PAGINATOR') public configPaginator: PaginationInstance,
     private spinnerService: NgxSpinnerService,
@@ -285,4 +287,16 @@ export class AreasComponent {
       this.selectedColorCode = target.value;
     }
   }
+  filterIconos() {
+    const query = this.areaForm.get('nombre')?.value.toLowerCase();
+    this.filteredIconos = this.iconosTabler.filter(icono =>
+      icono.name.toLowerCase().includes(query)
+    );
+  }
+
+  selectIcono(icono: any) {
+    this.areaForm.get('icono')?.setValue(icono.class);
+    this.filteredIconos = [];
+  }
+
 }
