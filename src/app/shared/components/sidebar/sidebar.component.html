@@ -161,6 +161,7 @@
                   </li>
                   <li class="nav-item dropdown" *appHasClaim="'CanAccessSeguridad'" [ngClass]="{
                     active:
+                    (rlDashboardIncidencias && rlDashboardIncidencias.isActive) ||
                     (rlIncidencias && rlIncidencias.isActive) ||
                     (rlTiposIncidencias && rlTiposIncidencias.isActive)  
                   }">
@@ -173,6 +174,12 @@
                           <ul class="dropdown-menu show">
                               <div class="dropdown-menu-columns">
                                   <div class="dropdown-menu-column">
+                                    <a *appHasClaim="'CanAccessDashboardIncidencias'" class="dropdown-item" [routerLink]="['dashboard-incidencias']" routerLinkActive="active" #rlDashboardIncidencias="routerLinkActive" (click)="cerrarMenu()">
+                                        <span class="nav-link-icon d-md-none d-lg-inline-block">
+                          <i class="ti ti-chart-dots"></i>
+                        </span>
+                                        <span class="nav-link-title">Tablero de incidencias</span>
+                                    </a>
                                       <a *appHasClaim="'CanAccessTiposIncidencias'" class="dropdown-item" [routerLink]="['tipos-incidencias']" routerLinkActive="active" #rlTiposIncidencias="routerLinkActive" (click)="cerrarMenu()">
                                           <span class="nav-link-icon d-md-none d-lg-inline-block">
                             <i class="ti ti-urgent"></i>

@@ -87,6 +87,7 @@ export class IncidenciasComponent {
       longitud: [],
       ubicacion: ['', Validators.required],
       tipoIncidencia: ['', Validators.required],
+      fecha: ['', Validators.required],
     });
   }
 
@@ -225,12 +226,12 @@ export class IncidenciasComponent {
 
   deleteItem(id: number, nameItem: string) {
     this.mensajeService.mensajeAdvertencia(
-      `¿Estás seguro de eliminar el apoyo de: ${nameItem}?`,
+      `¿Estás seguro de eliminar la incidencia de: ${nameItem}?`,
       () => {
         this.incidenciasService.delete(id).subscribe({
           next: () => {
             this.mensajeService.mensajeExito(
-              'Apoyo borrado correctamente'
+              'Incidencia borrada correctamente'
             );
             this.configPaginator.currentPage = 1;
             this.searchItem.nativeElement.value = '';

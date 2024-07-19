@@ -1,0 +1,67 @@
+<div class="container">
+  <!-- Total de Incidencias Atendidas -->
+  <div class="row mt-4">
+    <div class="col-lg-12 mb-4">
+      <div class="card">
+        <div class="card-body d-flex flex-column justify-content-center align-items-center">
+          <div class="d-flex align-items-center">
+            <div class="me-3">
+              <i class="fas fa-exclamation-triangle fa-3x" style="color: orange;"></i>
+            </div>
+            <div class="text-center">
+              <h1>Total de incidencias atendidas</h1>
+              <h3 id="total-incidencias" class="count">{{ totalIncidencias }}</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Incidencia Más Recurrente -->
+  <div class="row">
+    <div class="col-lg-12 mb-4">
+      <div class="card">
+        <div class="card-body d-flex flex-column justify-content-center align-items-center">
+          <div class="d-flex align-items-center">
+            <div class="me-3">
+              <i class="fas fa-exclamation-circle fa-3x" style="color: orange;"></i>
+            </div>
+            <div class="text-center">
+              <h1>Incidencia más recurrente</h1>
+              <div *ngIf="incidenciaRecurrente">
+                <h2> {{ incidenciaRecurrente.tipoIncidencia.nombre }}</h2>
+                <h4 id="total-incidencias" class="count">Total: {{ incidenciaRecurrente.total }}</h4>
+              </div>
+              <div *ngIf="!incidenciaRecurrente">
+                <p>Cargando...</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Gráfica de Incidencias por Comunidad -->
+  <div class="row mt-4">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-body">
+          <div id="containerIncidenciasComunidad" style="width: 100%; height: 400px;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Gráfica de Incidencias por Día -->
+  <div class="row mt-4">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-body">
+          <div id="containerIncidenciasPorDia" style="width: 100%; height: 400px;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

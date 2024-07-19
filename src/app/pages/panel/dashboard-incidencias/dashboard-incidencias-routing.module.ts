@@ -1,14 +1,14 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { DashboardComponent } from './dashboard.component';
+import { DashboardIncidenciasComponent } from './dashboard-incidencias.component';
 import { AuthGuard } from 'src/app/core/services/auth.guard';
 
 const routes: Routes = [
   {
     path: '',
-    component: DashboardComponent,
+    component: DashboardIncidenciasComponent,
     canActivate: [AuthGuard],
-    data: { claimType: 'CanAccessDashboardFinanciero' },
+    data: { claimType: 'CanAccessDashboardIncidencias' },
   },
 ];
 
@@ -16,4 +16,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class DashboardRoutingModule {}
+export class DashboardIncidenciasRoutingModule {}

@@ -49,6 +49,11 @@ const routes: Routes = [
           import('./dashboard/dashboard.module').then((i) => i.DashboardModule),
       },
       {
+        path: 'dashboard-incidencias',
+        loadChildren: () =>
+          import('./dashboard-incidencias/dashboard-incidencias.module').then((i) => i.DashboardIncidenciasModule),
+      },
+      {
         path: 'solicitudes',
         loadChildren: () =>
           import('./solicitudes/solicitudes.module').then((i) => i.SolicitudesModule),

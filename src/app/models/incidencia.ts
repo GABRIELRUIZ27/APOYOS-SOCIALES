@@ -10,5 +10,6 @@ export interface Incidencias {
     imagenBase64: string;
     ubicacion: string;
     foto: string;
+    fecha: string;
     tipoIncidencia: TiposIncidencias
   }
