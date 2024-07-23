@@ -148,7 +148,7 @@
 
                                        <ul *ngIf="filteredIconos.length > 0" class="suggestions-list">
                                         <li *ngFor="let icono of filteredIconos" (click)="selectIcono(icono)">
-                                          <i [ngClass]="icono.class"></i>
+                                          <i [ngClass]="icono.class"[ngStyle]="{'color': selectedColorCode}"></i>
                                         </li>
                                       </ul>
                                        
