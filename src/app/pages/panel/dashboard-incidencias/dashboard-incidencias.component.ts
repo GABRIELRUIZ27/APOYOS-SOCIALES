@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import * as Highcharts from 'highcharts';
-import { DashboardService, AdquisicionesPorDia, IncidenciasPorDia, IncidenciaRecurrente } from 'src/app/core/services/dashboard.service';
+import { DashboardService, AdquisicionesPorDia, IncidenciasPorDia, IncidenciaRecurrente, ComunidadRecurrente } from 'src/app/core/services/dashboard.service';
 import { IncidenciaService } from 'src/app/core/services/incidencia.service';
 import { Incidencias } from 'src/app/models/incidencia';
 import { TiposIncidencias } from 'src/app/models/tipos-incidecias';
@@ -18,6 +18,7 @@ interface IncidenciasPorComunidad {
 })
 export class DashboardIncidenciasComponent implements OnInit{
   incidenciaRecurrente?: IncidenciaRecurrente;
+  comunidadRecurrente?: ComunidadRecurrente;
   incidenciasPorComunidad: IncidenciasPorComunidad = {};
   totalIncidencias: number = 0;
   infowindow = new google.maps.InfoWindow();
@@ -45,6 +46,18 @@ export class DashboardIncidenciasComponent implements OnInit{
     this.getTiposIncidencias();
     this.getIncidencias();
     this.cargarNombresMunicipios();
+    this.getComunidadMasRecurrente();
+  }
+
+  getComunidadMasRecurrente(): void {
+    this.dashboardService.getComunidadMasRecurrente().subscribe(
+      data => {
+        this.comunidadRecurrente = data;
+      },
+      error => {
+        console.error('Error al obtener la comunidad más recurrente', error);
+      }
+    );
   }
 
   getIncidenciaMasRecurrente(): void {
@@ -369,7 +382,6 @@ export class DashboardIncidenciasComponent implements OnInit{
     });
   }
 
-  // Llama a esta función después de cargar las incidencias
   cargarIncidencias(): void {
     this.incidenciasService.getAll().subscribe({
       next: (dataFromAPI) => {

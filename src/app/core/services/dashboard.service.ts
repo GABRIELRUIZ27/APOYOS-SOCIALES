@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { TiposIncidencias } from 'src/app/models/tipos-incidecias';
+import { Comunidad } from 'src/app/models/comunidad';
 
 export interface AdquisicionesPorDia {
   fecha: string;
@@ -19,6 +20,10 @@ export interface IncidenciaRecurrente {
   total: number;
 }
 
+export interface ComunidadRecurrente {
+  comunidad: Comunidad;
+  total: number;
+}
 @Injectable({
   providedIn: 'root'
 })
@@ -77,5 +82,9 @@ export class DashboardService {
 
   getIncidenciaMasRecurrente(): Observable<IncidenciaRecurrente> {
     return this.http.get<IncidenciaRecurrente>(`${this.apiUrl}/dashboard/incidencia-mas-recurrente`);
+  }
+
+  getComunidadMasRecurrente(): Observable<ComunidadRecurrente> {
+    return this.http.get<ComunidadRecurrente>(`${this.apiUrl}/dashboard/incidencia-mas-recurrente-comunidad`);
   }
 }

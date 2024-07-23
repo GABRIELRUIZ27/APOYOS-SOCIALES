@@ -30,8 +30,8 @@
             <div class="text-center">
               <h1>Incidencia más recurrente</h1>
               <div *ngIf="incidenciaRecurrente">
-                <h2> {{ incidenciaRecurrente.tipoIncidencia.nombre }}</h2>
-                <h4 id="total-incidencias" class="count">Total: {{ incidenciaRecurrente.total }}</h4>
+                <h1> {{ incidenciaRecurrente.tipoIncidencia.nombre }}</h1>
+                <h4 id="total-incidencias" class="count">{{ incidenciaRecurrente.total }}</h4>
               </div>
               <div *ngIf="!incidenciaRecurrente">
                 <p>Cargando...</p>
@@ -42,6 +42,31 @@
       </div>
     </div>
   </div>
+
+    <!-- Incidencia Más Recurrente -->
+    <div class="row">
+      <div class="col-lg-12 mb-4">
+        <div class="card">
+          <div class="card-body d-flex flex-column justify-content-center align-items-center">
+            <div class="d-flex align-items-center">
+              <div class="me-3">
+                <i class="fa-solid fa-house-flag fa-3x" style="color: orange;"></i>
+              </div>
+              <div class="text-center">
+                <h1>Comunidad con mayor número de incidencias</h1>
+                <div *ngIf="comunidadRecurrente">
+                  <h1> {{ comunidadRecurrente.comunidad.nombre }}</h1>
+                  <h4 id="total-incidencias" class="count">{{ comunidadRecurrente.total }}</h4>
+                </div>
+                <div *ngIf="!comunidadRecurrente">
+                  <p>Cargando...</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
   <!-- Gráfica de Incidencias por Comunidad -->
   <div class="row mt-4">
