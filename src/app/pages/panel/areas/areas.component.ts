@@ -285,8 +285,10 @@ export class AreasComponent {
     const target = event.target as HTMLInputElement;
     if (target) {
       this.selectedColorCode = target.value;
+      this.areaForm.get('color')?.setValue(this.selectedColorCode);
     }
   }
+  
   filterIconos() {
     const query = this.areaForm.get('nombre')?.value.toLowerCase();
     this.filteredIconos = this.iconosTabler.filter(icono =>

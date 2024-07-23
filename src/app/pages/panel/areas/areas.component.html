@@ -120,10 +120,13 @@
                                 formControlName="icono"
                               >
                                 <ng-template ng-option-tmp let-item="item">
-                                  <i [ngClass]="item.class"></i> <!-- Renderizamos solo el icono -->
+                                  <i [ngClass]="item.class"
+                                  [ngStyle]="{'color': selectedColorCode}"
+                                  ></i> <!-- Renderizamos solo el icono -->
                                 </ng-template>
                                 <ng-template ng-label-tmp let-item="item">
-                                  <i [ngClass]="item.class"></i> <!-- Renderizamos solo el nombre del icono seleccionado -->
+                                  <i [ngClass]="item.class"
+                                  [ngStyle]="{'color': selectedColorCode}"></i> <!-- Renderizamos solo el nombre del icono seleccionado -->
                                 </ng-template>
                               </ng-select>
                               
