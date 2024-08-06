@@ -35,7 +35,78 @@ export class TiposIncidenciasComponent {
   iconosTabler = [
     { name: 'Accidente', class: 'ti ti-car-crash' },
     { name: 'Caida de arbol', class: 'ti ti-trees' },
-    { name: 'Incendio', class: 'ti ti-flame' } 
+    { name: 'Incendio', class: 'ti ti-flame' } ,
+    { name: 'Desbordamiento de alcantarillado', class: 'ti ti-ripple-off' },
+    { name: 'Robo', class: 'ti ti-lock' },
+    { name: 'Vandalismo', class: 'ti ti-spray' },
+    { name: 'Problemas de iluminación pública', class: 'ti ti-bulb-off' },
+    { name: 'Fuga de gas', class: 'ti ti-lighter' },
+    { name: 'Contaminación ambiental', class: 'ti ti-cloud' },
+    { name: 'Avería en el sistema de transporte', class: 'ti ti-bus' },
+    { name: 'Fugas de agua', class: 'ti ti-ripple' },
+    { name: 'Accidente vehicular', class: 'ti ti-car-crash' },
+    { name: 'Daños en la infraestructura', class: 'ti ti-tools' },
+    { name: 'Fugas de agua potable', class: 'ti ti-water-pump' },
+    { name: 'Mal estado de calles', class: 'ti ti-road' },
+    { name: 'Ruido excesivo', class: 'ti ti-volume' },
+    { name: 'Plagas urbanas', class: 'ti ti-insect' },
+    { name: 'Emergencia médica', class: 'ti ti-heartbeat' },
+    { name: 'Problemas con el suministro eléctrico', class: 'ti ti-bolt' },
+    { name: 'Obstrucción de vías', class: 'ti ti-signs' },
+    { name: 'Corte de servicio público', class: 'ti ti-server' },
+    { name: 'Desastres naturales', class: 'ti ti-earthquake' },
+    { name: 'Problemas con el alcantarillado', class: 'ti ti-sewer' },
+    { name: 'Quejas de vecinos', class: 'ti ti-comments' },
+    { name: 'Incendios forestales', class: 'ti ti-fire' },
+    { name: 'Accidente laboral', class: 'ti ti-briefcase' },
+    { name: 'Desastres causados por lluvias', class: 'ti ti-cloud-rain' },
+    { name: 'Ruidos molestos', class: 'ti ti-volume' },
+
+    { name: 'Deficiencia en servicios de emergencia', class: 'ti ti-medical-cross' },
+    { name: 'Problemas con la recolección de basura', class: 'ti ti-trash' },
+    { name: 'Inundaciones', class: 'ti ti-fold' },
+    { name: 'Protestas o manifestaciones', class: 'ti ti-flag' },
+    { name: 'Fugas de sustancias químicas', class: 'ti ti-flask' },
+    { name: 'Problemas con el suministro de agua', class: 'ti ti-pool-off' },
+    { name: 'Obstrucción de desagües', class: 'ti ti-aperture-off' },
+    { name: 'Desastres por tormentas eléctricas', class: 'ti ti-bolt' },
+    { name: 'Fugas de petróleo', class: 'ti ti-drop-circle' },
+    { name: 'Problemas con el alcantarillado pluvial', class: 'ti ti-cloud-rain' },
+    { name: 'Cierre de calles por obras', class: 'ti ti-barrier-block-off' },
+
+    { name: 'Problemas con el sistema de calefacción', class: 'ti ti-thermometer' },
+    { name: 'Deficiencias en la seguridad pública', class: 'ti ti-shield' },
+    { name: 'Problemas con la señalización vial', class: 'ti ti-road-sign' },
+
+    { name: 'Accidentes en áreas recreativas', class: 'ti ti-basket-x' },
+    { name: 'Contaminación del aire', class: 'ti ti-whirl' },
+    { name: 'Accidentes en parques públicos', class: 'ti ti-trees' },
+
+    { name: 'Daños por vandalismo en edificios', class: 'ti ti-building' },
+    { name: 'Problemas con la red de comunicaciones', class: 'ti ti-network' },
+
+    { name: 'Desastres causados por terremotos', class: 'ti ti-mountain' },
+    { name: 'Accidentes en instalaciones deportivas', class: 'ti ti-shirt-sport' },
+    { name: 'Pérdida de fauna silvestre', class: 'ti ti-deer' },
+    { name: 'Problemas con el suministro de energía', class: 'ti ti-home-bolt' },
+
+    { name: 'Problemas con el servicio de internet', class: 'ti ti-wifi' },
+    { name: 'Contaminación del agua', class: 'ti ti-flask-2-off' },
+    { name: 'Accidentes en zonas industriales', class: 'ti ti-building-factory-2' },
+
+    { name: 'Problemas con el mantenimiento de parques', class: 'ti ti-tree' },
+    { name: 'Daños en áreas verdes', class: 'ti ti-leaf' },
+
+    { name: 'Contaminación acústica', class: 'ti ti-wave-sine' },
+    { name: 'Problemas con el sistema de drenaje', class: 'ti ti-exclamation-circle' },
+    { name: 'Emergencias relacionadas con el transporte público', class: 'ti ti-bus' },
+    { name: 'Problemas con el sistema de alumbrado', class: 'ti ti-bulb' },
+    { name: 'Deficiencia en la gestión de residuos', class: 'ti ti-trash' },
+    { name: 'Problemas con la señalización de tráfico', class: 'ti ti-traffic-lights' },
+
+    { name: 'Accidentes en eventos públicos', class: 'ti ti-car-crash' },
+    { name: 'Problemas con el sistema de vigilancia', class: 'ti ti-camera' },
+    { name: 'Deficiencias en el servicio de emergencia', class: 'ti ti-ambulance' }
   ];
   
   constructor(
