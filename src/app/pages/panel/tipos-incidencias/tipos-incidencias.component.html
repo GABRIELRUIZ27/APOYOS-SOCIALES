@@ -59,9 +59,13 @@
                     [style.backgroundColor]="tipo.color"
                   ></span>
                 </td>
-                                <td class="text-center">
-                                <i [ngClass]="tipo.icono" class="icono-con-espacio"></i>{{ tipo.nombre }}
-                            </td>
+                <td class="text-center">
+                    <i [ngClass]="tipo.icono" 
+                       class="icono-con-espacio"
+                       [ngStyle]="{'color': tipo.color}">
+                    </i>
+                    {{ tipo.nombre }}
+                </td>                
                                 <td>
                                     <div class="d-flex justify-content-between">
                                         <button class="btn btn-warning btn-icon btn-sm" data-bs-toggle="modal" data-bs-target="#modal-programa-social" (click)="setDataModalUpdate(tipo)">

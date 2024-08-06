@@ -59,9 +59,14 @@
                     [style.backgroundColor]="area.color"
                   ></span>
                 </td>
-                                <td class="text-center">
-                                <i [ngClass]="area.icono" class="icono-con-espacio"></i>{{ area.nombre }}
-                            </td>
+                <td class="text-center">
+                    <i [ngClass]="area.icono" 
+                       class="icono-con-espacio"
+                       [ngStyle]="{'color': area.color}">
+                    </i>
+                    {{ area.nombre }}
+                </td>
+                
                                 <td>
                                     <div class="d-flex justify-content-between">
                                         <button class="btn btn-warning btn-icon btn-sm" data-bs-toggle="modal" data-bs-target="#modal-programa-social" (click)="setDataModalUpdate(area)">
@@ -120,38 +125,23 @@
                                 formControlName="icono"
                               >
                                 <ng-template ng-option-tmp let-item="item">
-                                  <i [ngClass]="item.class"
-                                  [ngStyle]="{'color': selectedColorCode}"
-                                  ></i> <!-- Renderizamos solo el icono -->
+                                  <i [ngClass]="item.class"></i> <!-- Renderizamos solo el icono -->
                                 </ng-template>
                                 <ng-template ng-label-tmp let-item="item">
-                                  <i [ngClass]="item.class"
-                                  [ngStyle]="{'color': selectedColorCode}"></i> <!-- Renderizamos solo el nombre del icono seleccionado -->
+                                  <i [ngClass]="item.class"></i> <!-- Renderizamos solo el icono seleccionado -->
                                 </ng-template>
                               </ng-select>
-                              
                               <div *ngIf="areaForm.get('icono')?.touched" class="error-message">
                                 <div *ngIf="areaForm.get('icono')?.hasError('required')">
                                   <p style="color: red">El icono es obligatorio</p>
                                 </div>
                               </div>
                             </div>
-                        </div>
-                        <div class="col-lg-9">
+                          </div>
+                          <div class="col-lg-9">
                             <div class="mb-3">
                                 <label class="form-label">Nombre*:</label>
-                                <input type="text" 
-                                       class="form-control" 
-                                       formControlName="nombre" 
-                                       (input)="filterIconos()" 
-                                       />
-
-                                       <ul *ngIf="filteredIconos.length > 0" class="suggestions-list">
-                                        <li *ngFor="let icono of filteredIconos" (click)="selectIcono(icono)">
-                                          <i [ngClass]="icono.class"[ngStyle]="{'color': selectedColorCode}"></i>
-                                        </li>
-                                      </ul>
-                                       
+                                <input type="text" class="form-control" formControlName="nombre" />
                                 <div *ngIf="areaForm.get('nombre')?.touched" class="error-message">
                                     <div *ngIf="
                       areaForm.get('nombre')?.hasError('required')
