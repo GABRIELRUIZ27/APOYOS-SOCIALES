@@ -59,6 +59,51 @@
         </div>
       </div>
 
+      <div class="row">
+        <div class="col-lg-6">
+          <div>
+            <form [formGroup]="areaForm">
+              <label style="margin-top: 5px; margin-left: 10px;" class="form-label">Filtrar por área:</label>
+              <ng-select 
+                #selectarea 
+                formControlName="areaId" 
+                [searchable]="false" 
+                [items]="Areas"
+                placeholder="Todas las áreas"
+                bindValue="id" 
+                [clearable]="true" 
+                (change)="onSelectPrograma($event?.id)" 
+                (clear)="onClear()" 
+                style="margin-bottom: 5px; margin-left: 10px;"
+              >
+                <!-- Custom template for dropdown items -->
+                <ng-template ng-option-tmp let-item="item" let-index="index">
+                  <span style="margin-right: 8px;">
+                    <i [ngClass]="item.icono" 
+                       class="icono-con-espacio"
+                       [ngStyle]="{'color': item.color}">
+                    </i>
+                  </span>
+                  {{ item.nombre }}
+                </ng-template>
+      
+                <!-- Custom template for the selected item -->
+                <ng-template ng-label-tmp let-item="item">
+                  <span style="margin-right: 8px;">
+                    <i [ngClass]="item.icono" 
+                       class="icono-con-espacio"
+                       [ngStyle]="{'color': item.color}">
+                    </i>
+                  </span>
+                  {{ item.nombre }}
+                </ng-template>
+      
+              </ng-select>
+            </form>
+          </div>
+        </div>
+      </div>
+
       <ng-container [ngSwitch]="isLoading">
         <div style="height: 300px" *ngSwitchCase="2">
           <div class="progress">
@@ -70,18 +115,18 @@
             <thead>
               <tr>
                 <th class="text-center" style="text-transform: none">#</th>
-                <th style="text-transform: none; font-size: inherit">Foto</th>
-                <th style="text-transform: none; font-size: inherit">
+                <th style="text-transform: none; font-size: inherit" class="text-center">Foto</th>
+                <th style="text-transform: none; font-size: inherit" class="text-center">
                   Descripción
                 </th>
-                <th style="text-transform: none; font-size: inherit">
+                <th style="text-transform: none; font-size: inherit"class="text-center">
                   Comunidad
                 </th>
                 <th
                   class="text-center"
                   style="text-transform: none; font-size: inherit"
                 >
-                  Ubicacion
+                  Área
                 </th>
                 <th
                   class="w-1"
@@ -107,7 +152,7 @@
                       1
                   }}
                 </td>
-                <td class="text-muted">
+                <td class="text-center">
                   <div class="flex justify-center items-center">
                     <img
                       src="{{ apoyos.foto }}"
@@ -118,9 +163,12 @@
                     />
                   </div>
                 </td>
-                <td>{{ apoyos.comentarios }}</td>
-                <td>{{ apoyos.comunidad.nombre }}</td>
-                <td class="text-muted">{{ apoyos.ubicacion }}</td>
+                <td class="text-center">{{ apoyos.comentarios }}</td>
+                <td class="text-center">{{ apoyos.comunidad.nombre }}</td>
+                <td class="text-center"> <i [ngClass]="apoyos.area.icono" 
+                  class="icono-con-espacio"
+                  [ngStyle]="{'color': apoyos.area.color}">
+               </i>{{ apoyos.area.nombre }}</td>
                 <td>
                   <div class="d-flex justify-content-between">
                     <button
@@ -142,6 +190,10 @@
               </tr>
             </tbody>
           </table>
+          <div class="text-center">
+            <label class="form-label" style="margin-top: 15px; font-size: 24px">
+              {{ sinProgramaMessage }}</label>
+          </div>
         </div>
         <app-no-results *ngSwitchCase="4"></app-no-results>
       </ng-container>
@@ -337,7 +389,7 @@
               <div class="row">
                 <div class="col-lg-6">
                   <div class="mb-3">
-                    <label class="form-label">Area*:</label>
+                    <label class="form-label">Área*:</label>
                     <ng-select
                       formControlName="area"
                       #selectarea

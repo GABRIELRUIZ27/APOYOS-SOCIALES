@@ -52,6 +52,51 @@
         </div>
       </div>
 
+      <div class="row">
+        <div class="col-lg-6">
+          <div>
+            <form [formGroup]="areaForm">
+              <label style="margin-top: 5px; margin-left: 10px;" class="form-label">Filtrar por área:</label>
+              <ng-select 
+                #selectarea 
+                formControlName="areaId" 
+                [searchable]="false" 
+                [items]="areas"
+                placeholder="Todas las áreas"
+                bindValue="id" 
+                [clearable]="true" 
+                (change)="onSelectPrograma($event?.id)" 
+                (clear)="onClear()" 
+                style="margin-bottom: 5px; margin-left: 10px;"
+              >
+                <!-- Custom template for dropdown items -->
+                <ng-template ng-option-tmp let-item="item" let-index="index">
+                  <span style="margin-right: 8px;">
+                    <i [ngClass]="item.icono" 
+                       class="icono-con-espacio"
+                       [ngStyle]="{'color': item.color}">
+                    </i>
+                  </span>
+                  {{ item.nombre }}
+                </ng-template>
+      
+                <!-- Custom template for the selected item -->
+                <ng-template ng-label-tmp let-item="item">
+                  <span style="margin-right: 8px;">
+                    <i [ngClass]="item.icono" 
+                       class="icono-con-espacio"
+                       [ngStyle]="{'color': item.color}">
+                    </i>
+                  </span>
+                  {{ item.nombre }}
+                </ng-template>
+      
+              </ng-select>
+            </form>
+          </div>
+        </div>
+      </div>
+
       <ng-container [ngSwitch]="isLoading">
         <div style="height: 300px" *ngSwitchCase="2">
           <div class="progress">
@@ -69,11 +114,11 @@
                 >
                   #
                 </th>
-                <th style="text-transform: none; font-size: inherit">
+                <th style="text-transform: none; font-size: inherit"  class="text-center">
                     Nombre
                   </th>
-                  <th style="text-transform: none; font-size: inherit">Folio</th>
-                  <th style="text-transform: none; font-size: inherit">Area</th>
+                  <th style="text-transform: none; font-size: inherit"  class="text-center">Folio</th>
+                  <th style="text-transform: none; font-size: inherit"  class="text-center">Área</th>
                 <th
                   style="text-transform: none; font-size: inherit"
                   class="w-1"
@@ -97,9 +142,12 @@
                       1
                   }}
                 </td>
-                <td>{{ adquisicion.nombre }}</td>
-                <td class="text-muted">{{ adquisicion.folio? adquisicion.folio : 'N/A' }}</td>
-                <td class="text-muted">{{ adquisicion.area.nombre }}</td>
+                <td class="text-center">{{ adquisicion.nombre }}</td>
+                <td class="text-center">{{ adquisicion.folio? adquisicion.folio : 'N/A' }}</td>
+                <td class="text-center"> <i [ngClass]="adquisicion.area.icono" 
+                  class="icono-con-espacio"
+                  [ngStyle]="{'color': adquisicion.area.color}">
+               </i>{{ adquisicion.area.nombre }}</td>
                 <td>
                   <div class="d-flex justify-content-between">
                     <button
@@ -121,6 +169,10 @@
               </tr>
             </tbody>
           </table>
+          <div class="text-center">
+            <label class="form-label" style="margin-top: 15px; font-size: 24px">
+              {{ sinProgramaMessage }}</label>
+          </div>
         </div>
 
         <app-no-results *ngSwitchCase="4"></app-no-results>
@@ -269,22 +321,38 @@
                   [clearable]="false"
                   formControlName="area"
                 >
+                  <!-- Plantilla personalizada para las opciones en el dropdown -->
                   <ng-template ng-option-tmp let-item="item">
+                    <span style="margin-right: 8px;">
+                      <i [ngClass]="item.icono" 
+                         class="icono-con-espacio"
+                         [ngStyle]="{'color': item.color}">
+                      </i>
+                    </span>
                     {{ item.nombre }}
                   </ng-template>
+            
+                  <!-- Plantilla personalizada para la opción seleccionada -->
+                  <ng-template ng-label-tmp let-item="item">
+                    <span style="margin-right: 8px;">
+                      <i [ngClass]="item.icono" 
+                         class="icono-con-espacio"
+                         [ngStyle]="{'color': item.color}">
+                      </i>
+                    </span>
+                    {{ item.nombre }}
+                  </ng-template>
+                  
                 </ng-select>
-                <div
-                  *ngIf="adquisicionesForm.get('area')?.touched"
-                  class="error-message"
-                >
+            
+                <!-- Mensaje de error -->
+                <div *ngIf="adquisicionesForm.get('area')?.touched" class="error-message">
                   <div *ngIf="adquisicionesForm.get('area')?.hasError('required')">
                     <p style="color: red">El área es obligatorio</p>
                   </div>
                 </div>
               </div>
             </div>
-          
-         
           </div>         
 
           <div class="row">

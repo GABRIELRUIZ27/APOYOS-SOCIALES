@@ -26,7 +26,9 @@ export class AdquisicionComponent {
   isLoading = LoadingStates.neutro;
   isModalAdd = true;
   areas: Area[] = []; 
-
+  areaForm!: FormGroup;
+  sinProgramaMessage = '';
+  adquisicionSelect!: Adquisicion | undefined;
   constructor(
     @Inject('CONFIG_PAGINATOR') public configPaginator: PaginationInstance,
     private spinnerService: NgxSpinnerService,
@@ -244,5 +246,49 @@ export class AdquisicionComponent {
     const precioUnitario = this.adquisicionesForm.get('precioUnitario')?.value || 0;
     const precioTotal = cantidad * precioUnitario;
     this.adquisicionesForm.get('precioTotal')?.setValue(precioTotal.toFixed(2));
+  }
+
+  onSelectPrograma(id: number | null) {
+    this.adquisicionSelect = this.adquisiciones.find(
+      (v) => v.area.id === id
+    );
+
+    if (this.adquisicionSelect) {
+      const valueSearch2 =
+        this.adquisicionSelect.area.nombre.toLowerCase();
+      console.log('Search Value:', valueSearch2);
+
+      // Filtrar los votantes
+      this.adquisicionesFilter = this.adquisiciones.filter((adquisicion) =>
+        adquisicion.area.nombre
+          .toLowerCase()
+          .includes(valueSearch2)
+      );
+      this.sinProgramaMessage = '';
+      console.log('Filtered Votantes:', this.adquisicionesFilter);
+
+      // Verificar si votantesFilter es null o vacío
+      if (!this.adquisicionesFilter || this.adquisicionesFilter.length === 0) {
+        this.adquisicionesFilter = [];
+      }
+      this.configPaginator.currentPage = 1;
+    } else {
+      this.sinProgramaMessage = 'No se encontraron adquisiciones.';
+      // Si no se encuentra el votante seleccionado, establecer votantesFilter como un array vacío
+      this.adquisicionesFilter = [];
+    }
+  }
+
+  onClear() {
+    if (this.adquisiciones) {
+      this.getAdquisicion();
+    }
+    this.sinProgramaMessage = '';
+  }
+
+  creteForm2() {
+    this.areaForm = this.formBuilder.group({
+      areaId: [],
+    });
   }
 }

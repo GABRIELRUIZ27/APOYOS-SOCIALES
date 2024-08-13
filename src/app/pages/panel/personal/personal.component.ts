@@ -32,6 +32,9 @@ export class PersonalComponent {
   isModalAdd = true;
   areas: Area[] = []; 
   cargos: Cargo[] = []; 
+  areaForm!: FormGroup;
+  sinProgramaMessage = '';
+  personalSelect!: Personal | undefined;
 
   constructor(
     @Inject('CONFIG_PAGINATOR') public configPaginator: PaginationInstance,
@@ -276,5 +279,49 @@ export class PersonalComponent {
       this.personalForm.reset();
       this.isModalAdd = true;
     }
+  }
+
+  onSelectPrograma(id: number | null) {
+    this.personalSelect = this.personales.find(
+      (v) => v.area.id === id
+    );
+
+    if (this.personalSelect) {
+      const valueSearch2 =
+        this.personalSelect.area.nombre.toLowerCase();
+      console.log('Search Value:', valueSearch2);
+
+      // Filtrar los votantes
+      this.personalFilter = this.personales.filter((personal) =>
+        personal.area.nombre
+          .toLowerCase()
+          .includes(valueSearch2)
+      );
+      this.sinProgramaMessage = '';
+      console.log('Filtered Votantes:', this.personalFilter);
+
+      // Verificar si votantesFilter es null o vacío
+      if (!this.personalFilter || this.personalFilter.length === 0) {
+        this.personalFilter = [];
+      }
+      this.configPaginator.currentPage = 1;
+    } else {
+      this.sinProgramaMessage = 'No se encontraro personal.';
+      // Si no se encuentra el votante seleccionado, establecer votantesFilter como un array vacío
+      this.personalFilter = [];
+    }
+  }
+
+  onClear() {
+    if (this.personales) {
+      this.getPersonal();
+    }
+    this.sinProgramaMessage = '';
+  }
+
+  creteForm2() {
+    this.areaForm = this.formBuilder.group({
+      areaId: [],
+    });
   }
 }

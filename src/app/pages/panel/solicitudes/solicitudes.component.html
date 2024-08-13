@@ -70,13 +70,19 @@
             <thead>
               <tr>
                 <th class="text-center" style="text-transform: none">#</th>
-                <th style="text-transform: none; font-size: inherit">
-                  CURP
+                <th class="text-center" style="text-transform: none; font-size: inherit">
+                  Nombre
                 </th>
-                <th style="text-transform: none; font-size: inherit">
-                Nombre
+                <th class="text-center" style="text-transform: none; font-size: inherit">
+                CURP
                 </th>
-                <th style="text-transform: none; font-size: inherit">
+                <th class="text-center" style="text-transform: none; font-size: inherit">
+                  Área
+                  </th>
+                  <th class="text-center" style="text-transform: none; font-size: inherit">
+                    Programa Social
+                    </th>
+                <th class="text-center" style="text-transform: none; font-size: inherit">
                     Estatus
                   </th>
                   <th
@@ -109,9 +115,14 @@
                       1
                   }}
                 </td>
-                <td>{{ apoyos.curp }}</td>
-                <td class="text-muted">{{ apoyos.nombre }}</td>
-                <td [ngClass]="{
+                <td class="text-center">{{ apoyos.nombre }}</td>
+                <td class="text-center">{{ apoyos.curp }}</td>
+                <td class="text-center"> <i [ngClass]="apoyos.area.icono" 
+                  class="icono-con-espacio"
+                  [ngStyle]="{'color': apoyos.area.color}">
+               </i>{{ apoyos.area.nombre }}</td>
+                <td class="text-center">{{ apoyos.programaSocial.nombre }}</td>
+                <td class="text-center" [ngClass]="{
                   'text-warning': apoyos.estatus === null, 
                   'text-success': apoyos.estatus === true, 
                   'text-danger': apoyos.estatus === false
@@ -361,6 +372,7 @@
                     [disabled]="!isModalAdd"
                     (change)="onAreaChange($event)"
                   >
+                    <!-- Input para buscar opciones en el dropdown -->
                     <ng-template ng-header-tmp>
                       <input
                         class="form-control"
@@ -368,19 +380,36 @@
                         (input)="selectarea.filter($any($event.target).value)"
                       />
                     </ng-template>
+              
+                    <!-- Plantilla para las opciones en el dropdown -->
                     <ng-template ng-option-tmp let-item="item" let-index="index">
                       <div class="option-item">
-                        <i *ngIf="item.icono" class="{{ item.icono }} icon"></i>
+                        <span style="margin-right: 8px;">
+                          <i [ngClass]="item.icono" 
+                             class="icono-con-espacio"
+                             [ngStyle]="{'color': item.color}">
+                          </i>
+                        </span>
                         {{ item.nombre }}
                       </div>
                     </ng-template>
+              
+                    <!-- Plantilla para la opción seleccionada -->
                     <ng-template ng-label-tmp let-item="item">
                       <div class="selected-item">
-                        <i *ngIf="item.icono" class="{{ item.icono }} icon"></i>
+                        <span style="margin-right: 8px;">
+                          <i [ngClass]="item.icono" 
+                             class="icono-con-espacio"
+                             [ngStyle]="{'color': item.color}">
+                          </i>
+                        </span>
                         {{ item.nombre }}
                       </div>
                     </ng-template>
+                    
                   </ng-select>
+              
+                  <!-- Mensaje de error -->
                   <div *ngIf="apoyosForm.get('area')?.touched" class="error-message">
                     <div *ngIf="apoyosForm.get('area')?.hasError('required')">
                       El área es requerida
@@ -388,6 +417,7 @@
                   </div>
                 </div>
               </div>
+              
               <div class="col-lg-6">
                 <div class="mb-3">
                   <label class="form-label">Programa social{{ isModalAdd ? '*' : '' }}:</label>

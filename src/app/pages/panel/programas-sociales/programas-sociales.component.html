@@ -199,44 +199,49 @@
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="mb-3">
-                                      <label class="form-label">Area*:</label>
+                                      <label class="form-label">Área*:</label>
                                       <ng-select
-                                        formControlName="area"
-                                        #selectarea
-                                        [searchable]="false"
+                                        placeholder="Elegir"
                                         [items]="Areas"
                                         bindLabel="nombre"
                                         bindValue="id"
-                                        placeholder="Elegir"
+                                        [searchable]="false"
                                         [clearable]="false"
+                                        formControlName="area"
                                       >
-                                        <ng-template ng-header-tmp>
-                                          <input
-                                            class="form-control"
-                                            type="text"
-                                            (input)="selectarea.filter($any($event.target).value)"
-                                          />
+                                        <!-- Plantilla personalizada para las opciones en el dropdown -->
+                                        <ng-template ng-option-tmp let-item="item">
+                                          <span style="margin-right: 8px;">
+                                            <i [ngClass]="item.icono" 
+                                               class="icono-con-espacio"
+                                               [ngStyle]="{'color': item.color}">
+                                            </i>
+                                          </span>
+                                          {{ item.nombre }}
                                         </ng-template>
-                                        <ng-template ng-option-tmp let-item="item" let-index="index">
-                                          <div class="option-item">
-                                            <i *ngIf="item.icono" class="{{ item.icono }} icon"></i>
-                                            {{ item.nombre }}
-                                          </div>
-                                        </ng-template>
+                                  
+                                        <!-- Plantilla personalizada para la opción seleccionada -->
                                         <ng-template ng-label-tmp let-item="item">
-                                          <div class="selected-item">
-                                            <i *ngIf="item.icono" class="{{ item.icono }} icon"></i>
-                                            {{ item.nombre }}
-                                          </div>
+                                          <span style="margin-right: 8px;">
+                                            <i [ngClass]="item.icono" 
+                                               class="icono-con-espacio"
+                                               [ngStyle]="{'color': item.color}">
+                                            </i>
+                                          </span>
+                                          {{ item.nombre }}
                                         </ng-template>
+                                        
                                       </ng-select>
+                                  
+                                      <!-- Mensaje de error -->
                                       <div *ngIf="programaSocialForm.get('area')?.touched" class="error-message">
                                         <div *ngIf="programaSocialForm.get('area')?.hasError('required')">
-                                          El area es requerida
+                                          <p style="color: red">El área es obligatorio</p>
                                         </div>
                                       </div>
                                     </div>
-                                  </div> 
+                                  </div>
+                                  
                             <div class="col-lg-6">
                                 <div class="mb-3 custom-green-switch">
                                     <label for="estadoActivo" class="form-label">Estatus</label>

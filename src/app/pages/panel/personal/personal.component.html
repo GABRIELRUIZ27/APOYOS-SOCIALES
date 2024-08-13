@@ -40,7 +40,7 @@
               class="btn w-30 btn-icon"
               aria-label="Dribbble"
               (click)="exportarDatosAExcel()"
-              title="Descargar excel de usuarios"
+              title="Descargar excel de personal"
               style="margin-left: 8px; padding-top: 4px; padding-bottom: 4px"
             >
               <i
@@ -59,6 +59,51 @@
           </div>
         </div>
 
+        <div class="row">
+          <div class="col-lg-6">
+            <div>
+              <form [formGroup]="areaForm">
+                <label style="margin-top: 5px; margin-left: 10px;" class="form-label">Filtrar por área:</label>
+                <ng-select 
+                  #selectarea 
+                  formControlName="areaId" 
+                  [searchable]="false" 
+                  [items]="areas"
+                  placeholder="Todas las áreas"
+                  bindValue="id" 
+                  [clearable]="true" 
+                  (change)="onSelectPrograma($event?.id)" 
+                  (clear)="onClear()" 
+                  style="margin-bottom: 5px; margin-left: 10px;"
+                >
+                  <!-- Custom template for dropdown items -->
+                  <ng-template ng-option-tmp let-item="item" let-index="index">
+                    <span style="margin-right: 8px;">
+                      <i [ngClass]="item.icono" 
+                         class="icono-con-espacio"
+                         [ngStyle]="{'color': item.color}">
+                      </i>
+                    </span>
+                    {{ item.nombre }}
+                  </ng-template>
+        
+                  <!-- Custom template for the selected item -->
+                  <ng-template ng-label-tmp let-item="item">
+                    <span style="margin-right: 8px;">
+                      <i [ngClass]="item.icono" 
+                         class="icono-con-espacio"
+                         [ngStyle]="{'color': item.color}">
+                      </i>
+                    </span>
+                    {{ item.nombre }}
+                  </ng-template>
+        
+                </ng-select>
+              </form>
+            </div>
+          </div>
+        </div>
+
         <div *ngSwitchCase="3" class="table-responsive">
           <table class="table table-vcenter card-table table-striped">
             <thead>
@@ -69,11 +114,11 @@
                 >
                   #
                 </th>
-                <th style="text-transform: none; font-size: inherit">
+                <th style="text-transform: none; font-size: inherit" class="text-center">
                     Nombre
                   </th>
-                  <th style="text-transform: none; font-size: inherit">Cargo</th>
-                  <th style="text-transform: none; font-size: inherit">Area</th>
+                  <th style="text-transform: none; font-size: inherit" class="text-center">Cargo</th>
+                  <th style="text-transform: none; font-size: inherit" class="text-center">Área</th>
                 <th
                   style="text-transform: none; font-size: inherit"
                   class="w-1"
@@ -97,9 +142,15 @@
                       1
                   }}
                 </td>
-                <td>{{ personal.nombre }}</td>
-                <td class="text-muted">{{ personal.cargo.nombre }}</td>
-                <td class="text-muted">{{ personal.area?.nombre? personal.area.nombre : 'N/A' }}</td>
+                <td class="text-center">{{ personal.nombre }}</td>
+                <td class="text-center">{{ personal.cargo.nombre }}</td>
+                <td class="text-center"> 
+                  <i [ngClass]="personal.area?.icono" 
+                  class="icono-con-espacio"
+                  [ngStyle]="{'color': personal.area?.color}">
+               </i>
+               {{ personal.area?.nombre? personal.area.nombre : 'N/A' }}
+              </td>
                 <td>
                   <div class="d-flex justify-content-between">
                     <button
@@ -121,6 +172,10 @@
               </tr>
             </tbody>
           </table>
+          <div class="text-center">
+            <label class="form-label" style="margin-top: 15px; font-size: 24px">
+              {{ sinProgramaMessage }}</label>
+          </div>
         </div>
 
         <app-no-results *ngSwitchCase="4"></app-no-results>
@@ -318,33 +373,51 @@
               </div>
             </div>
           </div>
-          
           <div class="col-lg-6" *ngIf="personalForm.get('cargo')?.value !== 1 && personalForm.get('cargo')?.value !== 3">
             <div class="mb-3">
-              <label class="form-label">Area*:</label>
+              <label class="form-label">Área*:</label>
               <ng-select
-                formControlName="area"
-                #selectArea
-                [searchable]="false"
+                placeholder="Elegir"
                 [items]="areas"
                 bindLabel="nombre"
                 bindValue="id"
-                placeholder="Elegir"
+                [searchable]="false"
                 [clearable]="false"
+                formControlName="area"
               >
-                <ng-template ng-header-tmp>
-                  <input
-                    class="form-control"
-                    type="text"
-                    (input)="selectArea.filter($any($event.target).value)"
-                  />
-                </ng-template>
-                <ng-template ng-option-tmp let-item="item" let-index="index">
+                <!-- Plantilla personalizada para las opciones en el dropdown -->
+                <ng-template ng-option-tmp let-item="item">
+                  <span style="margin-right: 8px;">
+                    <i [ngClass]="item.icono" 
+                       class="icono-con-espacio"
+                       [ngStyle]="{'color': item.color}">
+                    </i>
+                  </span>
                   {{ item.nombre }}
                 </ng-template>
+          
+                <!-- Plantilla personalizada para la opción seleccionada -->
+                <ng-template ng-label-tmp let-item="item">
+                  <span style="margin-right: 8px;">
+                    <i [ngClass]="item.icono" 
+                       class="icono-con-espacio"
+                       [ngStyle]="{'color': item.color}">
+                    </i>
+                  </span>
+                  {{ item.nombre }}
+                </ng-template>
+                
               </ng-select>
+          
+              <!-- Mensaje de error -->
+              <div *ngIf="personalForm.get('area')?.touched" class="error-message">
+                <div *ngIf="personalForm.get('area')?.hasError('required')">
+                  <p style="color: red">El área es obligatorio</p>
+                </div>
+              </div>
             </div>
           </div>
+
         </div>
         </div>
         <p

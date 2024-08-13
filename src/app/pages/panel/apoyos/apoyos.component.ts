@@ -50,6 +50,9 @@ export class ApoyosComponent {
   apoyos!: Apoyos;
   public isUpdatingImg: boolean = false;
   public imgPreview: string = '';
+  areaForm!: FormGroup;
+  sinProgramaMessage = '';
+  apoyosSelect!: Apoyos | undefined;
 
   constructor(
     @Inject('CONFIG_PAGINATOR') public configPaginator: PaginationInstance,
@@ -630,5 +633,49 @@ export class ApoyosComponent {
     };
 
     this.selectAddress2(dummyPlace);
+  }
+
+  onSelectPrograma(id: number | null) {
+    this.apoyosSelect = this.Apoyos.find(
+      (v) => v.area.id === id
+    );
+
+    if (this.apoyosSelect) {
+      const valueSearch2 =
+        this.apoyosSelect.area.nombre.toLowerCase();
+      console.log('Search Value:', valueSearch2);
+
+      // Filtrar los votantes
+      this.ApoyosFilter = this.Apoyos.filter((personal) =>
+        personal.area.nombre
+          .toLowerCase()
+          .includes(valueSearch2)
+      );
+      this.sinProgramaMessage = '';
+      console.log('Filtered Votantes:', this.ApoyosFilter);
+
+      // Verificar si votantesFilter es null o vacío
+      if (!this.ApoyosFilter || this.ApoyosFilter.length === 0) {
+        this.ApoyosFilter = [];
+      }
+      this.configPaginator.currentPage = 1;
+    } else {
+      this.sinProgramaMessage = 'No se encontrararon apoyos.';
+      // Si no se encuentra el votante seleccionado, establecer votantesFilter como un array vacío
+      this.ApoyosFilter = [];
+    }
+  }
+
+  onClear() {
+    if (this.Apoyos) {
+      this.getApoyos();
+    }
+    this.sinProgramaMessage = '';
+  }
+
+  creteForm2() {
+    this.areaForm = this.formBuilder.group({
+      areaId: [],
+    });
   }
 }
