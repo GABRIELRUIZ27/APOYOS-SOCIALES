@@ -69,12 +69,12 @@
                 >
                   #
                 </th>
-                <th style="text-transform: none; font-size: inherit">
+                <th style="text-transform: none; font-size: inherit" class="text-center">
                   Nombre completo
                 </th>
-                <th style="text-transform: none; font-size: inherit">Email</th>
-                <th style="text-transform: none; font-size: inherit">Rol</th>
-                <th style="text-transform: none; font-size: inherit">Area</th>
+                <th style="text-transform: none; font-size: inherit" class="text-center">Email</th>
+                <th style="text-transform: none; font-size: inherit" class="text-center">Rol</th>
+                <th style="text-transform: none; font-size: inherit" class="text-center">Area</th>
                 <th
                   style="text-transform: none; font-size: inherit"
                   class="text-center"
@@ -104,10 +104,10 @@
                       1
                   }}
                 </td>
-                <td>{{ usuario.nombreCompleto }}</td>
-                <td class="text-muted">{{ usuario.correo }}</td>
-                <td class="text-muted">{{ usuario.rol.nombreRol }}</td>
-                <td class="text-muted">{{ usuario.area?.nombre? usuario.area.nombre : 'N/A' }}</td>
+                <td class="text-center">{{ usuario.nombreCompleto }}</td>
+                <td class="text-center">{{ usuario.correo }}</td>
+                <td class="text-center">{{ usuario.rol.nombreRol }}</td>
+                <td class="text-center">{{ usuario.area?.nombre? usuario.area.nombre : 'N/A' }}</td>
                 <td class="text-center">
                   <ng-container *ngIf="usuario.estatus; else elseEstatus">
                     <span class="badge bg-success me-1"> </span> Activo

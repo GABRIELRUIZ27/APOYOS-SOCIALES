@@ -1,1 +1,510 @@
-<p>solicitudes works!</p>
+<ngx-spinner
+  bdColor="rgba(0,0,0,0.41)"
+  size="large"
+  color="#ffffff"
+  type="ball-scale-multiple"
+  [fullScreen]="true"
+>
+  <p style="color: white">Guardando...</p>
+</ngx-spinner>
+
+<app-page-header headerTitle="Solicitudes de apoyos recibidas"></app-page-header>
+
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body border-bottom py-3">
+        <div class="row">
+          <div class="col-md-6 mb-2">
+            <button
+              class="btn btn-primary mb-2"
+              data-bs-toggle="modal"
+              data-bs-target="#modal-propaganda"
+              (click)="handleChangeAdd()"
+            >
+              <i class="ti ti-plus me-1"></i>Agregar
+            </button>
+          </div>
+
+          <div class="col-md-6 mb-2">
+            <div
+              class="d-flex align-items-center justify-content-between justify-content-md-end"
+            >
+              <div class="input-icon col-sm-8">
+                <input
+                  #searchItem
+                  type="text"
+                  class="form-control form-control-rounded"
+                  placeholder="Buscar"
+                  (input)="handleChangeSearch($event)"
+                />
+                <span class="input-icon-addon">
+                  <i class="ti ti-search"></i>
+                </span>
+              </div>
+              <a
+                class="btn w-30 btn-icon"
+                aria-label="Dribbble"
+                (click)="exportarDatosAExcel()"
+                title="Descargar excel de solicitudes"
+                style="margin-left: 8px; padding-top: 4px; padding-bottom: 4px"
+              >
+                <i
+                  class="ti ti-cloud-down text-muted"
+                  style="font-size: 28px"
+                ></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <ng-container [ngSwitch]="isLoading">
+        <div style="height: 300px" *ngSwitchCase="2">
+          <div class="progress">
+            <div class="progress-bar progress-bar-indeterminate bg-green"></div>
+          </div>
+        </div>
+        <div class="table-responsive" *ngSwitchCase="3">
+          <table class="table table-vcenter table-responsive card-table">
+            <thead>
+              <tr>
+                <th class="text-center" style="text-transform: none">#</th>
+                <th style="text-transform: none; font-size: inherit">
+                  CURP
+                </th>
+                <th style="text-transform: none; font-size: inherit">
+                Nombre
+                </th>
+                <th style="text-transform: none; font-size: inherit">
+                    Estatus
+                  </th>
+                  <th
+                  style="text-transform: none; font-size: inherit"
+                  class="text-center"
+                >
+                  Solicitud
+                </th>
+                <th
+                  style="text-transform: none; font-size: inherit"
+                  class="text-center"
+                >
+                Acciones
+              </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                *ngFor="
+                  let apoyos of SolicitudesFilter
+                    | paginate : configPaginator;
+                  let pointIndex = index
+                "
+              >
+                <td class="text-center">
+                  {{
+                    configPaginator.itemsPerPage *
+                      (configPaginator.currentPage - 1) +
+                      pointIndex +
+                      1
+                  }}
+                </td>
+                <td>{{ apoyos.curp }}</td>
+                <td class="text-muted">{{ apoyos.nombre }}</td>
+                <td [ngClass]="{
+                  'text-warning': apoyos.estatus === null, 
+                  'text-success': apoyos.estatus === true, 
+                  'text-danger': apoyos.estatus === false
+              }">
+              {{ apoyos.estatus === null ? 'Por Aprobar' : (apoyos.estatus === false ? 'Rechazado' : 'Aprobado') }}
+          </td>           
+                <td>
+                  <div class="d-flex justify-content-center gap-2">
+                    <button
+                      class="btn btn-info btn-icon btn-sm"
+                      data-bs-toggle="modal"
+                      data-bs-target="#modal-propaganda"
+                      (click)="setDataModalUpdate(apoyos); mapa()"
+                    >
+                      <i class="ti ti-eye me-2"></i> Ver Solicitud&nbsp;
+                    </button>
+                  </div>
+                </td>
+                <td>
+                  <div class="d-flex justify-content-center gap-2">
+                    <button
+                        class="btn btn-success btn-icon btn-sm"
+                        (click)="setDataModalUpdate(apoyos); mapa()"
+                        (click)="aprobar(apoyos.id, apoyos); mapa()"
+                      >
+                      <i class="ti ti-check me-2"></i> Aceptar&nbsp;
+                    </button>
+                      <button
+                        class="btn btn-danger btn-icon btn-sm"
+                        (click)="setDataModalUpdate(apoyos); mapa()"
+                        (click)="rechazar(apoyos.id, apoyos); mapa()"
+                      >
+                      <i class="ti ti-x me-2"></i> Rechazar&nbsp;
+                    </button>
+                    </div>
+                  </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <app-no-results *ngSwitchCase="4"></app-no-results>
+      </ng-container>
+      <!-- Fin *ngSwitchCase-->
+
+      <div class="card-footer d-flex align-items-center">
+        <p class="m-0 text-muted">
+          Total de registros: <b>{{ SolicitudesFilter.length }}</b>
+        </p>
+
+        <div class="m-0 ms-auto">
+          <pagination-controls
+            (pageChange)="onPageChange($event)"
+            previousLabel=""
+            nextLabel=""
+          >
+          </pagination-controls>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal"
+  id="modal-propaganda"
+  tabindex="-1"
+  role="dialog"
+  aria-hidden="true"
+>
+<div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">
+          {{ isModalAdd ? "Enviar" : "Ver" }} solicitud
+        </h5>
+        <button
+          #closebutton
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+          (click)="resetMap(); resetForm()"
+        ></button>
+      </div>
+  
+      <form [formGroup]="apoyosForm" (ngSubmit)="submit()">
+        <div class="modal-body">
+          <div class="row d-flex align-items-center align-items-end">
+            <div class="row">
+              <div class="col-lg-9">
+                <div class="mb-3">
+                  <label class="form-label">Nombre{{ isModalAdd ? '*' : '' }}:</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="nombre"
+                    [attr.readonly]="!isModalAdd ? true : null"
+                  />
+                  <div
+                    *ngIf="apoyosForm.get('nombre')?.touched"
+                    class="error-message"
+                  >
+                    <div
+                      *ngIf="apoyosForm.get('nombre')?.hasError('required')"
+                    >
+                      El nombre es requerido
+                    </div>
+                    <div
+                      *ngIf="apoyosForm.get('nombre')?.hasError('maxlength')"
+                    >
+                      El nombre debe tener máximo 10 caracteres
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-3">
+                <div class="mb-3">
+                  <label class="form-label">Edad{{ isModalAdd ? '*' : '' }}:</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="edad"
+                    [attr.readonly]="!isModalAdd ? true : null"
+                  />
+                  <div
+                    *ngIf="apoyosForm.get('edad')?.touched"
+                    class="error-message"
+                  >
+                    <div
+                      *ngIf="apoyosForm.get('edad')?.hasError('required')"
+                    >
+                      La edad es requerida
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-12">
+                <div class="mb-3">
+                  <label class="form-label">CURP:</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="CURP"
+                    [attr.readonly]="!isModalAdd ? true : null"
+                  />
+                  <div
+                    *ngIf="apoyosForm.get('CURP')?.touched"
+                    class="error-message"
+                  >
+                    <div
+                      *ngIf="apoyosForm.get('CURP')?.hasError('required')"
+                    >
+                      El CURP es requerido
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-6">
+                <div class="mb-3">
+                  <label class="form-label">Género{{ isModalAdd ? '*' : '' }}:</label>
+                  <ng-select
+                    formControlName="genero"
+                    #selectarea
+                    [searchable]="false"
+                    [items]="Genero"
+                    bindLabel="nombre"
+                    bindValue="id"
+                    placeholder="Elegir"
+                    [clearable]="false"
+                    [disabled]="!isModalAdd"
+                  >
+                    <ng-template ng-header-tmp>
+                      <input
+                        class="form-control"
+                        type="text"
+                        (input)="selectarea.filter($any($event.target).value)"
+                      />
+                    </ng-template>
+                    <ng-template ng-option-tmp let-item="item" let-index="index">
+                      <div class="option-item">
+                        {{ item.nombre }}
+                      </div>
+                    </ng-template>
+                    <ng-template ng-label-tmp let-item="item">
+                      <div class="selected-item">
+                        {{ item.nombre }}
+                      </div>
+                    </ng-template>
+                  </ng-select>
+                  <div *ngIf="apoyosForm.get('genero')?.touched" class="error-message">
+                    <div *ngIf="apoyosForm.get('genero')?.hasError('required')">
+                      El género es requerido
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="mb-3">
+                  <label class="form-label">Comunidad{{ isModalAdd ? '*' : '' }}:</label>
+                  <ng-select
+                    formControlName="comunidad"
+                    #selectMunicipio
+                    [searchable]="true"
+                    [items]="Comunidad"
+                    bindLabel="nombre"
+                    bindValue="id"
+                    placeholder="Elegir"
+                    [clearable]="true"
+                    [disabled]="!isModalAdd"
+                  >
+                    <ng-template ng-header-tmp>
+                      <input
+                        class="form-control color"
+                        type="text"
+                        (input)="selectMunicipio.filter($any($event.target).value)"
+                      />
+                    </ng-template>
+                    <ng-template ng-option-tmp let-item="item" let-index="index">
+                      {{ item.nombre }}
+                    </ng-template>
+                  </ng-select>
+                  <div *ngIf="apoyosForm.get('comunidad')?.touched" class="error-message">
+                    <div *ngIf="apoyosForm.get('comunidad')?.hasError('required')">
+                      La comunidad es requerida
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-6">
+                <div class="mb-3">
+                  <label class="form-label">Área{{ isModalAdd ? '*' : '' }}:</label>
+                  <ng-select
+                    formControlName="area"
+                    #selectarea
+                    [searchable]="false"
+                    [items]="Areas"
+                    bindLabel="nombre"
+                    bindValue="id"
+                    placeholder="Elegir"
+                    [clearable]="false"
+                    [disabled]="!isModalAdd"
+                    (change)="onAreaChange($event)"
+                  >
+                    <ng-template ng-header-tmp>
+                      <input
+                        class="form-control"
+                        type="text"
+                        (input)="selectarea.filter($any($event.target).value)"
+                      />
+                    </ng-template>
+                    <ng-template ng-option-tmp let-item="item" let-index="index">
+                      <div class="option-item">
+                        <i *ngIf="item.icono" class="{{ item.icono }} icon"></i>
+                        {{ item.nombre }}
+                      </div>
+                    </ng-template>
+                    <ng-template ng-label-tmp let-item="item">
+                      <div class="selected-item">
+                        <i *ngIf="item.icono" class="{{ item.icono }} icon"></i>
+                        {{ item.nombre }}
+                      </div>
+                    </ng-template>
+                  </ng-select>
+                  <div *ngIf="apoyosForm.get('area')?.touched" class="error-message">
+                    <div *ngIf="apoyosForm.get('area')?.hasError('required')">
+                      El área es requerida
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="mb-3">
+                  <label class="form-label">Programa social{{ isModalAdd ? '*' : '' }}:</label>
+                  <ng-select
+                    formControlName="programaSocial"
+                    #selectprogramas
+                    [searchable]="false"
+                    [items]="filteredProgramasSociales"
+                    bindLabel="nombre"
+                    bindValue="id"
+                    placeholder="Elegir"
+                    [clearable]="false"
+                    [disabled]="!isModalAdd"
+                  >
+                    <ng-template ng-header-tmp>
+                      <input
+                        class="form-control"
+                        type="text"
+                        (input)="selectprogramas.filter($any($event.target).value)"
+                      />
+                    </ng-template>
+                    <ng-template ng-option-tmp let-item="item" let-index="index">
+                      <div class="option-item">
+                        {{ item.nombre }}
+                      </div>
+                    </ng-template>
+                    <ng-template ng-label-tmp let-item="item">
+                      <div class="selected-item">
+                        {{ item.nombre }}
+                      </div>
+                    </ng-template>
+                  </ng-select>
+                  <div *ngIf="apoyosForm.get('programaSocial')?.touched" class="error-message">
+                    <div *ngIf="apoyosForm.get('programaSocial')?.hasError('required')">
+                      El programa social es requerido
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-10 mt-1 mb-3">
+                <label class="form-label">Ubicación{{ isModalAdd ? '*' : '' }}:</label>
+                <input
+                  #ubicacionInput
+                  class="form-control"
+                  type="text"
+                  ngx-gp-autocomplete
+                  formControlName="ubicacion"
+                  (onAddressChange)="selectAddress($event)"
+                  [attr.readonly]="!isModalAdd ? true : null"
+                />
+                <div *ngIf="apoyosForm.get('ubicacion')?.touched" class="error-message">
+                  <div *ngIf="apoyosForm.get('ubicacion')?.hasError('required')">
+                    La ubicación es requerida
+                  </div>
+                </div>
+              </div>
+  
+              <div class="col-lg-2 d-flex align-items-end justify-content-end mt-1 mb-3">
+                <button
+                  type="button"
+                  title="Obtener ubicación"
+                  class="btn btn-info float-end"
+                  (click)="getCurrentLocation()"
+                  [disabled]="!isModalAdd"
+                >
+                  <i class="ti ti-map-pin"></i>
+                </button>
+              </div>
+            </div>
+  
+            <div class="row">
+              <div class="col-lg-12">
+                <div class="mb-3">
+                  <div
+                    class="card w-100 altura-mapa"
+                    style="width: 100%; height: 50vh"
+                    #mapCanvas
+                  ></div>
+                </div>
+              </div>
+            </div>
+          </div>
+  
+          <p
+            class="form-label"
+            style="margin-left: 20px; color: red; font-weight: bold"
+            *ngIf="isModalAdd"
+          >
+            Todos los campos marcados con * son requeridos
+          </p>
+          <div class="modal-footer">
+            <button
+              type="submit"
+              class="btn btn-success"
+              [disabled]="!apoyosForm.valid"
+              *ngIf="isModalAdd"
+            >
+              Agregar
+            </button>
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+              (click)="resetMap(); resetForm()"
+              *ngIf="!isModalAdd"
+            >
+              Cerrar
+            </button>
+          </div>
+        </div>
+        </form>
+      </div>
+    </div>
+  
+
+  
+</div>
+

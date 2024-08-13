@@ -100,10 +100,10 @@ export class ApoyosComponent {
     if (areaId) {
       this.isProgramaSocialSelectEnabled = true;
       this.filteredProgramasSociales = this.programasSociales.filter(programa => programa.area.id === areaId);
-      this.apoyosForm.get('programasSociales')?.enable();
+      this.apoyosForm.get('programaSocial')?.enable();
     } else {
       this.isProgramaSocialSelectEnabled = false;
-      this.apoyosForm.get('programasSociales')?.disable();
+      this.apoyosForm.get('programaSocial')?.disable();
       this.filteredProgramasSociales = [];
     }
   }
@@ -122,7 +122,7 @@ export class ApoyosComponent {
       edad: ['', Validators.required],
       genero: ['', Validators.required],
       CURP: [''],
-      programasSociales: ['', Validators.required],
+      programaSocial: ['', Validators.required],
 
     });
   }
@@ -161,8 +161,8 @@ export class ApoyosComponent {
     this.apoyos.area = { id: area } as Area;
     const genero = this.apoyosForm.get('genero')?.value;
     this.apoyos.genero = { id: genero } as Genero;  
-    const programa = this.apoyosForm.get('programasSociales')?.value;
-    this.apoyos.programa = { id: programa } as ProgramaSocial;
+    const programa = this.apoyosForm.get('programaSocial')?.value;
+    this.apoyos.programaSocial = { id: programa } as ProgramaSocial;
 
     const imagenBase64 = this.apoyosForm.get('imagenBase64')?.value;
 
@@ -215,8 +215,8 @@ export class ApoyosComponent {
     this.apoyos.area = { id: area } as Area;
     const genero = this.apoyosForm.get('genero')?.value;
     this.apoyos.genero = { id: genero } as Genero;
-    const programa = this.apoyosForm.get('programasSociales')?.value;
-    this.apoyos.programa = { id: programa } as ProgramaSocial;
+    const programa = this.apoyosForm.get('programaSocial')?.value;
+    this.apoyos.programaSocial = { id: programa } as ProgramaSocial;
 
     this.spinnerService.show();
 
@@ -261,7 +261,7 @@ export class ApoyosComponent {
       id: dto.id,
       area: dto.area.id,
       comunidad: dto.comunidad.id,
-      programa: dto.programa.id,
+      programa: dto.programaSocial.id,
       genero: dto.genero.id,
       nombre: dto.nombre,
       edad: dto.edad,

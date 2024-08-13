@@ -25,7 +25,51 @@
                     </div>
                 </div>
             </div>
-
+            <div class="row">
+                <div class="col-lg-6">
+                  <div>
+                    <form [formGroup]="areaForm">
+                      <label style="margin-top: 5px; margin-left: 10px;" class="form-label">Filtrar por área:</label>
+                      <ng-select 
+                        #selectarea 
+                        formControlName="areaId" 
+                        [searchable]="false" 
+                        [items]="Areas"
+                        placeholder="Todas las áreas"
+                        bindValue="id" 
+                        [clearable]="true" 
+                        (change)="onSelectPrograma($event?.id)" 
+                        (clear)="onClear()" 
+                        style="margin-bottom: 5px; margin-left: 10px;"
+                      >
+                        <!-- Custom template for dropdown items -->
+                        <ng-template ng-option-tmp let-item="item" let-index="index">
+                          <span style="margin-right: 8px;">
+                            <i [ngClass]="item.icono" 
+                               class="icono-con-espacio"
+                               [ngStyle]="{'color': item.color}">
+                            </i>
+                          </span>
+                          {{ item.nombre }}
+                        </ng-template>
+              
+                        <!-- Custom template for the selected item -->
+                        <ng-template ng-label-tmp let-item="item">
+                          <span style="margin-right: 8px;">
+                            <i [ngClass]="item.icono" 
+                               class="icono-con-espacio"
+                               [ngStyle]="{'color': item.color}">
+                            </i>
+                          </span>
+                          {{ item.nombre }}
+                        </ng-template>
+              
+                      </ng-select>
+                    </form>
+                  </div>
+                </div>
+              </div>
+              
             <ng-container [ngSwitch]="isLoading">
                 <div style="height: 300px" *ngSwitchCase="2">
                     <div class="progress">
@@ -38,8 +82,8 @@
                         <thead>
                             <tr>
                                 <th class="text-center">#</th>
-                                <th style="text-transform: none; font-size: inherit">Nombre</th>
-                                <th style="text-transform: none; font-size: inherit">Área</th>
+                                <th style="text-transform: none; font-size: inherit" class="text-center">Nombre</th>
+                                <th style="text-transform: none; font-size: inherit" class="text-center">Área</th>
                                 <th style="text-transform: none; font-size: inherit" class="text-center">
                                     Estatus
                                 </th>
@@ -57,9 +101,13 @@
                                 <td class="text-center">
                                     {{ configPaginator.itemsPerPage * (configPaginator.currentPage - 1) + pointIndex + 1 }}
                                 </td>
-                                <td>{{ programa.nombre }}</td>
-                                <td>
-                                    <i [ngClass]="programa.area.icono" class="icono-con-espacio"></i>{{ programa.area.nombre }}
+                                <td class="text-center">{{ programa.nombre }}</td>
+                                <td class="text-center">
+                                    <i [ngClass]="programa.area.icono" 
+                                       class="icono-con-espacio"
+                                       [ngStyle]="{'color': programa.area.color}">
+                                    </i>
+                                    {{ programa.area.nombre }}
                                 </td>
                                 <td class="text-center">
                                     <ng-container *ngIf="programa.estatus; else elseEstatus">
@@ -82,6 +130,10 @@
                             </tr>
                         </tbody>
                     </table>
+                    <div class="text-center">
+                        <label class="form-label" style="margin-top: 15px; font-size: 24px">
+                          {{ sinProgramaMessage }}</label>
+                      </div>
                 </div>
 
                 <app-no-results *ngSwitchCase="4"></app-no-results>

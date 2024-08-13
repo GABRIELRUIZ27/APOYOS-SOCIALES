@@ -1,13 +1,14 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
+import { SharedModule } from 'src/app/shared/shared.module';
+import { ReactiveFormsModule } from '@angular/forms';
+import { NgxSpinnerModule } from 'ngx-spinner';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { NgxPaginationModule } from 'ngx-pagination';
 import { SolicitudesRoutingModule } from './solicitudes-routing.component';
 import { SolicitudesComponent } from './solicitudes.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { SharedModule } from 'src/app/shared/shared.module';
-import { NgxSpinnerModule } from 'ngx-spinner';
-import { NgxPaginationModule } from 'ngx-pagination';
-import { NgSelectModule } from '@ng-select/ng-select';
+import { FormsModule } from '@angular/forms';
+import { NgxGpAutocompleteModule } from '@angular-magic/ngx-gp-autocomplete';
 
 
 @NgModule({
@@ -23,6 +24,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
     NgxSpinnerModule,
     NgxPaginationModule,
     NgSelectModule,
+    NgxGpAutocompleteModule
   ]
 })
 export class SolicitudesModule { }

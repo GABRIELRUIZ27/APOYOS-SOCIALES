@@ -20,6 +20,7 @@ export class ProgramasSocialesComponent {
   @ViewChild('searchItem') searchItem!: ElementRef;
   programaSocial!: ProgramaSocial;
   programaSocialForm!: FormGroup;
+  programaSelect!: ProgramaSocial | undefined;
   programasSociales: ProgramaSocial[] = [];
   programasSocialesFilter: ProgramaSocial[] = [];
   isLoading = LoadingStates.neutro;
@@ -31,6 +32,8 @@ export class ProgramasSocialesComponent {
   falso = 'Inactivo';
   estatusTag = this.verdadero;
   Areas: Area [] = [];
+  sinProgramaMessage = '';
+  areaForm!: FormGroup;
 
   constructor(
     @Inject('CONFIG_PAGINATOR') public configPaginator: PaginationInstance,
@@ -261,5 +264,49 @@ export class ProgramasSocialesComponent {
   actualizarFiltro(event: any): void {
     this.buscar = event.target.value;
     this.beneficiarioFiltrado = this.filtrarBeneficiario();
+  }
+
+  onSelectPrograma(id: number | null) {
+    this.programaSelect = this.programasSociales.find(
+      (v) => v.area.id === id
+    );
+
+    if (this.programaSelect) {
+      const valueSearch2 =
+        this.programaSelect.area.nombre.toLowerCase();
+      console.log('Search Value:', valueSearch2);
+
+      // Filtrar los votantes
+      this.programasSocialesFilter = this.programasSociales.filter((programaSocial) =>
+        programaSocial.area.nombre
+          .toLowerCase()
+          .includes(valueSearch2)
+      );
+      this.sinProgramaMessage = '';
+      console.log('Filtered Votantes:', this.programasSocialesFilter);
+
+      // Verificar si votantesFilter es null o vacío
+      if (!this.programasSocialesFilter || this.programasSocialesFilter.length === 0) {
+        this.programasSocialesFilter = [];
+      }
+      this.configPaginator.currentPage = 1;
+    } else {
+      this.sinProgramaMessage = 'No se encontraron programas sociales.';
+      // Si no se encuentra el votante seleccionado, establecer votantesFilter como un array vacío
+      this.programasSocialesFilter = [];
+    }
+  }
+
+  onClear() {
+    if (this.programasSociales) {
+      this.getProgramasSociales();
+    }
+    this.sinProgramaMessage = '';
+  }
+
+  creteForm2() {
+    this.areaForm = this.formBuilder.group({
+      areaId: [],
+    });
   }
 }

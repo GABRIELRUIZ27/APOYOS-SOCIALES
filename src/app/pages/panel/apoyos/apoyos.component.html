@@ -46,7 +46,7 @@
                 class="btn w-30 btn-icon"
                 aria-label="Dribbble"
                 (click)="exportarDatosAExcel()"
-                title="Descargar excel de promovidos"
+                title="Descargar excel de apoyos"
                 style="margin-left: 8px; padding-top: 4px; padding-bottom: 4px"
               >
                 <i
@@ -380,7 +380,7 @@
                   <div class="mb-3">
                     <label class="form-label">Programa social*:</label>
                     <ng-select
-                      formControlName="programasSociales"
+                      formControlName="programaSocial"
                       #selectprogramas
                       [searchable]="false"
                       [items]="filteredProgramasSociales"
@@ -408,8 +408,8 @@
                         </div>
                       </ng-template>
                     </ng-select>
-                    <div *ngIf="apoyosForm.get('programasSociales')?.touched" class="error-message">
-                      <div *ngIf="apoyosForm.get('programasSociales')?.hasError('required')">
+                    <div *ngIf="apoyosForm.get('programaSocial')?.touched" class="error-message">
+                      <div *ngIf="apoyosForm.get('programaSocial')?.hasError('required')">
                         El programa social es requerido
                       </div>
                     </div>
