@@ -59,6 +59,51 @@
         </div>
       </div>
 
+      <div class="row">
+        <div class="col-lg-6">
+          <div>
+            <form [formGroup]="areaForm">
+              <label style="margin-top: 5px; margin-left: 10px;" class="form-label">Filtrar por tipo de incidencia:</label>
+              <ng-select 
+                #selectarea 
+                formControlName="areaId" 
+                [searchable]="false" 
+                [items]="TiposIncidencias"
+                placeholder="Todos los tipos de incidencia"
+                bindValue="id" 
+                [clearable]="true" 
+                (change)="onSelectPrograma($event?.id)" 
+                (clear)="onClear()" 
+                style="margin-bottom: 5px; margin-left: 10px;"
+              >
+                <!-- Custom template for dropdown items -->
+                <ng-template ng-option-tmp let-item="item" let-index="index">
+                  <span style="margin-right: 8px;">
+                    <i [ngClass]="item.icono" 
+                       class="icono-con-espacio"
+                       [ngStyle]="{'color': item.color}">
+                    </i>
+                  </span>
+                  {{ item.nombre }}
+                </ng-template>
+      
+                <!-- Custom template for the selected item -->
+                <ng-template ng-label-tmp let-item="item">
+                  <span style="margin-right: 8px;">
+                    <i [ngClass]="item.icono" 
+                       class="icono-con-espacio"
+                       [ngStyle]="{'color': item.color}">
+                    </i>
+                  </span>
+                  {{ item.nombre }}
+                </ng-template>
+      
+              </ng-select>
+            </form>
+          </div>
+        </div>
+      </div>
+
       <ng-container [ngSwitch]="isLoading">
         <div style="height: 300px" *ngSwitchCase="2">
           <div class="progress">
@@ -145,6 +190,10 @@
               </tr>
             </tbody>
           </table>
+          <div class="text-center">
+            <label class="form-label" style="margin-top: 15px; font-size: 24px">
+              {{ sinProgramaMessage }}</label>
+          </div>
         </div>
         <app-no-results *ngSwitchCase="4"></app-no-results>
       </ng-container>

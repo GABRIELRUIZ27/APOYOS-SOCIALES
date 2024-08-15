@@ -42,6 +42,9 @@ export class IncidenciasComponent {
   incidencias!: Incidencias;
   public isUpdatingImg: boolean = false;
   public imgPreview: string = '';
+  areaForm!: FormGroup;
+  sinProgramaMessage = '';
+  apoyosSelect!: Incidencias | undefined;
 
   constructor(
     @Inject('CONFIG_PAGINATOR') public configPaginator: PaginationInstance,
@@ -574,5 +577,49 @@ export class IncidenciasComponent {
     };
 
     this.selectAddress2(dummyPlace);
+  }
+
+  onSelectPrograma(id: number | null) {
+    this.apoyosSelect = this.Incidencias.find(
+      (v) => v.tipoIncidencia.id === id
+    );
+
+    if (this.apoyosSelect) {
+      const valueSearch2 =
+        this.apoyosSelect.tipoIncidencia.nombre.toLowerCase();
+      console.log('Search Value:', valueSearch2);
+
+      // Filtrar los votantes
+      this.IncidenciasFilter = this.Incidencias.filter((personal) =>
+        personal.tipoIncidencia.nombre
+          .toLowerCase()
+          .includes(valueSearch2)
+      );
+      this.sinProgramaMessage = '';
+      console.log('Filtered Votantes:', this.IncidenciasFilter);
+
+      // Verificar si votantesFilter es null o vacío
+      if (!this.IncidenciasFilter || this.IncidenciasFilter.length === 0) {
+        this.IncidenciasFilter = [];
+      }
+      this.configPaginator.currentPage = 1;
+    } else {
+      this.sinProgramaMessage = 'No se encontrararon incidencias.';
+      // Si no se encuentra el votante seleccionado, establecer votantesFilter como un array vacío
+      this.IncidenciasFilter = [];
+    }
+  }
+
+  onClear() {
+    if (this.Incidencias) {
+      this.getIncidencias();
+    }
+    this.sinProgramaMessage = '';
+  }
+
+  creteForm2() {
+    this.areaForm = this.formBuilder.group({
+      areaId: [],
+    });
   }
 }
