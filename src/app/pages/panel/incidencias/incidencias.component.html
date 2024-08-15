@@ -70,22 +70,22 @@
             <thead>
               <tr>
                 <th class="text-center" style="text-transform: none">#</th>
-                <th style="text-transform: none; font-size: inherit">Foto</th>
-                <th style="text-transform: none; font-size: inherit">
+                <th class="text-center" style="text-transform: none; font-size: inherit">Foto</th>
+                <th class="text-center" style="text-transform: none; font-size: inherit">
                   Descripción
                 </th>
-                <th style="text-transform: none; font-size: inherit">
-                  Comunidad
+                <th class="text-center" style="text-transform: none; font-size: inherit">
+                  Tipo de incidencia
                 </th>
                 <th
                   class="text-center"
                   style="text-transform: none; font-size: inherit"
                 >
-                  Ubicacion
+                Comunidad
                 </th>
                 <th
-                  class="w-1"
-                  style="text-transform: none; font-size: inherit"
+                class="text-center"                  
+                style="text-transform: none; font-size: inherit"
                 >
                   Acciones
                 </th>
@@ -107,7 +107,7 @@
                       1
                   }}
                 </td>
-                <td class="text-muted">
+                <td class="text-center">
                   <div class="flex justify-center items-center">
                     <img
                       src="{{ apoyos.foto }}"
@@ -118,9 +118,12 @@
                     />
                   </div>
                 </td>
-                <td>{{ apoyos.comentarios }}</td>
-                <td>{{ apoyos.comunidad.nombre }}</td>
-                <td class="text-muted">{{ apoyos.ubicacion }}</td>
+                <td class="text-center">{{ apoyos.comentarios }}</td>
+                <td class="text-center"> <i [ngClass]="apoyos.tipoIncidencia.icono" 
+                  class="icono-con-espacio"
+                  [ngStyle]="{'color': apoyos.tipoIncidencia.color}">
+               </i>{{ apoyos.tipoIncidencia.nombre }}</td>
+                <td class="text-center">{{ apoyos.comunidad.nombre }}</td>
                 <td>
                   <div class="d-flex justify-content-between">
                     <button
@@ -192,7 +195,7 @@
         <div class="modal-body">
           <div class="row d-flex align-items-center align-items-end">
             <div class="row">
-              <div class="col-lg-12">
+              <div class="col-lg-6">
                 <div class="mb-3">
                   <label class="form-label">Tipo de Incidencia*:</label>
                   <ng-select
@@ -205,6 +208,7 @@
                     placeholder="Elegir"
                     [clearable]="false"
                   >
+                    <!-- Input para buscar opciones en el dropdown -->
                     <ng-template ng-header-tmp>
                       <input
                         class="form-control"
@@ -212,51 +216,45 @@
                         (input)="selectarea.filter($any($event.target).value)"
                       />
                     </ng-template>
+              
+                    <!-- Plantilla para las opciones en el dropdown -->
                     <ng-template ng-option-tmp let-item="item" let-index="index">
                       <div class="option-item">
-                        <i *ngIf="item.icono" class="{{ item.icono }} icon"></i>
+                        <span style="margin-right: 8px;">
+                          <i [ngClass]="item.icono" 
+                             class="icono-con-espacio"
+                             [ngStyle]="{'color': item.color}">
+                          </i>
+                        </span>
                         {{ item.nombre }}
                       </div>
                     </ng-template>
+              
+                    <!-- Plantilla para la opción seleccionada -->
                     <ng-template ng-label-tmp let-item="item">
                       <div class="selected-item">
-                        <i *ngIf="item.icono" class="{{ item.icono }} icon"></i>
+                        <span style="margin-right: 8px;">
+                          <i [ngClass]="item.icono" 
+                             class="icono-con-espacio"
+                             [ngStyle]="{'color': item.color}">
+                          </i>
+                        </span>
                         {{ item.nombre }}
                       </div>
                     </ng-template>
+              
                   </ng-select>
+              
+                  <!-- Mensaje de error -->
                   <div *ngIf="incidenciasForm.get('tipoIncidencia')?.touched" class="error-message">
                     <div *ngIf="incidenciasForm.get('tipoIncidencia')?.hasError('required')">
                       El tipo de incidencia es requerida
                     </div>
                   </div>
                 </div>
-              </div>                    
-            </div>
-            <div class="row">
-              <div class="col-lg-12">
-                  <div class="mb-3">
-                    <label class="form-label">Fecha*:</label>
-                    <input
-                      type="date"
-                      class="form-control"
-                      formControlName="fecha"
-                    />
-                    <div
-                      *ngIf="incidenciasForm.get('fecha')?.touched"
-                      class="error-message"
-                    >
-                      <div
-                        *ngIf="incidenciasForm.get('fecha')?.hasError('required')"
-                      >
-                        <p style="color: red">La fecha de ontratación es obligatoria</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-            </div>
-            <div class="row">
-              <div class="col-lg-12">
+              </div>
+              
+              <div class="col-lg-6">
                 <div class="mb-3">
                   <label class="form-label">Comunidad*:</label>
                   <ng-select
@@ -299,7 +297,29 @@
                     </div>
                   </div>
                 </div>
-              </div>                    
+              </div>                  
+            </div>
+            <div class="row">
+              <div class="col-lg-12">
+                  <div class="mb-3">
+                    <label class="form-label">Fecha*:</label>
+                    <input
+                      type="date"
+                      class="form-control"
+                      formControlName="fecha"
+                    />
+                    <div
+                      *ngIf="incidenciasForm.get('fecha')?.touched"
+                      class="error-message"
+                    >
+                      <div
+                        *ngIf="incidenciasForm.get('fecha')?.hasError('required')"
+                      >
+                        <p style="color: red">La fecha de ontratación es obligatoria</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
             </div>
           </div>
           <div class="col-lg-12">

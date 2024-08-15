@@ -237,7 +237,7 @@ export class MapaApoyosComponent implements AfterViewInit {
           <p class="text-muted ">
             ${apoyos.nombre}
           </p>
-            Area:
+            Área:
             <p class="text-muted ">
               ${apoyos.area.nombre}
             </p>
