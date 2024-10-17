@@ -17,20 +17,20 @@
       </div>
     </div>
   </div>
-
-  <!-- Incidencia Más Recurrente -->
+  
+  <!-- Incidencia Más Recurrente y Comunidad con Mayor Incidencias -->
   <div class="row">
     <div class="col-lg-6 mb-4">
-      <div class="card">
+      <div class="card h-100">
         <div class="card-body d-flex flex-column justify-content-center align-items-center">
           <div class="d-flex align-items-center">
             <div class="me-3">
-              <i class="fas fa-exclamation-circle fa-3x" style="color: orange;"></i>
+              <i class="fas fa-exclamation-circle fa-3x" style="color: #FF6347;"></i> <!-- Tomate Rojo -->
             </div>
             <div class="text-center">
               <h1>Incidencia más recurrente</h1>
               <div *ngIf="incidenciaRecurrente">
-                <h1> {{ incidenciaRecurrente.tipoIncidencia.nombre }}</h1>
+                <h1>{{ incidenciaRecurrente.tipoIncidencia.nombre }}</h1>
                 <h4 id="total-incidencias" class="count">{{ incidenciaRecurrente.total }}</h4>
               </div>
               <div *ngIf="!incidenciaRecurrente">
@@ -41,17 +41,18 @@
         </div>
       </div>
     </div>
+  
     <div class="col-lg-6 mb-4">
-      <div class="card">
+      <div class="card h-100">
         <div class="card-body d-flex flex-column justify-content-center align-items-center">
           <div class="d-flex align-items-center">
             <div class="me-3">
-              <i class="fas fa-car-burst fa-3x" style="color: orange;"></i>
+              <i class="fas fa-users fa-3x" style="color: #32CD32;"></i> <!-- Verde Lima -->
             </div>
             <div class="text-center">
               <h1>Comunidad con mayor incidencias</h1>
               <div *ngIf="comunidadRecurrente">
-                <h1> {{ comunidadRecurrente.comunidad.nombre }}</h1>
+                <h1>{{ comunidadRecurrente.comunidad.nombre }}</h1>
                 <h4 id="total-incidencias" class="count">{{ comunidadRecurrente.total }}</h4>
               </div>
               <div *ngIf="!comunidadRecurrente">
@@ -62,7 +63,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </div>  
 
   <!-- Gráfica de Incidencias por Comunidad -->
   <div class="row mt-4">

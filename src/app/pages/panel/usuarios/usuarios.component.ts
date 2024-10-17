@@ -89,8 +89,8 @@ export class UsuariosComponent {
   }
 
   changeValidatorsEmpleado(rolId: number) {
-    //Si es empleado
-    if (rolId === 2) {
+    //Si es director
+    if (rolId === 3) {
       this.usuarioForm.controls['areaId'].enable();
       this.usuarioForm.controls['areaId'].setValidators(
         Validators.required

@@ -115,7 +115,7 @@ export class ApoyosComponent {
     this.apoyosForm = this.formBuilder.group({
       id: [null],
       comunidad: ['', Validators.required],
-      nombre: ['', [Validators.required, Validators.maxLength(25)]],
+      nombre: ['', [Validators.required, Validators.maxLength(40)]],
       comentarios: [''],
       imagenBase64: [''],
       latitud: [],

@@ -59,6 +59,16 @@ const routes: Routes = [
           import('./solicitudes/solicitudes.module').then((i) => i.SolicitudesModule),
       },
       {
+        path: 'agua-potable',
+        loadChildren: () =>
+          import('./agua-potable/agua-potable.module').then((i) => i.AguaPotableModule),
+      },
+      {
+        path: 'control-agua',
+        loadChildren: () =>
+          import('./control-agua/control-agua.module').then((i) => i.ControlAguaModule),
+      },
+      {
         path: 'areas',
         loadChildren: () =>
           import('./areas/areas.module').then((i) => i.AreasModule),

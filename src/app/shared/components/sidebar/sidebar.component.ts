@@ -18,7 +18,8 @@ export class SidebarComponent implements AfterViewInit {
   @ViewChild('rlDashboard') rlDashboard!: RouterLinkActive;
   @ViewChild('rlDashboardFinanciero') rlDashboardFinanciero!: RouterLinkActive;
   @ViewChild('rlDashboardIncidencias') rlDashboardIncidencias!: RouterLinkActive;
-
+  @ViewChild('rlControlAgua') rlControlAgua!: RouterLinkActive;
+  
   @ViewChild('rlTiposIncidencias') rlTiposIncidencias!: RouterLinkActive;
   @ViewChild('rlUsuarios') rlUsuarios: RouterLinkActive | undefined;
   @ViewChild('rlProgramasSociales') rlProgramasSociales:
@@ -33,6 +34,7 @@ export class SidebarComponent implements AfterViewInit {
   @ViewChild('rlFondos') rlFondos: RouterLinkActive | undefined;
   @ViewChild('rlPersonal') rlPersonal: RouterLinkActive | undefined;
   @ViewChild('rlAdquisiciones')rlAdquisiciones: RouterLinkActive | undefined;
+  @ViewChild('rlAgua')rlAgua: RouterLinkActive | undefined;
   dataObject!: AppUserAuth | null;
   @ViewChild('rlMapaApoyos') rlMapaApoyos: RouterLinkActive | undefined;
   @ViewChild('rlMapaIncidencias') rlMapaIncidencias: RouterLinkActive | undefined;

@@ -73,8 +73,8 @@
                       {{ fondos.tipoDistribucion.nombre }}
                     </h5>
                     <p class="card-text">
-                      <strong>Cantidad:</strong> {{ fondos.cantidad | currency:'MXN':'symbol':'1.2-2' }} MXN
-                    </p>
+                      <strong>Cantidad:</strong> {{ '$' + (fondos.cantidad | number:'1.2-2') }} MXN
+                    </p>                    
                     <p class="card-text">
                       <strong>Periodo:</strong> {{ fondos.periodo }}
                     </p>
@@ -98,12 +98,16 @@
                 </div>
               </div>
               <div *ngIf="(i + 1) % 4 === 0 || i === fondosFilter.length - 1" class="col-12">
-                <h3 class="text-center"><strong>Total:</strong> {{ getTotalForGroup(i - (i % 4)) | currency:'MXN':'symbol':'1.2-2' }} MXN</h3>
-                <h3 [ngClass]="{'text-success': getPercentageDifference(i - (i % 4)) > 0, 'text-danger': getPercentageDifference(i - (i % 4)) < 0}" class="text-center">
-                  {{ getPercentageDifference(i - (i % 4)) | number:'1.2-2' }}% respecto al mes anterior
+                <h3 class="text-center">
+                  <strong>Total:</strong> {{ '$' + (getTotalForGroup(i - (i % 4)) | number:'1.2-2') }} MXN
+                </h3>
+                <h3 
+                  [ngClass]="{'text-success': getPercentageDifference(i - (i % 4)) > 0, 'text-danger': getPercentageDifference(i - (i % 4)) < 0}" 
+                  class="text-center">
+                  {{ getPercentageDifference(i - (i % 4)) | number:'1.2-2' }}% respecto al año anterior
                 </h3>
                 <br>
-              </div>
+              </div>              
             </ng-container>
           </div>
         </div>

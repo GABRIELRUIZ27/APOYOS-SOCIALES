@@ -8,7 +8,6 @@ import { AppComponent } from './app.component';
 import { PanelModule } from './pages/panel/panel.module';
 import { Loader } from '@googlemaps/js-api-loader';
 import { LoginModule } from './pages/login/login.module';
-
 @NgModule({
   declarations: [AppComponent],
   imports: [

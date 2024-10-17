@@ -58,7 +58,7 @@ export class ProgramasSocialesComponent {
         '',
         [
           Validators.required,
-          Validators.maxLength(40),
+          Validators.maxLength(60),
           Validators.minLength(2),
           Validators.pattern(
             /^([a-zA-ZÀ-ÿ\u00C0-\u00FF]{2})[a-zA-ZÀ-ÿ\u00C0-\u00FF ]+$/
