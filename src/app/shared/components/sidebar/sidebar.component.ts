@@ -15,11 +15,13 @@ import { RouterLinkActive } from '@angular/router';
 })
 export class SidebarComponent implements AfterViewInit {
   menuColapsado: boolean = true;
+  
   @ViewChild('rlDashboard') rlDashboard!: RouterLinkActive;
   @ViewChild('rlDashboardFinanciero') rlDashboardFinanciero!: RouterLinkActive;
   @ViewChild('rlDashboardIncidencias') rlDashboardIncidencias!: RouterLinkActive;
   @ViewChild('rlControlAgua') rlControlAgua!: RouterLinkActive;
-  
+  @ViewChild('rlPagoAgua') rlPagoAgua!: RouterLinkActive;
+
   @ViewChild('rlTiposIncidencias') rlTiposIncidencias!: RouterLinkActive;
   @ViewChild('rlUsuarios') rlUsuarios: RouterLinkActive | undefined;
   @ViewChild('rlProgramasSociales') rlProgramasSociales:

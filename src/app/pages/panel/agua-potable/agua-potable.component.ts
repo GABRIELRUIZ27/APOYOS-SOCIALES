@@ -11,6 +11,7 @@ import { Comunidad } from 'src/app/models/comunidad';
 import { Agua } from 'src/app/models/agua';
 import * as XLSX from 'xlsx';
 import {TiposDeServicio} from 'src/app/models/tiposDeServicio';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-agua-potable',
@@ -72,10 +73,10 @@ export class AguaPotableComponent {
     this.aguaForm = this.formBuilder.group({
       id: [null],
       domicilio: ['',[Validators.required,],],
-      folio: ['',[Validators.required,],],
+      folio: [''],
       contrato: ['',[Validators.required,],],
       comunidad: ['',[Validators.required,],],
-      periodo: ['',[Validators.required,],],
+      periodo: [''],
       nombre: ['',[Validators.required,],],
       tipoServicio: ['',[Validators.required,],],
     });
@@ -107,7 +108,8 @@ export class AguaPotableComponent {
       (personal) =>
         personal.nombre.toLowerCase().includes(valueSearch) ||
         personal.contrato.toLowerCase().includes(valueSearch) ||
-        personal.comunidad.nombre.toLowerCase().includes(valueSearch)
+        personal.comunidad.nombre.toLowerCase().includes(valueSearch)||
+        personal.tipoServicio.nombre.toLowerCase().includes(valueSearch)
     );
 
     this.configPaginator.currentPage = 1;
@@ -127,6 +129,7 @@ export class AguaPotableComponent {
       periodo: dto.periodo,
       comunidad: dto.comunidad.id,
       servicio: dto.tipoServicio.id,
+      tipoServicio: dto.tipoServicio.id,
     });
   }
 
@@ -302,8 +305,31 @@ onFilterChange() {
 onClear() {
   this.comunidadForm.reset();
   this.servicioForm.reset();
-  this.getAgua(); // Recarga la lista completa
+  this.getAgua(); 
   this.sinAguaMessage = '';
+}
+
+isAlCorriente(periodo: string | null): boolean {
+  if (!periodo) {
+    return false; 
+  }
+
+  // Dividir el periodo en partes separadas por el guion "-"
+  const partesPeriodo = periodo.split('-');
+
+  // Tomar la segunda parte y quitar espacios adicionales
+  const fechaFinal = partesPeriodo[1] ? partesPeriodo[1].trim() : null;
+
+  if (!fechaFinal) {
+    return false; 
+  }
+
+  // Convertir la fecha final a un objeto Moment
+  const mesPeriodoFinal = moment(fechaFinal, 'MMMM YYYY'); 
+  const mesActual = moment(); // Fecha actual
+
+  // Regresar true si el mes del periodo final es igual o posterior al mes actual
+  return mesPeriodoFinal.isSameOrAfter(mesActual, 'month');
 }
 
 }

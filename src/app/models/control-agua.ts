@@ -6,4 +6,13 @@ export interface ControlAgua {
     importe: string;
     descripcion: string;
     agua: Agua;
+    servicio: string;
+    alcantarillado: string;
+    periodo: string;
+    inapam: boolean;
+    pago: boolean;
+    folio: string;
+    recargo: string;
 }
+
+  

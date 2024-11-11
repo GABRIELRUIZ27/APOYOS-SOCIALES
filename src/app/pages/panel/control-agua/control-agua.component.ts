@@ -11,7 +11,9 @@ import { Comunidad } from 'src/app/models/comunidad';
 import { Agua } from 'src/app/models/agua';
 import * as XLSX from 'xlsx';
 import { ControlAgua } from 'src/app/models/control-agua';
-
+import * as moment from 'moment';
+import 'moment/locale/es';
+moment.locale('es'); 
 @Component({
   selector: 'app-control-agua',
   templateUrl: './control-agua.component.html',
@@ -32,11 +34,12 @@ export class ControlAguaComponent {
   controlSelect!: ControlAgua | undefined;
   sinAguaMessage = '';
   selectedDomicilio: string = '';
+  selectedPeriodo: string = '';
   totalAgua: number = 0;
   totalAlcantarillado: number = 0;
   precioAgua: number = 65;
   precioAlcantarillado: number = 15;
-  
+
   constructor(
     @Inject('CONFIG_PAGINATOR') public configPaginator: PaginationInstance,
     private spinnerService: NgxSpinnerService,
@@ -67,6 +70,12 @@ export class ControlAguaComponent {
       importe: ['',[Validators.required,],],
       descripcion: ['',[Validators.required,],],
       agua: ['',[Validators.required,],],
+      recargo: [''],    
+      periodo: ['',[Validators.required,],],
+      servicio: ['',[Validators.required,],],
+      alcantarillado: ['',[Validators.required,],],
+      inapam: [false],
+      pagado: [false],
     });
   }
 
@@ -102,57 +111,6 @@ export class ControlAguaComponent {
     this.configPaginator.currentPage = 1;
   }
 
-  idUpdate!: number;
-
-  setDataModalUpdate(dto: ControlAgua) {
-    this.isModalAdd = false;
-    this.idUpdate = dto.id;
-    this.aguaForm.patchValue({
-      id: dto.id,
-      fecha: dto.fecha,
-      importe: dto.importe,
-      descripcion: dto.descripcion,
-      agua: dto.agua.id,
-    });
-  }
-
-  editarPersonal() {
-    this.controlAgua = this.aguaForm.value as ControlAgua;
-
-    const agua = this.aguaForm.get('agua')?.value;
-
-    this.controlAgua.agua = { id: agua } as Agua;
-
-    this.spinnerService.show();
-    this.controlPagoService.put(this.idUpdate, this.controlAgua).subscribe({
-      next: () => {
-        this.spinnerService.hide();
-        this.mensajeService.mensajeExito('Usuario de agua potable actualizado correctamente');
-        this.resetForm();
-      },
-      error: (error) => {
-        this.spinnerService.hide();
-        this.mensajeService.mensajeError(error);
-      },
-    });
-  }
-
-  deleteItem(id: number, nameItem: string) {
-    this.mensajeService.mensajeAdvertencia(
-      `¿Estás seguro de eliminar a: ${nameItem}?`,
-      () => {
-        this.aguaService.delete(id).subscribe({
-          next: () => {
-            this.mensajeService.mensajeExito('Usuario de agua potable borrado correctamente');
-            this.configPaginator.currentPage = 1;
-            this.searchItem.nativeElement.value = '';
-          },
-          error: (error) => this.mensajeService.mensajeError(error),
-        });
-      }
-    );
-  }
-
   agregar() {
     this.controlAgua = this.aguaForm.value as ControlAgua;
     const agua = this.aguaForm.get('agua')?.value;
@@ -163,7 +121,7 @@ export class ControlAguaComponent {
     this.controlPagoService.post(this.controlAgua).subscribe({
       next: () => {
         this.spinnerService.hide();
-        this.mensajeService.mensajeExito('Usuario de agua potable guardado correctamente');
+        this.mensajeService.mensajeExito('Información de pago guardada correctamente');
         this.resetForm();
         this.configPaginator.currentPage = 1;
       },
@@ -179,11 +137,13 @@ export class ControlAguaComponent {
     this.closebutton.nativeElement.click();
     this.aguaForm.reset();
     this.selectedDomicilio = '';
+    this.selectedPeriodo= '';
+    this.totalAlcantarillado= 0;
+    this.totalAgua= 0;
   }
 
   submit() {
     if (this.isModalAdd === false) {
-      this.editarPersonal();
     } else {
       this.agregar();
     }
@@ -287,12 +247,86 @@ export class ControlAguaComponent {
     if (selectedUser) {
       // Llenar el campo de domicilio con el domicilio del usuario seleccionado
       this.selectedDomicilio = selectedUser.domicilio;
+      this.selectedPeriodo = selectedUser.periodo ? selectedUser.periodo : 'No se tiene registro de último periodo de pago';
       console.log('Domicilio del usuario seleccionado:', this.selectedDomicilio); // Verificar el domicilio del usuario
     } else {
       // Limpiar el campo de domicilio si no hay un usuario seleccionado
       this.selectedDomicilio = '';
+      this.selectedPeriodo = '';
       console.log('No se seleccionó ningún usuario, domicilio limpiado'); // Mensaje cuando no se selecciona nada
     }
+  }
+  
+  onPeriodoChange(event: Event) {
+    const inputElement = event.target as HTMLInputElement;
+    const periodo = inputElement.value;
+  
+    console.log("Periodo ingresado:", periodo);
+  
+    // Dividir el periodo en dos fechas
+    const fechas = periodo.split(' - ');
+    if (fechas.length === 2) {
+      const fechaInicio = moment(fechas[0], 'MMMM YYYY'); // Usar formato en español
+      const fechaFin = moment(fechas[1], 'MMMM YYYY');
+  
+      console.log("Fecha inicio:", fechaInicio.isValid() ? fechaInicio.format('MMMM YYYY') : "Invalid date");
+      console.log("Fecha fin:", fechaFin.isValid() ? fechaFin.format('MMMM YYYY') : "Invalid date");
+  
+      // Validar si las fechas son correctas
+      if (fechaInicio.isValid() && fechaFin.isValid()) {
+        const meses = fechaFin.diff(fechaInicio, 'months') + 1;
+        console.log("Meses calculados:", meses);
+  
+        // Calculamos los totales
+        this.totalAgua = this.precioAgua * meses;
+        this.totalAlcantarillado = this.precioAlcantarillado * meses;
+  
+        console.log("Total Agua:", this.totalAgua);
+        console.log("Total Alcantarillado:", this.totalAlcantarillado);
+  
+        // Actualizamos los campos de servicio y alcantarillado
+        this.aguaForm.get('servicio')?.setValue(this.totalAgua.toFixed(2));
+        this.aguaForm.get('alcantarillado')?.setValue(this.totalAlcantarillado.toFixed(2));
+  
+        // Sumar los totales y actualizar el campo "importe"
+        const importeTotal = this.totalAgua + this.totalAlcantarillado;
+        this.aguaForm.get('importe')?.setValue(importeTotal.toFixed(2)); // Actualizar el campo de importe como string
+      } else {
+        this.resetValores();
+      }
+    } else {
+      this.resetValores();
+    }
+  }
+  
+  // Función auxiliar para resetear los valores
+  resetValores() {
+    this.totalAgua = 0;
+    this.totalAlcantarillado = 0;
+    this.aguaForm.get('servicio')?.setValue('0.00');
+    this.aguaForm.get('alcantarillado')?.setValue('0.00');
+    this.aguaForm.get('importe')?.setValue('0.00');
+  }
+  
+  onInapamChange(event: Event) {
+    const checked = (event.target as HTMLInputElement).checked;
+    console.log('INAPAM status:', checked);
+  
+    // Siempre partimos del importe base que ya fue calculado
+    let importeTotal = this.totalAgua + this.totalAlcantarillado;
+  
+    // Si el switch de INAPAM está activo, aplicar el 50% de descuento al importe
+    if (checked) {
+      importeTotal *= 0.5; // Aplicar el descuento del 50%
+    }
+  
+    // Asegurarse de que el importe se actualice como un string
+    const importeString = importeTotal.toFixed(2);
+  
+    // Actualizar el campo de "importe" con el valor calculado como string
+    this.aguaForm.get('importe')?.setValue(importeString);
+    
+    // No modificar los valores de servicio y alcantarillado; solo recalcular el importe
   }
   
 }

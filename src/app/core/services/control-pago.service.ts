@@ -46,14 +46,4 @@ export class ControlPagoService {
       );
   }
 
-  delete(id: number) {
-    return this.http.delete(`${this.route}/eliminar/${id}`)
-      .pipe(
-        tap(() => {
-          this._refreshListControlAgua$.next(null);
-        }),
-        catchError(this.handleErrorService.handleError)
-      );
-  }
-
 }

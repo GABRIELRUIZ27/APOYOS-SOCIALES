@@ -130,42 +130,33 @@
           <table class="table table-vcenter card-table table-striped">
             <thead>
               <tr>
-                <th
-                  style="text-transform: none; font-size: inherit"
-                  class="text-center"
-                >
-                  Folio
-                </th>
-                <th style="text-transform: none; font-size: inherit" class="text-center">
-                    Nombre
-                  </th>
-                  <th style="text-transform: none; font-size: inherit" class="text-center">Contrato</th>
-                  <th style="text-transform: none; font-size: inherit" class="text-center">Comunidad</th>
-                  <th style="text-transform: none; font-size: inherit" class="text-center">Servicio</th>
-                  <th
-                  style="text-transform: none; font-size: inherit"
-                  class="w-1"
-                >
-                  Acciones
-                </th>
+                <th style="text-transform: none; font-size: inherit" class="text-center">Nombre</th>
+                <th style="text-transform: none; font-size: inherit" class="text-center">Contrato</th>
+                <th style="text-transform: none; font-size: inherit" class="text-center">Comunidad</th>
+                <th style="text-transform: none; font-size: inherit" class="text-center">Servicio</th>
+                <th style="text-transform: none; font-size: inherit" class="text-center">Estatus</th>
+                <th style="text-transform: none; font-size: inherit" class="w-1">Acciones</th>
               </tr>
             </thead>
             <tbody>
-              <tr
-                *ngFor="
-                  let agua of aguaFilter | paginate : configPaginator;
-                  let pointIndex = index
-                "
-              >
-                <td class="text-center">
-                  {{
-                    agua.folio
-                  }}
-                </td>
+              <tr *ngFor="let agua of aguaFilter | paginate : configPaginator; let pointIndex = index">
                 <td class="text-center">{{ agua.nombre }}</td>
                 <td class="text-center">{{ agua.contrato }}</td>
                 <td class="text-center">{{ agua.comunidad.nombre }}</td>
                 <td class="text-center">{{ agua.tipoServicio.nombre }}</td>
+                
+                <!-- Período con estado condicional -->
+                <td class="text-center">
+                  <span
+                    [ngClass]="{
+                      'text-success': isAlCorriente(agua.periodo),
+                      'text-danger': !isAlCorriente(agua.periodo)
+                    }">
+                    {{ isAlCorriente(agua.periodo) ? 'Al corriente' : 'Adeudo' }}
+                  </span>
+                </td>
+        
+                <!-- Acciones -->
                 <td>
                   <div class="d-flex justify-content-between">
                     <button
@@ -186,7 +177,8 @@
                 </td>
               </tr>
             </tbody>
-          </table>
+        </table>
+        
           <div class="text-center">
             <label class="form-label" style="margin-top: 15px; font-size: 24px">
               {{ sinAguaMessage }}</label>
@@ -364,42 +356,22 @@
             <div class="row">
                 <div class="col-lg-6">
                     <div class="mb-3">
-                    <label class="form-label">Périodo*:</label>
+                    <label class="form-label">Périodo:</label>
                     <input
                         type="text"
                         class="form-control"
                         formControlName="periodo"
                     />
-                    <div
-                        *ngIf="aguaForm.get('periodo')?.touched"
-                        class="error-message"
-                    >
-                        <div
-                        *ngIf="aguaForm.get('periodo')?.hasError('required')"
-                        >
-                        <p style="color: red">El pérido es obligatorio</p>
-                        </div>
-                    </div>
                     </div>
                 </div> 
                 <div class="col-lg-6">
                   <div class="mb-3">
-                  <label class="form-label">Folio*:</label>
+                  <label class="form-label">Folio:</label>
                   <input
                       type="text"
                       class="form-control"
                       formControlName="folio"
                   />
-                  <div
-                      *ngIf="aguaForm.get('folio')?.touched"
-                      class="error-message"
-                  >
-                      <div
-                      *ngIf="aguaForm.get('folio')?.hasError('required')"
-                      >
-                      <p style="color: red">El folio es obligatorio</p>
-                      </div>
-                  </div>
                   </div>
               </div>               
             </div>

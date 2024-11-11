@@ -89,6 +89,11 @@ const routes: Routes = [
           import('./adquisicion/adquisicion.module').then((i) => i.AdquisicionModule),
       },
       {
+        path: 'pago-agua',
+        loadChildren: () =>
+          import('./pago-agua/pago-agua.module').then((i) => i.PagoAguaModule),
+      },
+      {
         path: 'fondos',
         loadChildren: () =>
           import('./fondos/fondos.module').then((i) => i.FondosModule),

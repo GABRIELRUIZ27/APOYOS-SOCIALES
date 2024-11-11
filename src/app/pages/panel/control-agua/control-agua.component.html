@@ -67,7 +67,7 @@
                 <ng-select 
                   #selectarea 
                   formControlName="areaId" 
-                  [searchable]="false" 
+                  [searchable]="true" 
                   [items]="agua"
                   placeholder="Todas los usuarios"
                   bindValue="id" 
@@ -76,22 +76,13 @@
                   (clear)="onClear()" 
                   style="margin-bottom: 5px; margin-left: 10px;"
                 >
-                  <!-- Custom template for dropdown items -->
-                  <ng-template ng-option-tmp let-item="item" let-index="index">
-                    {{ item.nombre }}
+                  <ng-template ng-option-tmp let-item="item"let-index="index">
+                    {{ item.contrato }} - {{ item.nombre }} <!-- Mostrar contrato y nombre -->
                   </ng-template>
-        
-                  <!-- Custom template for the selected item -->
                   <ng-template ng-label-tmp let-item="item">
-                    <span style="margin-right: 8px;">
-                      <i [ngClass]="item.icono" 
-                         class="icono-con-espacio"
-                         [ngStyle]="{'color': item.color}">
-                      </i>
-                    </span>
-                    {{ item.nombre }}
+                    {{ item.contrato }} - {{ item.nombre }}
                   </ng-template>
-        
+                  <!-- Custom template for the selected item -->        
                 </ng-select>
               </form>
             </div>
@@ -114,12 +105,7 @@
                   <th style="text-transform: none; font-size: inherit" class="text-center">Contrato</th>
                   <th style="text-transform: none; font-size: inherit" class="text-center">Fecha</th>
                   <th style="text-transform: none; font-size: inherit" class="text-center">Importe</th>
-                <th
-                  style="text-transform: none; font-size: inherit"
-                  class="w-1"
-                >
-                  Acciones
-                </th>
+                  <th style="text-transform: none; font-size: inherit" class="text-center">Estatus de Pago</th>
               </tr>
             </thead>
             <tbody>
@@ -141,24 +127,11 @@
                 <td class="text-center">{{ agua.agua.contrato }}</td>
                 <td class="text-center">{{ agua.fecha | date: 'dd-MM-yyyy' }}</td>
                 <td class="text-center">{{ agua.importe | currency: 'MXN':'symbol-narrow':'1.2-2' }}</td>
-                <td>
-                  <div class="d-flex justify-content-between">
-                    <button
-                      class="btn btn-warning btn-icon btn-sm"
-                      data-bs-toggle="modal"
-                      data-bs-target="#modal-usuario"
-                      (click)="setDataModalUpdate(controlAgua)"
-                    >
-                      <i class="ti ti-edit"></i>
-                    </button>
-                    <button
-                      class="btn btn-danger btn-icon btn-sm"
-                      (click)="deleteItem(agua.id, agua.agua.nombre)"
-                    >
-                      <i class="ti ti-eraser"></i>
-                    </button>
-                  </div>
-                </td>
+                <td class="text-center">
+                  <span [ngClass]="{'text-success': agua.pago, 'text-danger': !agua.pago}">
+                    {{ agua.pago ? 'PAGADO' : 'NO PAGADO' }}
+                  </span>
+                </td>           
               </tr>
             </tbody>
           </table>
@@ -239,7 +212,7 @@
               </div>
 
               <div class="row">
-                <div class="col-lg-6">
+                <div class="col-lg-12">
                   <div class="mb-3">
                     <label class="form-label">Número de Contrato y Nombre*:</label>
                     <ng-select
@@ -247,7 +220,7 @@
                       [items]="agua"
                       bindLabel="nombre"
                       bindValue="id"
-                      [searchable]="false"
+                      [searchable]="true"
                       [clearable]="false"
                       formControlName="agua"
                       (change)="onSelectAgua($event)" 
@@ -266,21 +239,33 @@
                     </div>
                   </div>
                 </div>
-              
-                <!-- Campo de dirección (bloqueado) -->
-                <div class="col-lg-6">
-                  <div class="mb-3">
-                    <label class="form-label">Domicilio:</label>
-                    <input
-                      type="text"
-                      class="form-control"
-                      [value]="selectedDomicilio" 
-                      readonly
-                    />
-                  </div>
+              </div>
+            <div class="row">
+            <!-- Campo de dirección (bloqueado) -->
+            <div class="col-lg-6">
+              <div class="mb-3">
+                <label class="form-label">Domicilio:</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  [value]="selectedDomicilio" 
+                  readonly
+                />
+              </div>
+            </div>
+              <!-- Campo de periodo (bloqueado) -->
+              <div class="col-lg-6">
+                <div class="mb-3">
+                  <label class="form-label">Último Período de Pago</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    [value]="selectedPeriodo" 
+                    readonly
+                  />
                 </div>
               </div>
-              
+            </div>
 
             <div class="row">
                 <div class="col-lg-12">
@@ -305,29 +290,85 @@
                 </div>
             </div>
 
-            <div class="row">
-            <div class="col-lg-6">
-              <div class="mb-3">
-              <label class="form-label">Importe*:</label>
+        <div class="row">
+          <!-- Campo de periodo -->
+          <div class="col-lg-12">
+            <div class="mb-3">
+              <label class="form-label">Periodo (Ejemplo: Octubre 2024 - Noviembre 2024):</label>
               <input
-                  type="text"
-                  class="form-control"
-                  formControlName="importe"
+              type="text"
+              class="form-control"
+              placeholder="Ingrese el periodo"
+              formControlName="periodo"
+              (input)="onPeriodoChange($event)"
               />
-              <div
-                  *ngIf="aguaForm.get('importe')?.touched"
-                  class="error-message"
-              >
-                  <div
-                  *ngIf="aguaForm.get('importe')?.hasError('required')"
-                  >
-                  <p style="color: red">El importe es obligatorio</p>
-                  </div>
-              </div>
-              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Row con los resultados de agua y alcantarillado -->
+        <div class="row">
+          <!-- Monto de agua -->
+          <div class="col-lg-4">
+            <div class="mb-3">
+              <label class="form-label">Total Agua:</label>
+              <input type="text" formControlName="servicio" class="form-control" [value]="totalAgua | currency"/>
+            </div>
+          </div>
+        
+          <!-- Monto de alcantarillado -->
+        <div class="col-lg-4">
+          <div class="mb-3">
+            <label class="form-label">Total Agua:</label>
+            <input type="text" formControlName="servicio" class="form-control" [value]="totalAgua | currency"/>
           </div>
         </div>
 
+        <div class="col-lg-4">
+          <div class="mb-3">
+            <label class="form-label">Recargos:</label>
+            <input type="text" formControlName="recargos" class="form-control">
+          </div>
+        </div>
+      </div>
+
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="mb-3">
+              <label class="form-label">Importe*:</label>
+              <input
+              formControlName="importe"
+              type="text"
+              class="form-control"
+              [value]="aguaForm.get('importe')?.value | currency"
+              readonly
+            />
+              <div
+                *ngIf="aguaForm.get('importe')?.touched"
+                class="error-message"
+              >
+                <div
+                  *ngIf="aguaForm.get('importe')?.hasError('required')"
+                >
+                  <p style="color: red">El importe es obligatorio</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="row">
+          <div class="col-lg-6">
+            <div class="mb-3">
+              <label class="form-label">¿Cuenta con INAPAM?*</label>
+              <label class="switch">
+                <input type="checkbox" formControlName="inapam" (change)="onInapamChange($event)" />
+                <span class="slider round"></span>
+              </label>
+            </div>
+          </div>
+        </div>        
+        
             </div>
         </div>
         <p
